@@ -3,78 +3,110 @@ HOST: http://polls.apiblueprint.org/
 
 # Scout
 
-Polls is a simple API allowing consumers to view polls and vote in them.
+API для приложения Scout
 
-## Questions Collection [/questions]
+#Group Группы товаров 
 
-### List All Questions [GET]
+## Дерево групп товаров [/api_group_goods]
+
+### Получить все группы товаров в виде дерева [GET]
 
 + Response 200 (application/json)
 
-        [
+        [ 
             {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
+                "id_group": 0,
+                "name_group": "Корневая группа товаров",
+                "active":true,
+                "children": 
+                [
+                    { 
+                        "id_group":1,
+                        "name_group":"Хлебобулочные изделия",
+                        "active":true,
+                        "children": []
+                    },
+                    { 
+                        "id_group":2,
+                        "name_group":"Мясо",
+                        "active":true,
+                        "children": []
+                    }
+                                        { 
+                        "id_group":3,
+                        "name_group":"Безалкогольные напитки",
+                        "active":true,
+                        "children": []
                     }
                 ]
             }
         ]
 
-### Create a New Question [POST]
+## Группа товаров [/api_group_goods/{id_group}]
 
-You may create your own question using this action. It takes a JSON
-object containing a question and a collection of answers in the
-form of choices.
+Параметр id_group при получении, изменении, деактивировании группы указывает на целевую группу. 
+При добавлении группы - на родительскую группу товаров
 
-+ Request (application/json)
++ Parameters
+    + id_group (number) - Код группы товаров - целое число
 
-        {
-            "question": "Favourite programming language?",
-            "choices": [
-                "Swift",
-                "Python",
-                "Objective-C",
-                "Ruby"
-            ]
-        }
+### Получить группу товаров [GET]
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Headers
 
-            Location: /questions/2
+            Location: /api_group_goods/1
 
     + Body
 
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 0
-                    }, {
-                        "choice": "Python",
-                        "votes": 0
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 0
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 0
-                    }
-                ]
+            { 
+                "id_group":1,
+                "name_group":"Хлебобулочные изделия",
+                "active":true,
+                "children": []
+            },
+            
+### Добавить группу товаров [POST]
+
++ Request (application/json)
+
+            { 
+                "name_group":"Алкогольные напитки"
             }
+            
++ Response 201 (application/json)
+
+            { 
+                "id_group":4,
+                "name_group":"Алкогольные напитки",
+                "active":true,
+                "children": []
+            }
+
+### Изменить группу товаров [PUT]
+
++ Request (application/json)
+
+            { 
+                "name_group":"Алкогольные напитки"
+                "active":true,
+            }
+            
++ Response 204
+            
+### Деактивировать группу товаров [DELETE]
+
++ Response 204
+
+## Перемещение группы товаров [/api_group_goods/id_group/{id_group}/id_parent_group{id_parent_group}]
+
+Перемещает группу товаров от одного родителя к другому
+
++ Parameters
+    + id_group (number) - Код группы товаров - целое число
+    + id_parent_group (number) - Код родительской группы, куда нужно переместить группу товаров 
+
+### Переместить группу товаров [PUT]
+
++ Response 204
