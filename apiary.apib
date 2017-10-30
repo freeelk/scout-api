@@ -7,7 +7,7 @@ API для приложения Scout
 
 #Group Группы товаров 
 
-## Дерево групп товаров [/api_group_goods{?active}]
+## Дерево групп товаров [/api/group_goods{?active}]
 
 ### Получить все группы товаров в виде дерева [GET]
 
@@ -71,7 +71,7 @@ API для приложения Scout
                 }
             }
 
-## Группа товаров [/api_group_goods/{id_group}]
+## Группа товаров [/api/group_goods/{id_group}]
 
 Параметр id_group при получении, изменении, деактивировании группы указывает на целевую группу. 
 При добавлении группы - на родительскую группу товаров
@@ -140,7 +140,7 @@ API для приложения Scout
 
     + Headers
 
-            Location: /api_group_goods/1
+            Location: /api/group_goods/1
 
     + Body
 
@@ -190,7 +190,7 @@ API для приложения Scout
 
 + Response 204
 
-## Перемещение группы товаров [/api_group_goods/id_group/{id_group}/id_parent_group/{id_parent_group}]
+## Перемещение группы товаров [/api/group_goods/id_group/{id_group}/id_parent_group/{id_parent_group}]
 
 Перемещает группу товаров от одного родителя к другому
 
@@ -201,3 +201,316 @@ API для приложения Scout
 ### Переместить группу товаров [PUT]
 
 + Response 204
+
+#Group Товары
+
+## Список товаров [/api/goods{?id_group,immediate_parent,active,offset,limit}]
+
+### Получить все товары [GET]
+
+Получение списка товаров. Если не указывать код группы, возвращаются все товары, если immediate_parent не равен "true", будут возвращены также товары, которые входят в подчиненные группы, указаной группы товаров 
+
++ Parameters
+    + id_group (integer, optional) - Код группы товаров, к которой принадлежит товар
+    + immediate_parent (string, optional) - Если параметр равен "true", то возвращаются товары, принадлежащие непосредственно к данной группе
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные товары.
+    + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (integer, optional) - Возвращать указанное количество записей
+    
++ Response 200 (application/json)
+
+    + Body
+        
+            [
+                {
+                    "id_goods":1,
+                    "id_group":1,
+                    "id_tax":1,
+                    "name_goods":"Хлеб черный",
+                    "sort_order":"",
+                    "id_printer":1,
+                    "type_goods":0,
+                    "active":true
+                },
+                {
+                    "id_goods":2,
+                    "id_group":1,
+                    "id_tax":1,
+                    "name_goods":"Хлеб белый",
+                    "sort_order":"",
+                    "id_printer":1,
+                    "type_goods":0,
+                    "active":true
+                },
+                {
+                    "id_goods":3,
+                    "id_group":1,
+                    "id_tax":1,
+                    "name_goods":"Батон",
+                    "sort_order":"",
+                    "id_printer":1,
+                    "type_goods":0,
+                    "active":true
+                }
+            ]
+    
+    + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-06/schema#",
+                "type":"array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "id_goods": {
+                            "type": "integer"
+                        },
+                        "id_group": {
+                            "type": "integer"
+                        },
+                        "id_tax": {
+                            "type": "integer"
+                        },
+                        "name_goods": {
+                            "type": "string"
+                        },
+                        "sort_order": {
+                            "type": "string"
+                        },
+                        "id_printer": {
+                            "type": "integer"
+                        },
+                        "type_goods": {
+                            "type": "integer"
+                        },
+                        "active": {
+                            "type":"boolean"
+                        }
+                    }
+                }
+            }
+    
+    
+### Добавить товар [POST]
+
+Добавление нового товара
+
++ Request (application/json)
+
+    + Body
+
+            {
+                    "id_group":1,
+                    "id_tax":1,
+                    "name_goods":"Булочка с маком",
+                    "sort_order":"",
+                    "id_printer":1,
+                    "type_goods":0,
+                    "active":true
+                },
+            
+    + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-06/schema#",
+                "type":"array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "id_group": {
+                            "type": "integer"
+                        },
+                        "id_tax": {
+                            "type": "integer"
+                        },
+                        "name_goods": {
+                            "type": "string"
+                        },
+                        "sort_order": {
+                            "type": "string"
+                        },
+                        "id_printer": {
+                            "type": "integer"
+                        },
+                        "type_goods": {
+                            "type": "integer"
+                        },
+                        "active": {
+                            "type":"boolean"
+                        }
+                    }
+                }
+            }
+            
+            
++ Response 201 (application/json)
+
+     + Body
+
+            {
+                    "id_goods":5,
+                    "id_group":1,
+                    "id_tax":1,
+                    "name_goods":"Булочка с маком",
+                    "sort_order":"",
+                    "id_printer":1,
+                    "type_goods":0,
+                    "active":true
+                }
+            
+    + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-06/schema#",
+                "type":"array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "id_goods": {
+                            "type": "integer"
+                        },
+                        "id_group": {
+                            "type": "integer"
+                        },
+                        "id_tax": {
+                            "type": "integer"
+                        },
+                        "name_goods": {
+                            "type": "string"
+                        },
+                        "sort_order": {
+                            "type": "string"
+                        },
+                        "id_printer": {
+                            "type": "integer"
+                        },
+                        "type_goods": {
+                            "type": "integer"
+                        },
+                        "active": {
+                            "type":"boolean"
+                        }
+                    }
+                }
+            }
+
+
+## Товар [/api/goods/{id_goods}]
+
+Получение товара по коду
+
++ Parameters
+    + id_goods (integer, required) - Код товара
+
+### Получить товар [GET]
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /api/goods/1
+
+    + Body
+
+            {
+                "id_goods":5,
+                "id_group":1,
+                "id_tax":1,
+                "name_goods":"Булочка с маком",
+                "sort_order":"",
+                "id_printer":1,
+                "type_goods":0,
+                "active":true
+            }
+            
+    + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-06/schema#",
+                "type":"array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "id_goods": {
+                            "type": "integer"
+                        },
+                        "id_group": {
+                            "type": "integer"
+                        },
+                        "id_tax": {
+                            "type": "integer"
+                        },
+                        "name_goods": {
+                            "type": "string"
+                        },
+                        "sort_order": {
+                            "type": "string"
+                        },
+                        "id_printer": {
+                            "type": "integer"
+                        },
+                        "type_goods": {
+                            "type": "integer"
+                        },
+                        "active": {
+                            "type":"boolean"
+                        }
+                    }
+                }
+            }
+            
+### Изменить товар [PUT]
+
++ Parameters
+    + id_goods (integer, required) - Код товара
+
++ Request (application/json)
+
+            {
+                "id_group":1,
+                "id_tax":1,
+                "name_goods":"Булочка с маком",
+                "sort_order":"",
+                "id_printer":1,
+                "type_goods":0,
+                "active":true
+            }
+            
++ Response 204
+            
+### Деактивировать товар [DELETE]
+
++ Response 204            
+
+## Атрибуты товара [/api/goods/{id_goods}/attributes]
+
+
++ Parameters
+    + id_goods (integer, required) - Код товара
+
+### Получить атрибуты товара [GET]
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /api/goods/1/attributes
+
+    + Body
+
+            {
+                "id_goods":5,
+                "control_rest":true,
+                "extern_service_id":0,
+                "print_name_goods":"Булочка с маком",
+                "free_price":false,
+                "only_bar_code":false,
+                "control_showcase":false,
+                "min_order":0.00,
+                "id_client":1,
+                "use_series":false,
+                "id_text":null,
+                "id_modificator_group":0
+            }
+            
+    + Schema
