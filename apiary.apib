@@ -1,5 +1,5 @@
 FORMAT: 1A
-HOST: http://polls.apiblueprint.org/
+HOST: http://private-01ace7-scout7.apiary-mock.com/
 
 # Scout
 
@@ -7,7 +7,7 @@ API для приложения Scout
 
 #Group Группы товаров 
 
-## Дерево групп товаров [/api_group_goods/{?active}]
+## Дерево групп товаров [/api_group_goods{?active}]
 
 ### Получить все группы товаров в виде дерева [GET]
 
@@ -44,6 +44,32 @@ API для приложения Scout
                 ]
             }
         ]
+        
+ + Schema 
+    
+            {
+                "$schema": "http://json-schema.org/draft-06/schema#",
+                "type":"array"
+                "items": {
+                    "type":"object",
+                    "properties": {
+                        "id_group": {
+                            "type": "integer"
+                        },
+                        "name_group": {
+                            "type": "string"
+                        },
+                        "active": {
+                            "type":"boolean"
+                        },
+                        "children": {
+                            "type":"array"
+                            "items": {
+                            "type":"object"
+                        }
+                    }
+                }
+            }        
 
 ## Группа товаров [/api_group_goods/{id_group}]
 
@@ -68,8 +94,31 @@ API для приложения Scout
                 "name_group":"Хлебобулочные изделия",
                 "active":true,
                 "children": []
-            },
-            
+            }
+    + Schema 
+    
+            {
+              "$schema": "http://json-schema.org/draft-06/schema#",
+              "type": "object",
+              "properties": {
+                "id_group": {
+                  "type": "integer"
+                },
+                "name_group": {
+                  "type": "string"
+                },
+                "active": {
+                  "type":"boolean"
+                }
+                "children": {
+                  "type":"array"
+                  "items": {
+                    "type":"object"
+                  }
+                }
+              }
+            }
+    
 ### Добавить группу товаров [POST]
 
 + Request (application/json)
