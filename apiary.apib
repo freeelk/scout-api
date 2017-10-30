@@ -7,9 +7,12 @@ API для приложения Scout
 
 #Group Группы товаров 
 
-## Дерево групп товаров [/api_group_goods]
+## Дерево групп товаров [/api_group_goods/{?active}]
 
 ### Получить все группы товаров в виде дерева [GET]
+
++ Parameters 
+    + active (string, optional) - Если параметр равен "true", то возвращается дерево, с использованием только активных групп товаров.
 
 + Response 200 (application/json)
 
@@ -99,7 +102,7 @@ API для приложения Scout
 
 + Response 204
 
-## Перемещение группы товаров [/api_group_goods/id_group/{id_group}/id_parent_group{id_parent_group}]
+## Перемещение группы товаров [/api_group_goods/id_group/{id_group}/id_parent_group/{id_parent_group}]
 
 Перемещает группу товаров от одного родителя к другому
 
