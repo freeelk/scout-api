@@ -514,3 +514,51 @@ API для приложения Scout
             }
             
     + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-06/schema#",
+                "type":"array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "id_goods": {
+                            "type": "integer"
+                        },
+                        "control_rest": {
+                            "type": "boolean"
+                        },
+                        "extern_service_id": {
+                            "type": "integer"
+                        },
+                        "print_name_goods": {
+                            "type": "string"
+                        },
+                        "free_price": {
+                            "type": "boolean"
+                        },
+                        "only_bar_code": {
+                            "type": "boolean"
+                        },
+                        "control_showcase": {
+                            "type": "boolean"
+                        },
+                        "min_order": {
+                            "type":"float"
+                        },
+                        "id_client": {
+                            "type":"integer"
+                        },
+                        ,
+                        "use_series": {
+                            "type":"boolean"
+                        },
+                        "id_text": {
+                            "type":"integer"
+                        },
+                        "id_modificator_group": {
+                            "type":"integer"
+                        }
+                        
+                    }
+                }
+            }
