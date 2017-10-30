@@ -16,60 +16,60 @@ API для приложения Scout
 
 + Response 200 (application/json)
 
-        [ 
-            {
-                "id_group": 0,
-                "name_group": "Корневая группа товаров",
-                "active":true,
-                "children": 
-                [
-                    { 
-                        "id_group":1,
-                        "name_group":"Хлебобулочные изделия",
-                        "active":true,
-                        "children": []
-                    },
-                    { 
-                        "id_group":2,
-                        "name_group":"Мясо",
-                        "active":true,
-                        "children": []
-                    }
-                                        { 
-                        "id_group":3,
-                        "name_group":"Безалкогольные напитки",
-                        "active":true,
-                        "children": []
-                    }
-                ]
-            }
-        ]
+    + Body
+
+            [ 
+                {
+                    "id_group": 0,
+                    "name_group": "Корневая группа товаров",
+                    "active":true,
+                    "children": 
+                    [
+                        { 
+                            "id_group":1,
+                            "name_group":"Хлебобулочные изделия",
+                            "active":true,
+                            "children": []
+                        },
+                        { 
+                            "id_group":2,
+                            "name_group":"Мясо",
+                            "active":true,
+                            "children": []
+                        },
+                        { 
+                            "id_group":3,
+                            "name_group":"Безалкогольные напитки",
+                            "active":true,
+                            "children": []
+                        }
+                    ]
+                }
+            ]
         
- + Schema 
+    + Schema 
     
             {
                 "$schema": "http://json-schema.org/draft-06/schema#",
-                "type":"array"
-                "items": {
-                    "type":"object",
-                    "properties": {
-                        "id_group": {
-                            "type": "integer"
-                        },
-                        "name_group": {
-                            "type": "string"
-                        },
-                        "active": {
-                            "type":"boolean"
-                        },
-                        "children": {
-                            "type":"array"
-                            "items": {
+                "type": "object",
+                "properties": {
+                    "id_group": {
+                        "type": "integer"
+                    },
+                    "name_group": {
+                        "type": "string"
+                    },
+                    "active": {
+                        "type":"boolean"
+                    },
+                    "children": {
+                        "type":"array"
+                        "items": {
                             "type":"object"
                         }
                     }
                 }
-            }        
+            }
 
 ## Группа товаров [/api_group_goods/{id_group}]
 
@@ -78,6 +78,61 @@ API для приложения Scout
 
 + Parameters
     + id_group (number) - Код группы товаров - целое число
+
+### Добавить группу товаров [POST]
+
++ Request (application/json)
+
+    + Body
+
+            { 
+                "name_group":"Алкогольные напитки"
+            }
+            
+    + Schema
+    
+            {
+                "type":"object",
+                "properties": {
+                    "name_group":"string"
+                }
+            }
+            
+            
++ Response 201 (application/json)
+
+     + Body
+
+            { 
+                "id_group":4,
+                "name_group":"Алкогольные напитки",
+                "active":true,
+                "children": []
+            }
+            
+    + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-06/schema#",
+                "type": "object",
+                "properties": {
+                    "id_group": {
+                        "type": "integer"
+                    },
+                    "name_group": {
+                        "type": "string"
+                    },
+                    "active": {
+                        "type":"boolean"
+                    },
+                    "children": {
+                        "type":"array"
+                        "items": {
+                            "type":"object"
+                        }
+                    }
+                }
+            }
 
 ### Получить группу товаров [GET]
 
@@ -95,47 +150,31 @@ API для приложения Scout
                 "active":true,
                 "children": []
             }
+            
     + Schema 
     
             {
-              "$schema": "http://json-schema.org/draft-06/schema#",
-              "type": "object",
-              "properties": {
-                "id_group": {
-                  "type": "integer"
-                },
-                "name_group": {
-                  "type": "string"
-                },
-                "active": {
-                  "type":"boolean"
+                "$schema": "http://json-schema.org/draft-06/schema#",
+                "type": "object",
+                "properties": {
+                    "id_group": {
+                        "type": "integer"
+                    },
+                    "name_group": {
+                        "type": "string"
+                    },
+                    "active": {
+                        "type":"boolean"
+                    },
+                    "children": {
+                        "type":"array"
+                        "items": {
+                            "type":"object"
+                        }
+                    }
                 }
-                "children": {
-                  "type":"array"
-                  "items": {
-                    "type":"object"
-                  }
-                }
-              }
             }
     
-### Добавить группу товаров [POST]
-
-+ Request (application/json)
-
-            { 
-                "name_group":"Алкогольные напитки"
-            }
-            
-+ Response 201 (application/json)
-
-            { 
-                "id_group":4,
-                "name_group":"Алкогольные напитки",
-                "active":true,
-                "children": []
-            }
-
 ### Изменить группу товаров [PUT]
 
 + Request (application/json)
