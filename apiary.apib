@@ -562,3 +562,394 @@ API для приложения Scout
                     }
                 }
             }
+            
+### Изменить атрибуты товара [PUT]
+
++ Parameters
+    + id_goods (integer, required) - Код товара
+
++ Request (application/json)
+
+            {
+                "control_rest":true,
+                "extern_service_id":0,
+                "print_name_goods":"Булочка с маком",
+                "free_price":false,
+                "only_bar_code":false,
+                "control_showcase":false,
+                "min_order":0.00,
+                "id_client":1,
+                "use_series":false,
+                "id_text":null,
+                "id_modificator_group":0
+            }
+            
++ Response 204            
+
+#Group Контрагенты
+
+## Список контрагентов [/api/clients{?supplier,active,offset,limit}]
+
+### Получить список контрагентов [GET]
+
++ Parameters
+    + supplier (string, optional) - Если параметр равен "true", то возвращается (добавляется запись) список покупателей, если "false" или опущен - список продавцов 
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные контрагенты.
+    + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (integer, optional) - Возвращать указанное количество записей
+    
++ Response 200 (application/json)
+
+    + Body
+        
+            [
+                {
+                    "id_client":1,
+                    "name_client":"Иванов Иван Иванович"
+                    "can_return":true,
+                    "id_price_level":null
+                    "active":true
+                },
+                {
+                    "id_client":2,
+                    "name_client":"Петров Петр Петрович"
+                    "can_return":true,
+                    "id_price_level":null
+                    "active":true
+                },
+                {
+                    "id_client":3,
+                    "name_client":"Сидоров Сидор Сидорович"
+                    "can_return":true,
+                    "id_price_level":null
+                    "active":true
+                }
+            ]
+
+### Добавить контрагента [POST]
+
++ Request (application/json)
+
+    + Body
+
+            {
+                "name_client":"Иванов Иван Иванович"
+                "can_return":true,
+                "id_price_level":null
+                "active":true
+            }
+            
++ Response 201 (application/json)
+
+     + Body
+
+            {
+                "id_client":1,
+                "name_client":"Иванов Иван Иванович"
+                "can_return":true,
+                "id_price_level":null
+                "active":true
+            }
+            
+## Контрагент [/api/client/{id_client}]
+
++ Parameters
+    + id_client (integer, required) - Код клиента
+
+### Получить данные о контрагенте [GET]
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /api/client/1
+
+    + Body
+
+            {
+                "id_client":1,
+                "name_client":"Иванов Иван Иванович"
+                "can_return":true,
+                "id_price_level":null
+                "active":true
+            }
+            
+    
+            
+### Изменить данные о контрагенте [PUT]
+
++ Parameters
+    + id_client (integer, required) - Код клиента
+
++ Request (application/json)
+
+            {
+                "name_client":"Иванов Иван Иванович"
+                "can_return":true,
+                "id_price_level":1
+                "active":true
+            }
+            
++ Response 204
+            
+### Деактивировать данные о контрагенте [DELETE]
+
++ Response 204     
+
+
+#Group Налоги
+
+## Список налогов [/api/taxes{?active}]
+
+### Получить список налогов [GET]
+
++ Parameters
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные налоги.
+    
++ Response 200 (application/json)
+
+    + Body
+        
+            [
+                {
+                    "id_tax":1,
+                    "rate_tax":0.00,
+                    "name_tax":"Без НДС",
+                    "id_group_tax":1,
+                    "active":true
+                },
+                {
+                    "id_tax":2,
+                    "rate_tax":5.00,
+                    "name_tax":"Единый налог",
+                    "id_group_tax":2,
+                    "active":true
+                },
+                {
+                    "id_tax":3,
+                    "rate_tax":20.00,
+                    "name_tax":"НДС 20%",
+                    "id_group_tax":3,
+                    "active":true
+                }
+            ]
+
+### Добавить налог [POST]
+
++ Request (application/json)
+
+    + Body
+
+            {
+                "rate_tax":20.00,
+                "name_tax":"НДС 20%",
+                "id_group_tax":3,
+                "active":true
+            }
+            
++ Response 201 (application/json)
+
+     + Body
+
+            {
+                "id_tax":3,
+                "rate_tax":20.00,
+                "name_tax":"НДС 20%",
+                "id_group_tax":3,
+                "active":true
+            }
+            
+## Налог [/api/tax/{id_tax}]
+
++ Parameters
+    + id_tax (integer, required) - Код налога
+
+### Получить данные о налоге [GET]
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /api/tax/1
+
+    + Body
+
+            {
+                "id_tax":1,
+                "rate_tax":0.00,
+                "name_tax":"Без НДС",
+                "id_group_tax":1,
+                "active":true
+            }
+            
+    
+            
+### Изменить данные о налоге [PUT]
+
++ Parameters
+    + id_tax (integer, required) - Код налога
+
++ Request (application/json)
+
+    + Body
+
+            {
+                "rate_tax":1,
+                "name_tax":"Без НДС",
+                "id_group_tax":1,
+                "active":true
+            }
+            
++ Response 204
+            
+### Деактивировать данные о налоге [DELETE]
+
++ Response 204     
+
+## Список групп налоговых ставок [/api/group_tax]
+
+### Получить список групп налоговых ставок [GET]
+
++ Response 200 (application/json)
+
+    + Body
+
+            [
+                {
+                    "id_group_tax":"1",
+                    "name_group_tax":"A"
+                },
+                {
+                    "id_group_tax":"2",
+                    "name_group_tax":"B"
+                },
+                {
+                    "id_group_tax":"3",
+                    "name_group_tax":"C"
+                },
+                {
+                    "id_group_tax":"4",
+                    "name_group_tax":"D"
+                },
+                {
+                    "id_group_tax":"5",
+                    "name_group_tax":"E"
+                },
+                {
+                    "id_group_tax":"6",
+                    "name_group_tax":"B2"
+                }
+            ]
+
+## Группа налоговых ставок [/api/group_tax/{id_group_tax}]
+
++ Parameters
+    + id_group_tax (integer, required) - Код группы налоговых ставок
+
+### Получить данные о группе налоговых ставок [GET]
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /api/group_tax/1
+
+    + Body
+    
+            {
+                "id_group_tax":"1",
+                "name_group_tax":"A"
+            }
+            
+#Group Цены
+
+## Список цен для товара [/api/prices{id_goods}{?active}]
+
+### Получить все цены для товара [GET]
+
++ Parameters
+    + id_goods (integer, required) - Код товара
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные товары.
+    
++ Response 200 (application/json)
+
+    + Body
+        
+            [
+                {
+                    "id_goods":1,
+                    "id_unit":1,
+                    "id_series":"-",
+                    "id_price_level":1,
+                    "price":100.00,
+                    "min_price":null,
+                    "max_price":null,
+                    "wholesale_count":null,
+                    "wholesale_price":null,
+                    "active":true
+                },
+                {
+                    "id_goods":1,
+                    "id_unit":1,
+                    "id_series":"-",
+                    "id_price_level":2,
+                    "price":120.00,
+                    "min_price":null,
+                    "max_price":null,
+                    "wholesale_count":null,
+                    "wholesale_price":null,
+                    "active":true
+                },
+                {
+                    "id_goods":1,
+                    "id_unit":1,
+                    "id_series":"-",
+                    "id_price_level":3,
+                    "price":140.00,
+                    "min_price":null,
+                    "max_price":null,
+                    "wholesale_count":null,
+                    "wholesale_price":null,
+                    "active":true
+                }
+            
+            ]
+            
+### Добавить цену [POST]
+
++ Request (application/json)
+
+    + Body
+    
+            {
+                "id_unit":1,
+                "id_series":"-",
+                "id_price_level":1,
+                "price":100.00,
+                "min_price":null,
+                "max_price":null,
+                "wholesale_count":null,
+                "wholesale_price":null,
+                "active":true
+            }
+                
+
++ Response 201 (application/json)
+
+    + Body
+
+            {
+                "id_goods":1,
+                "id_unit":1,
+                "id_series":"-",
+                "id_price_level":1,
+                "price":100.00,
+                "min_price":null,
+                "max_price":null,
+                "wholesale_count":null,
+                "wholesale_price":null,
+                "active":true
+            
+            }
+            
+## Цена [/api/price/{id_goods,id_unit,id_series}]
