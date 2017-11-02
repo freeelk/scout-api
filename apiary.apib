@@ -869,7 +869,7 @@ API для приложения Scout
 
 + Parameters
     + id_goods (integer, required) - Код товара
-    + active (string, optional) - Если параметр равен "true", то возвращаются только активные товары.
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные цены.
     
 + Response 200 (application/json)
 
@@ -953,3 +953,409 @@ API для приложения Scout
             }
             
 ## Цена [/api/price/{id_goods,id_unit,id_series}]
+
++ Parameters
+    + id_goods (integer, required) - Код товара
+    + id_unit (integer, required) - Код единицы измерения
+    + id_series (integer, required) - Код серии    
+
+### Получить данные о цене [GET]
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /api/price/1/1/1
+
+    + Body
+
+            {
+                "id_goods":1,
+                "id_unit":1,
+                "id_series":"-",
+                "id_price_level":1,
+                "price":100.00,
+                "min_price":null,
+                "max_price":null,
+                "wholesale_count":null,
+                "wholesale_price":null,
+                "active":true
+            }
+            
+    
+            
+### Изменить данные о цене [PUT]
+
++ Parameters
+    + id_goods (integer, required) - Код товара
+    + id_unit (integer, required) - Код единицы измерения
+    + id_series (integer, required) - Код серии 
+
++ Request (application/json)
+
+    + Body
+
+            {
+                "id_goods":1,
+                "id_unit":1,
+                "id_series":"-",
+                "id_price_level":1,
+                "price":100.00,
+                "min_price":null,
+                "max_price":null,
+                "wholesale_count":null,
+                "wholesale_price":null,
+                "active":true
+            }
+            
++ Response 204
+            
+### Деактивировать данные о цене [DELETE]
+
++ Response 204     
+
+
+#Group Уровни цен
+
+## Список уровней цен [/api/price_levels{?active}]
+
+### Получить все уровни цен [GET]
+
++ Parameters
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные уровни цен.
+
++ Response 200 (application/json)
+
+    + Body
+        
+            [
+                {
+                    "id_price_level":1,
+                    "name_price_level":"Оптовая",
+                    "active":true
+                },
+                {
+                    "id_price_level":2,
+                    "name_price_level":"Розничная",
+                    "active":true
+                }
+            ]
+            
+### Добавить уровень цен [POST]
+
++ Request (application/json)
+
+    + Body
+    
+            {
+                "name_price_level":"Оптовая",
+                "active":true
+            }
+                
+
++ Response 201 (application/json)
+
+    + Body
+
+            {
+                "id_price_level":1,
+                "name_price_level":"Оптовая",
+                "active":true
+            }          
+
+## Уровень цен [/api/price_level/{id_price_level}]
+
+### Получить данные об уровне цен [GET]
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /api/price_level/1
+
+    + Body
+
+            {
+                "id_price_level":1,
+                "name_price_level":"Оптовая",
+                "active":true
+            }
+
+### Изменить данные об уровне цен [PUT]
+
++ Parameters
+    + id_price_level (integer, required) - Код уровня цен
+
++ Request (application/json)
+
+    + Body
+
+            {
+                "id_price_level":1,
+                "name_price_level":"Оптовая",
+                "active":true
+            }
+            
++ Response 204
+            
+### Деактивировать данные о цене [DELETE]
+
++ Response 204     
+
+#Group Единицы измерения
+
+## Список единиц измерения для товара [/api/units{id_goods}{?active}]
+
+### Получить все единицы измерения для товара [GET]
+
++ Parameters
+    + id_goods (integer, required) - Код товара
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные единицы измерения.
+    
++ Response 200 (application/json)
+    
+    + Body
+    
+            [
+                {
+                    "id_goods":1,
+                    "id_unit":1,
+                    "name_unit":"шт"
+                    "is_default":true,
+                    "rate":1,
+                    "type_unit":1,
+                    "max_count":0,
+                    "active":true
+                },
+                {
+                    "id_goods":1,
+                    "id_unit":2,
+                    "name_unit":"кг"
+                    "is_default":false,
+                    "rate":1,
+                    "type_unit":3,
+                    "max_count":0,
+                    "active":true
+                }
+            ]
+            
+### Добавить единицу измерения [POST]
+
++ Request (application/json)
+
+    + Body
+    
+            {
+                "id_goods":1,
+                "name_unit":"шт"
+                "is_default":true,
+                "rate":1,
+                "type_unit":1,
+                "max_count":0,
+                "active":true
+            },
+                
+
++ Response 201 (application/json)
+
+    + Body
+
+            {
+                "id_goods":1,
+                "id_unit":1,
+                "name_unit":"шт"
+                "is_default":true,
+                "rate":1,
+                "type_unit":1,
+                "max_count":0,
+                "active":true
+            }            
+
+## Единица измерения [/api/unit/{id_goods,id_unit}]
+
++ Parameters
+    + id_goods (integer, required) - Код товара
+    + id_unit (integer, required) - Код единицы измерения
+
+### Получить данные о единице измерения [GET]
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /api/price/1/1
+
+    + Body
+    
+            {
+                "id_goods":1,
+                "id_unit":1,
+                "name_unit":"шт"
+                "is_default":true,
+                "rate":1,
+                "type_unit":1,
+                "max_count":0,
+                "active":true
+            } 
+            
+### Изменить данные о единице измерения [PUT]
+
++ Parameters
+    + id_goods (integer, required) - Код товара
+    + id_unit (integer, required) - Код единицы измерения
+
++ Request (application/json)
+
+    + Body
+
+            {
+                "id_goods":1,
+                "id_unit":1,
+                "name_unit":"шт"
+                "is_default":true,
+                "rate":1,
+                "type_unit":1,
+                "max_count":0,
+                "active":true
+            }
+            
++ Response 204
+            
+### Деактивировать данные о единице измерения [DELETE]
+
++ Response 204         
+
+
+## Список типов единиц измерения [/api/types_units]
+
+### Получить все типы единиц измерения [GET]
+
++ Response 200 (application/json)
+    
+    + Body
+    
+            [
+                {
+                    "type_unit":1,
+                    "name":"только целое"
+                },
+                {
+                    "type_unit":2,
+                    "name":"50% или 25%"
+                },
+                {
+                    "type_unit":3,
+                    "name":"дробное"
+                }
+            ]
+            
+
+#Group Серии
+
+## Список серий для товара [/api/series{id_goods}{?active}]
+
+### Получить все серии для товара [GET]
+
++ Parameters
+    + id_goods (integer required) - Код товара
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные серии.
+
++ Response 200 (application/json)
+
+    + Body
+        
+            [ 
+                {
+                    "id_goods":1,
+                    "id_series":"-",
+                    "name_series":"-",
+                    "active":true
+                },
+                {
+                    "id_goods":1,
+                    "id_series":"1",
+                    "name_series":"Белые",
+                    "active":true
+                },
+                {
+                    "id_goods":1,
+                    "id_series":"2",
+                    "name_series":"Синие",
+                    "active":true
+                },
+                                {
+                    "id_goods":1,
+                    "id_series":"3",
+                    "name_series":"Красные",
+                    "active":true
+                }
+            ]
+    
+### Добавить серию для товара [POST]
+
++ Request (application/json)
+
+    + Body
+    
+            {
+                "id_goods":1,
+                "name_series":"Белые",
+                "active":true
+            }
+                
++ Response 201 (application/json)
+
+    + Body
+
+            {
+                "id_goods":1,
+                "id_series":"1",
+                "name_series":"Белые",
+                "active":true
+            }  
+   
+            
+## Серия [/api/series/{id_goods,id_series}]
+
+### Получить данные о серии товара [GET]
+
++ Parameters
+    + id_goods (integer, required) - Код товара
+    + id_series (string, required) - Код серии 
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /api/series/1/1
+
+    + Body         
+    
+            {
+                "id_goods":1,
+                "id_series":"1",
+                "name_series":"Белые",
+                "active":true
+            } 
+            
+### Изменить данные о серии товара [PUT]
+
++ Parameters
+    + id_goods (integer, required) - Код товара
+    + id_series (string, required) - Код серии 
+
++ Request (application/json)
+
+    + Body
+
+            {
+                "id_goods":1,
+                "name_series":"Белые",
+                "active":true
+            } 
+            
++ Response 204
+            
+### Деактивировать данные о серии товара [DELETE]
+
++ Response 204
