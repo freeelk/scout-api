@@ -7,7 +7,7 @@ API для приложения Scout
 
 #Group Группы товаров 
 
-## Дерево групп товаров [/api/group_goods{?active}]
+## Дерево групп товаров [/api/groups_goods{?active}]
 
 ### Получить все группы товаров в виде дерева [GET]
 
@@ -71,7 +71,7 @@ API для приложения Scout
                 }
             }
 
-## Группа товаров [/api/group_goods/{id_group}]
+## Группа товаров [/api/groups_goods/{id_group}]
 
 Параметр id_group при получении, изменении, деактивировании группы указывает на целевую группу. 
 При добавлении группы - на родительскую группу товаров
@@ -140,16 +140,17 @@ API для приложения Scout
 
     + Headers
 
-            Location: /api/group_goods/1
+            Location: /api/groups_goods/1
 
     + Body
 
-            { 
-                "id_group":1,
-                "name_group":"Хлебобулочные изделия",
-                "active":true,
-                "children": []
-            }
+                {
+                    "id_group": 1,
+                    "name_group": "Пополнение счета",
+                    "id_owner_group": 0,
+                    "active": true,
+                    "id_image": null
+                }
             
     + Schema 
     
@@ -190,17 +191,6 @@ API для приложения Scout
 
 + Response 204
 
-## Перемещение группы товаров [/api/group_goods/id_group/{id_group}/id_parent_group/{id_parent_group}]
-
-Перемещает группу товаров от одного родителя к другому
-
-+ Parameters
-    + id_group (number) - Код группы товаров - целое число
-    + id_parent_group (number) - Код родительской группы, куда нужно переместить группу товаров 
-
-### Переместить группу товаров [PUT]
-
-+ Response 204
 
 #Group Товары
 
@@ -1120,7 +1110,7 @@ API для приложения Scout
                 {
                     "id_goods":1,
                     "id_unit":1,
-                    "name_unit":"шт"
+                    "name_unit":"шт",
                     "is_default":true,
                     "rate":1,
                     "type_unit":1,
@@ -1130,7 +1120,7 @@ API для приложения Scout
                 {
                     "id_goods":1,
                     "id_unit":2,
-                    "name_unit":"кг"
+                    "name_unit":"кг",
                     "is_default":false,
                     "rate":1,
                     "type_unit":3,
@@ -1298,6 +1288,7 @@ API для приложения Scout
     + Body
     
             {
+                "id_series":"1",
                 "id_goods":1,
                 "name_series":"Белые",
                 "active":true
