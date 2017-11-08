@@ -16,68 +16,18 @@ API для приложения Scout
 
 + Response 200 (application/json)
 
-    + Body
-
-            [
-                {
-                    "id_group": 1,
-                    "name_group": "Пополнение счета",
-                    "id_owner_group": 0,
-                    "active": true,
-                    "id_image": null,
-                    "children": [
-                        {
-                            "id_group": 2,
-                            "name_group": "Для пополнения",
-                            "id_owner_group": 1,
-                            "active": true,
-                            "id_image": null,
-                            "children": []
-                        },
-                        {
-                            "id_group": 3,
-                            "name_group": "Пополнение с комиссией",
-                            "id_owner_group": 1,
-                            "active": true,
-                            "id_image": null,
-                            "children": []
-                        }
-                    ]
-                },
-                {
-                    "id_group": 4,
-                    "name_group": "Брюки",
-                    "id_owner_group": 0,
-                    "active": true,
-                    "id_image": null,
-                    "children": []
-                }
-            ]
-        
-    + Schema 
+    + Attributes (array[GoodsGroup])
     
-            {
-                "$schema": "http://json-schema.org/draft-06/schema#",
-                "type": "object",
-                "properties": {
-                    "id_group": {
-                        "type": "integer"
-                    },
-                    "name_group": {
-                        "type": "string"
-                    },
-                    "active": {
-                        "type":"boolean"
-                    },
-                    "children": {
-                        "type":"array"
-                        "items": {
-                            "type":"object"
-                        }
-                    }
-                }
-            }
+## Data Structures
 
+### GoodsGroup
++ id_group: 1 (number, required)
++ name_group: Пополнение счета (string, required)
++ id_owner_group: 0 (number, required)
++ active: true (boolean, required)
++ id_image: 123 (number, required)
++ children: [] (array[GoodsGroup])
+    
 ## Группа товаров [/api/groupsGoods/{id_group}]
 
 Параметр id_group при получении, изменении, деактивировании группы указывает на целевую группу. 
