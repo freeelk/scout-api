@@ -5,6 +5,102 @@ HOST: http://private-01ace7-scout7.apiary-mock.com/
 
 API для приложения Scout
 
+## Data Structures
+
+### GroupsGoodsStructure
++ id_group: 4 (number, required)
++ name_group: Пополнение счета (string, required)
++ id_owner_group: 0 (number, required)
++ active: true (boolean, required)
++ id_image: 123 (number, required)
++ children: [] (array[GroupsGoodsStructure], required)
+
+### GroupGoodsStructure
++ id_group: 4 (number, required)
++ id_owner_group: 0 (number, required)
++ name_group: Алкогольные напитки (string, required)
++ active: true (boolean, required)
+
+### GoodsStructure
++ id_goods: 7 (number, required)
++ id_group: 1 (number, required)
++ id_tax: 1 (number, required)
++ name_goods: Чашка обычная (string, required)
++ sort_order: 7 (string, required)
++ id_printer: 1 (number, required),
++ type_goods: 0 (number, required),
++ active: true (boolean, required)
+
+### GoodsAttrsStructure
++ id_goods: 7 (number, required)
++ control_rest: false (boolean, required)
++ extern_service_id: 1 (number, required, nullable)
++ print_name_goods: Чашка обычная (string, required)
++ free_price: false (boolean, required)
++ only_bar_code: false (boolean, required)
++ control_showcase: false (boolean, required)
++ min_order: 0.000 (number, required)
++ id_client: 1 (number, required, nullable)
++ use_series: false (boolean, required)
++ id_text: 1 (number, required, nullable)
+
+### ClientsStructure
++ id_client: 8 (number, required)
++ name_client: Иванов (string, required)
++ is_supplier false (boolean, required)
++ is_buyer true (boolean, required)
++ can_return: true (boolean, required)
++ id_price_level: 2 (number, required)
++ active: true (boolean, required)
+
+### TaxesStructure
++ id_tax: 1 (number, required)
++ rate_tax: 0.00 (number, required)
++ name_tax: Без НДС (string, required)
++ id_group_tax: 1 (number, required)
++ active: true (boolean, required)
+
+### GroupsTaxesStructure
++ id_group_tax: 1 (number, required)
++ name_group_tax: A (string, required)
+
+### PricesStructure
++ id_goods: 1 (number, required)
++ id_unit: 1 (number, required)
++ id_series: `-` (string, required)
++ id_price_level: 1 (number, required)
++ price: 100.00 (number, required)
++ min_price: 0 (number, required) 
++ max_price: 0 (number, required)
++ wholesale_count: 0 (number, required)
++ wholesale_price: 0 (number, required)
++ active: true (boolean, required)
+
+### PriceLevelsStructure
++ id_price_level: 1 (number, required)
++ name_price_level: Закупочная (string, required)
++ active: true (boolean, required)
+
+### UnitsStructure
++ id_goods: 1 (number, required)
++ id_unit: 1 (number, required)
++ name_unit: шт (string, required)
++ is_default: false (boolean, required)
++ rate: 1.000 (number, required)
++ type_unit: 3 (number, required)
++ max_count: 0.000 (number, required)
++ active: true (boolean, required)
+
+### TypesUnitsStructure
++ type_unit: 2 (number, required)
++ name: Кратное 25% (string, required)
+
+### SeriesStructure
++ id_goods: 5 (number, required)
++ id_series: 1 (string, required)
++ name_series: Синие (string, required)
++ active: true  (boolean, required)
+
 #Group Группы товаров 
 
 ## Дерево групп товаров [/api/groupsGoods{?active}]
@@ -12,21 +108,13 @@ API для приложения Scout
 ### Получить все группы товаров в виде дерева [GET]
 
 + Parameters 
+
     + active (string, optional) - Если параметр присутствует и равен "true", то возвращается дерево, с использованием только активных групп товаров.
 
 + Response 200 (application/json)
 
-    + Attributes (array[GoodsGroup])
-    
-## Data Structures
+    + Attributes (array[GroupsGoodsStructure])
 
-### GoodsGroup
-+ id_group: 1 (number, required)
-+ name_group: Пополнение счета (string, required)
-+ id_owner_group: 0 (number, required)
-+ active: true (boolean, required)
-+ id_image: 123 (number, required)
-+ children: [] (array[GoodsGroup])
     
 ## Группа товаров [/api/groupsGoods/{id_group}]
 
@@ -34,10 +122,13 @@ API для приложения Scout
 При добавлении группы - на родительскую группу товаров
 
 + Parameters
+
     + id_group (number) - Код группы товаров - целое число
 
+
 ### Добавить группу товаров [POST]
-Добавление группы товаров. Параметр id_group указывает на родительскую группу (0 - корневая группа товаров)
+Добавление группы товаров. Параметр id_group указывает на родительскую группу (0 - корневая группа товаров).
+Атрибут id_group в JSON-е запроса игнорируется.
 
 + Request (application/json)
 
@@ -49,68 +140,33 @@ API для приложения Scout
             
 + Response 201 (application/json)
 
-    + Attributes
-    
-        + id_group: 4 (number, required)
-        + id_owner_group: 0 (number, required)
-        + name_group: Алкогольные напитки (string, required)
-        + active: true (boolean, required)
+    + Headers
 
+            Location: /api/groupsGoods/1
+
+    + Attributes (GroupGoodsStructure)
     
+
 ### Получить группу товаров [GET]
+Получение группы товаров.
 
 + Response 200 (application/json)
 
-    + Headers
-
-            Location: /api/groups_goods/1
-
-    + Body
-
-                {
-                    "id_group": 1,
-                    "name_group": "Пополнение счета",
-                    "id_owner_group": 0,
-                    "active": true,
-                    "id_image": null
-                }
-            
-    + Schema 
-    
-            {
-                "$schema": "http://json-schema.org/draft-06/schema#",
-                "type": "object",
-                "properties": {
-                    "id_group": {
-                        "type": "integer"
-                    },
-                    "name_group": {
-                        "type": "string"
-                    },
-                    "active": {
-                        "type":"boolean"
-                    },
-                    "children": {
-                        "type":"array"
-                        "items": {
-                            "type":"object"
-                        }
-                    }
-                }
-            }
+    + Attributes (GroupGoodsStructure)
     
 ### Изменить группу товаров [PUT]
+Изменение группы товаров. Атрибут id_group в JSON-е запроса игнорируется.
 
 + Request (application/json)
 
-            { 
-                "name_group":"Алкогольные напитки"
-                "active":true,
-            }
+    + Attributes (GroupGoodsStructure)
             
-+ Response 204
++ Response 200 (application/json)
+
+    + Attributes (GroupGoodsStructure)
             
 ### Деактивировать группу товаров [DELETE]
+Деактивация группы товаров
 
 + Response 204
 
@@ -120,10 +176,10 @@ API для приложения Scout
 ## Список товаров [/api/goods{?id_group,immediate_parent,active,offset,limit}]
 
 ### Получить все товары [GET]
-
 Получение списка товаров. Если не указывать код группы, возвращаются все товары, если immediate_parent не равен "true", будут возвращены также товары, которые входят в подчиненные группы, указаной группы товаров 
 
 + Parameters
+
     + id_group (integer, optional) - Код группы товаров, к которой принадлежит товар
     + immediate_parent (string, optional) - Если параметр равен "true", то возвращаются товары, принадлежащие непосредственно к данной группе
     + active (string, optional) - Если параметр равен "true", то возвращаются только активные товары.
@@ -132,437 +188,149 @@ API для приложения Scout
     
 + Response 200 (application/json)
 
-    + Body
-        
-            [
-                {
-                    "id_goods":1,
-                    "id_group":1,
-                    "id_tax":1,
-                    "name_goods":"Хлеб черный",
-                    "sort_order":"",
-                    "id_printer":1,
-                    "type_goods":0,
-                    "active":true
-                },
-                {
-                    "id_goods":2,
-                    "id_group":1,
-                    "id_tax":1,
-                    "name_goods":"Хлеб белый",
-                    "sort_order":"",
-                    "id_printer":1,
-                    "type_goods":0,
-                    "active":true
-                },
-                {
-                    "id_goods":3,
-                    "id_group":1,
-                    "id_tax":1,
-                    "name_goods":"Батон",
-                    "sort_order":"",
-                    "id_printer":1,
-                    "type_goods":0,
-                    "active":true
-                }
-            ]
-    
-    + Schema
-    
-            {
-                "$schema": "http://json-schema.org/draft-06/schema#",
-                "type":"array",
-                "items": {
-                    "type": "object",
-                    "properties": {
-                        "id_goods": {
-                            "type": "integer"
-                        },
-                        "id_group": {
-                            "type": "integer"
-                        },
-                        "id_tax": {
-                            "type": "integer"
-                        },
-                        "name_goods": {
-                            "type": "string"
-                        },
-                        "sort_order": {
-                            "type": "string"
-                        },
-                        "id_printer": {
-                            "type": "integer"
-                        },
-                        "type_goods": {
-                            "type": "integer"
-                        },
-                        "active": {
-                            "type":"boolean"
-                        }
-                    }
-                }
-            }
+    + Attributes (array[GoodsStructure])
     
     
 ### Добавить товар [POST]
-
-Добавление нового товара
+Добавление нового товара. Атрибут id_goods в JSON-е запроса игнорируется.
 
 + Request (application/json)
 
-    + Body
-
-            {
-                    "id_group":1,
-                    "id_tax":1,
-                    "name_goods":"Булочка с маком",
-                    "sort_order":"",
-                    "id_printer":1,
-                    "type_goods":0,
-                    "active":true
-                },
-            
-    + Schema
-    
-            {
-                "$schema": "http://json-schema.org/draft-06/schema#",
-                "type":"array",
-                "items": {
-                    "type": "object",
-                    "properties": {
-                        "id_group": {
-                            "type": "integer"
-                        },
-                        "id_tax": {
-                            "type": "integer"
-                        },
-                        "name_goods": {
-                            "type": "string"
-                        },
-                        "sort_order": {
-                            "type": "string"
-                        },
-                        "id_printer": {
-                            "type": "integer"
-                        },
-                        "type_goods": {
-                            "type": "integer"
-                        },
-                        "active": {
-                            "type":"boolean"
-                        }
-                    }
-                }
-            }
+    + Attributes (GoodsStructure)
             
             
 + Response 201 (application/json)
-
-     + Body
-
-            {
-                    "id_goods":5,
-                    "id_group":1,
-                    "id_tax":1,
-                    "name_goods":"Булочка с маком",
-                    "sort_order":"",
-                    "id_printer":1,
-                    "type_goods":0,
-                    "active":true
-                }
-            
-    + Schema
-    
-            {
-                "$schema": "http://json-schema.org/draft-06/schema#",
-                "type":"array",
-                "items": {
-                    "type": "object",
-                    "properties": {
-                        "id_goods": {
-                            "type": "integer"
-                        },
-                        "id_group": {
-                            "type": "integer"
-                        },
-                        "id_tax": {
-                            "type": "integer"
-                        },
-                        "name_goods": {
-                            "type": "string"
-                        },
-                        "sort_order": {
-                            "type": "string"
-                        },
-                        "id_printer": {
-                            "type": "integer"
-                        },
-                        "type_goods": {
-                            "type": "integer"
-                        },
-                        "active": {
-                            "type":"boolean"
-                        }
-                    }
-                }
-            }
-
-
-## Товар [/api/goods/{id_goods}]
-
-Получение товара по коду
-
-+ Parameters
-    + id_goods (integer, required) - Код товара
-
-### Получить товар [GET]
-
-+ Response 200 (application/json)
 
     + Headers
 
             Location: /api/goods/1
 
-    + Body
+    + Attributes (GoodsStructure)
 
-            {
-                "id_goods":5,
-                "id_group":1,
-                "id_tax":1,
-                "name_goods":"Булочка с маком",
-                "sort_order":"",
-                "id_printer":1,
-                "type_goods":0,
-                "active":true
-            }
-            
-    + Schema
-    
-            {
-                "$schema": "http://json-schema.org/draft-06/schema#",
-                "type":"array",
-                "items": {
-                    "type": "object",
-                    "properties": {
-                        "id_goods": {
-                            "type": "integer"
-                        },
-                        "id_group": {
-                            "type": "integer"
-                        },
-                        "id_tax": {
-                            "type": "integer"
-                        },
-                        "name_goods": {
-                            "type": "string"
-                        },
-                        "sort_order": {
-                            "type": "string"
-                        },
-                        "id_printer": {
-                            "type": "integer"
-                        },
-                        "type_goods": {
-                            "type": "integer"
-                        },
-                        "active": {
-                            "type":"boolean"
-                        }
-                    }
-                }
-            }
-            
-### Изменить товар [PUT]
+
+## Товар [/api/goods/{id_goods}]
 
 + Parameters
+
     + id_goods (integer, required) - Код товара
 
-+ Request (application/json)
-
-            {
-                "id_group":1,
-                "id_tax":1,
-                "name_goods":"Булочка с маком",
-                "sort_order":"",
-                "id_printer":1,
-                "type_goods":0,
-                "active":true
-            }
-            
-+ Response 204
-            
-### Деактивировать товар [DELETE]
-
-+ Response 204            
-
-## Атрибуты товара [/api/goods/{id_goods}/attributes]
-
-
-+ Parameters
-    + id_goods (integer, required) - Код товара
-
-### Получить атрибуты товара [GET]
+### Получить товар [GET]
+Получение товара по коду
 
 + Response 200 (application/json)
 
-    + Headers
-
-            Location: /api/goods/1/attributes
-
-    + Body
-
-            {
-                "id_goods":5,
-                "control_rest":true,
-                "extern_service_id":0,
-                "print_name_goods":"Булочка с маком",
-                "free_price":false,
-                "only_bar_code":false,
-                "control_showcase":false,
-                "min_order":0.00,
-                "id_client":1,
-                "use_series":false,
-                "id_text":null,
-                "id_modificator_group":0
-            }
+    + Attributes (GoodsStructure)
             
-    + Schema
-    
-            {
-                "$schema": "http://json-schema.org/draft-06/schema#",
-                "type":"array",
-                "items": {
-                    "type": "object",
-                    "properties": {
-                        "id_goods": {
-                            "type": "integer"
-                        },
-                        "control_rest": {
-                            "type": "boolean"
-                        },
-                        "extern_service_id": {
-                            "type": "integer"
-                        },
-                        "print_name_goods": {
-                            "type": "string"
-                        },
-                        "free_price": {
-                            "type": "boolean"
-                        },
-                        "only_bar_code": {
-                            "type": "boolean"
-                        },
-                        "control_showcase": {
-                            "type": "boolean"
-                        },
-                        "min_order": {
-                            "type":"float"
-                        },
-                        "id_client": {
-                            "type":"integer"
-                        },
-                        ,
-                        "use_series": {
-                            "type":"boolean"
-                        },
-                        "id_text": {
-                            "type":"integer"
-                        },
-                        "id_modificator_group": {
-                            "type":"integer"
-                        }
-                        
-                    }
-                }
-            }
-            
-### Изменить атрибуты товара [PUT]
+### Изменить товар [PUT]
+Изменение товара. Атрибут id_goods в JSON-е запроса игнорируется.
 
 + Parameters
+
     + id_goods (integer, required) - Код товара
 
 + Request (application/json)
 
-            {
-                "control_rest":true,
-                "extern_service_id":0,
-                "print_name_goods":"Булочка с маком",
-                "free_price":false,
-                "only_bar_code":false,
-                "control_showcase":false,
-                "min_order":0.00,
-                "id_client":1,
-                "use_series":false,
-                "id_text":null,
-                "id_modificator_group":0
-            }
+    + Attributes (GoodsStructure)
             
++ Response 200 (application/json)
+
+    + Attributes (GoodsStructure)
+            
+### Деактивировать товар [DELETE]
+Деактивация товара
+
 + Response 204            
+
+
+## Список атрибутов товаров [/api/goodsAttrs{?offset,limit}]
+
+### Получить все записи атрибутов товаров [GET]
+Получить список записей атрибутов товаров
+
++ Parameters
+
+    + offset (integer,optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (integer,optional) - Возвращать указанное количество записей
+    
++ Response 200 (application/json)
+
+    + Attributes (array[GoodsAttrsStructure])    
+
+## Атрибуты товара [/api/goodsAttrs{id_goods}]
+
++ Parameters
+
+    + id_goods (integer, required) - Код товара
+
+### Добавить запись атрибутов товара [POST]
+Добавление атрибутов для товара. Атрибут id_goods в JSON-е запроса игнорируется. TODO: Продумать поведение, если запись с атрибутами для такого товара существует.
+
++ Request (application/json)
+
+    + Attributes (GoodsAttrsStructure)
+            
+            
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /api/goodsAttrs/1
+
+    + Attributes (GoodsAttrsStructure)
+
+
+### Получить атрибуты товара [GET]
+Получение атрибутов для товара. 
+
++ Response 200 (application/json)
+
+    + Attributes (GoodsAttrsStructure)
+            
+### Изменить атрибуты товара [PUT]
+Изменение атрибутов товара. Атрибут id_goods в JSON-е запроса игнорируется.
+
++ Request (application/json)
+
+    + Attributes (GoodsAttrsStructure)
+            
++ Response 200 (application/json)
+
+    + Attributes (GoodsAttrsStructure)      
+
 
 #Group Контрагенты
 
-## Список контрагентов [/api/clients{?supplier,active,offset,limit}]
+## Список контрагентов [/api/clients{?supplier,buyer,active,offset,limit}]
 
 ### Получить список контрагентов [GET]
+Получение списка контрагентов. Если не указаны дополнительные параметры, возвращаются сразу и поставщики, и покупатели.
+Параметры supplier, buyer со значением true дают возможность получать отдельно списки поставщиков или покупателей
 
 + Parameters
-    + supplier (string, optional) - Если параметр равен "true", то возвращается (добавляется запись) список покупателей, если "false" или опущен - список продавцов 
+    + supplier (string, optional) - Если параметр равен "true", то возвращается (добавляется запись) список покупателей 
+    + buyer (string, optional) - Если параметр равен "true", то возвращается (добавляется запись) список ппоставщиков 
     + active (string, optional) - Если параметр равен "true", то возвращаются только активные контрагенты.
     + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
     + limit (integer, optional) - Возвращать указанное количество записей
     
 + Response 200 (application/json)
 
-    + Body
-        
-            [
-                {
-                    "id_client":1,
-                    "name_client":"Иванов Иван Иванович"
-                    "can_return":true,
-                    "id_price_level":null
-                    "active":true
-                },
-                {
-                    "id_client":2,
-                    "name_client":"Петров Петр Петрович"
-                    "can_return":true,
-                    "id_price_level":null
-                    "active":true
-                },
-                {
-                    "id_client":3,
-                    "name_client":"Сидоров Сидор Сидорович"
-                    "can_return":true,
-                    "id_price_level":null
-                    "active":true
-                }
-            ]
+    + Attributes (array[ClientsStructure])  
 
 ### Добавить контрагента [POST]
+Добавление контрагента. Атрибут id_client в JSON-е запроса игнорируется.
 
 + Request (application/json)
 
-    + Body
-
-            {
-                "name_client":"Иванов Иван Иванович"
-                "can_return":true,
-                "id_price_level":null
-                "active":true
-            }
+    + Attributes (ClientsStructure)  
             
 + Response 201 (application/json)
+    
+    + Headers
 
-     + Body
+            Location: /api/client/1
 
-            {
-                "id_client":1,
-                "name_client":"Иванов Иван Иванович"
-                "can_return":true,
-                "id_price_level":null
-                "active":true
-            }
+    + Attributes (ClientsStructure)  
             
 ## Контрагент [/api/client/{id_client}]
 
@@ -570,107 +338,60 @@ API для приложения Scout
     + id_client (integer, required) - Код клиента
 
 ### Получить данные о контрагенте [GET]
+Получение данных о клиенте по коду
 
 + Response 200 (application/json)
 
-    + Headers
-
-            Location: /api/client/1
-
-    + Body
-
-            {
-                "id_client":1,
-                "name_client":"Иванов Иван Иванович"
-                "can_return":true,
-                "id_price_level":null
-                "active":true
-            }
-            
-    
+    + Attributes (ClientsStructure)  
             
 ### Изменить данные о контрагенте [PUT]
-
-+ Parameters
-    + id_client (integer, required) - Код клиента
+Изменение данных о клиенте. Атрибут id_client в JSON-е запроса игнорируется.
 
 + Request (application/json)
 
-            {
-                "name_client":"Иванов Иван Иванович"
-                "can_return":true,
-                "id_price_level":1
-                "active":true
-            }
+    + Attributes (ClientsStructure)  
             
-+ Response 204
++ Response 200 (application/json)
+
+    + Attributes (ClientsStructure)  
             
 ### Деактивировать данные о контрагенте [DELETE]
+Деактивация данных о контрагенте.
 
 + Response 204     
 
 
 #Group Налоги
 
-## Список налогов [/api/taxes{?active}]
+## Список налогов [/api/taxes{?active,offset,limit}]
 
 ### Получить список налогов [GET]
+Получение всех записей
 
 + Parameters
-    + active (string, optional) - Если параметр равен "true", то возвращаются только активные налоги.
+
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (integer, optional) - Возвращать указанное количество записей
     
 + Response 200 (application/json)
 
-    + Body
-        
-            [
-                {
-                    "id_tax":1,
-                    "rate_tax":0.00,
-                    "name_tax":"Без НДС",
-                    "id_group_tax":1,
-                    "active":true
-                },
-                {
-                    "id_tax":2,
-                    "rate_tax":5.00,
-                    "name_tax":"Единый налог",
-                    "id_group_tax":2,
-                    "active":true
-                },
-                {
-                    "id_tax":3,
-                    "rate_tax":20.00,
-                    "name_tax":"НДС 20%",
-                    "id_group_tax":3,
-                    "active":true
-                }
-            ]
+    + Attributes (array[TaxesStructure]) 
 
 ### Добавить налог [POST]
+Добавление нового налога. Атрибут id_tax в JSON-е запроса игнорируется.
 
 + Request (application/json)
 
-    + Body
-
-            {
-                "rate_tax":20.00,
-                "name_tax":"НДС 20%",
-                "id_group_tax":3,
-                "active":true
-            }
+    + Attributes (TaxesStructure) 
             
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
-     + Body
+    + Headers
 
-            {
-                "id_tax":3,
-                "rate_tax":20.00,
-                "name_tax":"НДС 20%",
-                "id_group_tax":3,
-                "active":true
-            }
+            Location: /api/tax/1
+
+    + Attributes (TaxesStructure) 
             
 ## Налог [/api/tax/{id_tax}]
 
@@ -678,250 +399,137 @@ API для приложения Scout
     + id_tax (integer, required) - Код налога
 
 ### Получить данные о налоге [GET]
+Получение записи по коду
 
 + Response 200 (application/json)
 
-    + Headers
-
-            Location: /api/tax/1
-
-    + Body
-
-            {
-                "id_tax":1,
-                "rate_tax":0.00,
-                "name_tax":"Без НДС",
-                "id_group_tax":1,
-                "active":true
-            }
-            
-    
+    + Attributes (TaxesStructure) 
             
 ### Изменить данные о налоге [PUT]
-
-+ Parameters
-    + id_tax (integer, required) - Код налога
+Изменение данных о налоге. Атрибут id_tax в JSON-е запроса игнорируется.
 
 + Request (application/json)
 
-    + Body
-
-            {
-                "rate_tax":1,
-                "name_tax":"Без НДС",
-                "id_group_tax":1,
-                "active":true
-            }
+    + Attributes (TaxesStructure) 
             
-+ Response 204
++ Response 200 (application/json)
+
+    + Attributes (TaxesStructure) 
             
 ### Деактивировать данные о налоге [DELETE]
 
 + Response 204     
 
-## Список групп налоговых ставок [/api/group_tax]
+## Список групп налоговых ставок [/api/groupsTaxes{?offset,limit}]
+TODO: Удаление группы налоговых ставок не предусмотрено?
 
 ### Получить список групп налоговых ставок [GET]
+Получить список всех групп налоговых ставок
+
++ Parameters
+
+    + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (integer, optional) - Возвращать указанное количество записей
 
 + Response 200 (application/json)
 
-    + Body
+    + Attributes (array[GroupsTaxesStructure])   
+    
+### Добавить группу налоговых ставок [POST]
+Добавление новой группы налоговых ставок. Атрибут id_group_tax в JSON-е запроса игнорируется.
 
-            [
-                {
-                    "id_group_tax":"1",
-                    "name_group_tax":"A"
-                },
-                {
-                    "id_group_tax":"2",
-                    "name_group_tax":"B"
-                },
-                {
-                    "id_group_tax":"3",
-                    "name_group_tax":"C"
-                },
-                {
-                    "id_group_tax":"4",
-                    "name_group_tax":"D"
-                },
-                {
-                    "id_group_tax":"5",
-                    "name_group_tax":"E"
-                },
-                {
-                    "id_group_tax":"6",
-                    "name_group_tax":"B2"
-                }
-            ]
++ Request (application/json)
 
-## Группа налоговых ставок [/api/group_tax/{id_group_tax}]
+    + Attributes (GroupsTaxesStructure) 
+            
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /api/groupsTaxes/1
+
+    + Attributes (GroupsTaxesStructure)     
+
+## Группа налоговых ставок [/api/groupsTaxes/{id_group_tax}]
 
 + Parameters
     + id_group_tax (integer, required) - Код группы налоговых ставок
 
 ### Получить данные о группе налоговых ставок [GET]
+Получение записи по коду
 
 + Response 200 (application/json)
 
-    + Headers
+    + Attributes (GroupsTaxesStructure)     
 
-            Location: /api/group_tax/1
+### Изменить данные о группе налоговых ставок [PUT]
+Изменение группы налоговых ставок. Атрибут id_group_tax в JSON-е запроса игнорируется.
 
-    + Body
-    
-            {
-                "id_group_tax":"1",
-                "name_group_tax":"A"
-            }
++ Request (application/json)
+
+    + Attributes (GroupsTaxesStructure) 
+            
++ Response 200 (application/json)
+
+    + Attributes (GroupsTaxesStructure) 
+
             
 #Group Цены
 
-## Список цен для товара [/api/prices{id_goods}{?active}]
+## Список цен [/api/prices{?id_goods,active,offset,limit}]
 
 ### Получить все цены для товара [GET]
 
 + Parameters
-    + id_goods (integer, required) - Код товара
-    + active (string, optional) - Если параметр равен "true", то возвращаются только активные цены.
+
+    + id_goods (integer, required) - Код товара. Если указать, будет возвращен список цен для конкретного товара
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (integer, optional) - Возвращать указанное количество записей
     
 + Response 200 (application/json)
 
-    + Body
-        
-            [
-                {
-                    "id_goods":1,
-                    "id_unit":1,
-                    "id_series":"-",
-                    "id_price_level":1,
-                    "price":100.00,
-                    "min_price":null,
-                    "max_price":null,
-                    "wholesale_count":null,
-                    "wholesale_price":null,
-                    "active":true
-                },
-                {
-                    "id_goods":1,
-                    "id_unit":1,
-                    "id_series":"-",
-                    "id_price_level":2,
-                    "price":120.00,
-                    "min_price":null,
-                    "max_price":null,
-                    "wholesale_count":null,
-                    "wholesale_price":null,
-                    "active":true
-                },
-                {
-                    "id_goods":1,
-                    "id_unit":1,
-                    "id_series":"-",
-                    "id_price_level":3,
-                    "price":140.00,
-                    "min_price":null,
-                    "max_price":null,
-                    "wholesale_count":null,
-                    "wholesale_price":null,
-                    "active":true
-                }
-            
-            ]
-            
+    + Attributes (array[PricesStructure])   
+
 ### Добавить цену [POST]
 
 + Request (application/json)
 
-    + Body
-    
-            {
-                "id_unit":1,
-                "id_series":"-",
-                "id_price_level":1,
-                "price":100.00,
-                "min_price":null,
-                "max_price":null,
-                "wholesale_count":null,
-                "wholesale_price":null,
-                "active":true
-            }
+    + Attributes (PricesStructure)  
                 
 
 + Response 201 (application/json)
 
-    + Body
+    + Headers
 
-            {
-                "id_goods":1,
-                "id_unit":1,
-                "id_series":"-",
-                "id_price_level":1,
-                "price":100.00,
-                "min_price":null,
-                "max_price":null,
-                "wholesale_count":null,
-                "wholesale_price":null,
-                "active":true
+            Location: /api/price/1/1/1/1
+
+    + Attributes (PricesStructure)  
             
-            }
-            
-## Цена [/api/price/{id_goods,id_unit,id_series}]
+## Цена [/api/price/{id_goods}/{id_unit}/{id_price_level}/{?id_series}]
 
 + Parameters
     + id_goods (integer, required) - Код товара
     + id_unit (integer, required) - Код единицы измерения
-    + id_series (integer, required) - Код серии    
+    + id_price_level (integer, required) - Код уровня цен
+    + id_series (string, optional) - Код серии. Если не указан, предполагается "-"    
 
 ### Получить данные о цене [GET]
 
 + Response 200 (application/json)
 
-    + Headers
-
-            Location: /api/price/1/1/1
-
-    + Body
-
-            {
-                "id_goods":1,
-                "id_unit":1,
-                "id_series":"-",
-                "id_price_level":1,
-                "price":100.00,
-                "min_price":null,
-                "max_price":null,
-                "wholesale_count":null,
-                "wholesale_price":null,
-                "active":true
-            }
-            
+    + Attributes (PricesStructure)
     
             
 ### Изменить данные о цене [PUT]
 
-+ Parameters
-    + id_goods (integer, required) - Код товара
-    + id_unit (integer, required) - Код единицы измерения
-    + id_series (integer, required) - Код серии 
-
 + Request (application/json)
 
-    + Body
-
-            {
-                "id_goods":1,
-                "id_unit":1,
-                "id_series":"-",
-                "id_price_level":1,
-                "price":100.00,
-                "min_price":null,
-                "max_price":null,
-                "wholesale_count":null,
-                "wholesale_price":null,
-                "active":true
-            }
+    + Attributes (PricesStructure)
             
-+ Response 204
++ Response 200 (application/json)
+
+    + Attributes (PricesStructure)
             
 ### Деактивировать данные о цене [DELETE]
 
@@ -930,345 +538,195 @@ API для приложения Scout
 
 #Group Уровни цен
 
-## Список уровней цен [/api/price_levels{?active}]
+## Список уровней цен [/api/priceLevels{?active,offset,limit}]
 
 ### Получить все уровни цен [GET]
+Получение списка всех уровней цен
 
 + Parameters
-    + active (string, optional) - Если параметр равен "true", то возвращаются только активные уровни цен.
+
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (integer, optional) - Возвращать указанное количество записей
 
 + Response 200 (application/json)
 
-    + Body
-        
-            [
-                {
-                    "id_price_level":1,
-                    "name_price_level":"Оптовая",
-                    "active":true
-                },
-                {
-                    "id_price_level":2,
-                    "name_price_level":"Розничная",
-                    "active":true
-                }
-            ]
+    + Attributes (array[PriceLevelsStructure])   
             
 ### Добавить уровень цен [POST]
+Добавление уровня цен.  Атрибут id_price_level в JSON-е запроса игнорируется. 
 
 + Request (application/json)
 
-    + Body
-    
-            {
-                "name_price_level":"Оптовая",
-                "active":true
-            }
+    + Attributes (PriceLevelsStructure)   
                 
-
 + Response 201 (application/json)
-
-    + Body
-
-            {
-                "id_price_level":1,
-                "name_price_level":"Оптовая",
-                "active":true
-            }          
-
-## Уровень цен [/api/price_level/{id_price_level}]
-
-### Получить данные об уровне цен [GET]
-
-+ Response 200 (application/json)
 
     + Headers
 
-            Location: /api/price_level/1
+            Location: /api/priceLevels/1
 
-    + Body
+    + Attributes (PriceLevelsStructure)       
 
-            {
-                "id_price_level":1,
-                "name_price_level":"Оптовая",
-                "active":true
-            }
+## Уровень цен [/api/priceLevels/{id_price_level}]
+
++ Parameters
+
+    + id_price_level (integer, required) - Код уровня цен
+
+### Получить данные об уровне цен [GET]
+Получение данных об уровне цен
+
++ Response 200 (application/json)
+
+    + Attributes (PriceLevelsStructure)   
 
 ### Изменить данные об уровне цен [PUT]
 
-+ Parameters
-    + id_price_level (integer, required) - Код уровня цен
-
 + Request (application/json)
 
-    + Body
-
-            {
-                "id_price_level":1,
-                "name_price_level":"Оптовая",
-                "active":true
-            }
+    + Attributes (PriceLevelsStructure)  
             
-+ Response 204
++ Response 200 (application/json)
+
+    + Attributes (PriceLevelsStructure)  
             
 ### Деактивировать данные о цене [DELETE]
 
 + Response 204     
 
+
 #Group Единицы измерения
 
-## Список единиц измерения для товара [/api/units{id_goods}{?active}]
+## Список единиц измерения для товара [/api/units{?id_goods,active,offset,limit}]
 
-### Получить все единицы измерения для товара [GET]
+### Получить все единицы измерения [GET]
+Получение списка всех единиц измерения. Если указан параметр id_goods, возвращаются единицы измерения для конкретного товара
 
 + Parameters
-    + id_goods (integer, required) - Код товара
-    + active (string, optional) - Если параметр равен "true", то возвращаются только активные единицы измерения.
+
+    + id_goods (integer, required) - Код товара, Если указан, возвращаются единицы измерения только для данного товара
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (integer, optional) - Возвращать указанное количество записей
     
-+ Response 200 (application/json)
++ Response 200 (application/json) 
+
+    + Attributes (array[UnitsStructure])   
     
-    + Body
-    
-            [
-                {
-                    "id_goods":1,
-                    "id_unit":1,
-                    "name_unit":"шт",
-                    "is_default":true,
-                    "rate":1,
-                    "type_unit":1,
-                    "max_count":0,
-                    "active":true
-                },
-                {
-                    "id_goods":1,
-                    "id_unit":2,
-                    "name_unit":"кг",
-                    "is_default":false,
-                    "rate":1,
-                    "type_unit":3,
-                    "max_count":0,
-                    "active":true
-                }
-            ]
-            
 ### Добавить единицу измерения [POST]
+Добавление единицы измерения.  Атрибут id_unit в JSON-е запроса игнорируется. 
 
 + Request (application/json)
 
-    + Body
-    
-            {
-                "id_goods":1,
-                "name_unit":"шт"
-                "is_default":true,
-                "rate":1,
-                "type_unit":1,
-                "max_count":0,
-                "active":true
-            },
+    + Attributes (UnitsStructure)   
                 
 
 + Response 201 (application/json)
 
-    + Body
+    + Headers
 
-            {
-                "id_goods":1,
-                "id_unit":1,
-                "name_unit":"шт"
-                "is_default":true,
-                "rate":1,
-                "type_unit":1,
-                "max_count":0,
-                "active":true
-            }            
+            Location: /api/unit/1/1
 
-## Единица измерения [/api/unit/{id_goods,id_unit}]
+    + Attributes (UnitsStructure)          
+
+
+## Единица измерения [/api/unit/{id_goods}/{id_unit}]
 
 + Parameters
     + id_goods (integer, required) - Код товара
     + id_unit (integer, required) - Код единицы измерения
 
 ### Получить данные о единице измерения [GET]
+Получение данных о единице измерения по коду товара и коду единицы измерения
 
 + Response 200 (application/json)
 
-    + Headers
-
-            Location: /api/price/1/1
-
-    + Body
-    
-            {
-                "id_goods":1,
-                "id_unit":1,
-                "name_unit":"шт"
-                "is_default":true,
-                "rate":1,
-                "type_unit":1,
-                "max_count":0,
-                "active":true
-            } 
+    + Attributes (UnitsStructure)
             
 ### Изменить данные о единице измерения [PUT]
-
-+ Parameters
-    + id_goods (integer, required) - Код товара
-    + id_unit (integer, required) - Код единицы измерения
+Изменение данных о единице измерения
 
 + Request (application/json)
 
-    + Body
-
-            {
-                "id_goods":1,
-                "id_unit":1,
-                "name_unit":"шт"
-                "is_default":true,
-                "rate":1,
-                "type_unit":1,
-                "max_count":0,
-                "active":true
-            }
+    + Attributes (UnitsStructure)
             
-+ Response 204
++ Response 200 (application/json)
+
+    + Attributes (UnitsStructure)
             
 ### Деактивировать данные о единице измерения [DELETE]
 
 + Response 204         
 
 
-## Список типов единиц измерения [/api/types_units]
+## Список типов единиц измерения [/api/typesUnits]
 
 ### Получить все типы единиц измерения [GET]
+Получение списка типов единиц измерения товаров.
 
 + Response 200 (application/json)
     
-    + Body
-    
-            [
-                {
-                    "type_unit":1,
-                    "name":"только целое"
-                },
-                {
-                    "type_unit":2,
-                    "name":"50% или 25%"
-                },
-                {
-                    "type_unit":3,
-                    "name":"дробное"
-                }
-            ]
+    + Attributes (array[TypesUnitsStructure])
             
 
 #Group Серии
 
-## Список серий для товара [/api/series{id_goods}{?active}]
+## Список серий [/api/series{?id_goods,active,offset,limit}]
 
-### Получить все серии для товара [GET]
+### Получить все серии [GET]
+Получение списка всех серий. Если указан параметр id_goods, возвращаются серии для конкретного товара
 
 + Parameters
-    + id_goods (integer required) - Код товара
-    + active (string, optional) - Если параметр равен "true", то возвращаются только активные серии.
+
+    + id_goods (integer, required) - Код товара, Если указан, возвращаются серии только для данного товара
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (integer, optional) - Возвращать указанное количество записей
 
 + Response 200 (application/json)
 
-    + Body
-        
-            [ 
-                {
-                    "id_goods":1,
-                    "id_series":"-",
-                    "name_series":"-",
-                    "active":true
-                },
-                {
-                    "id_goods":1,
-                    "id_series":"1",
-                    "name_series":"Белые",
-                    "active":true
-                },
-                {
-                    "id_goods":1,
-                    "id_series":"2",
-                    "name_series":"Синие",
-                    "active":true
-                },
-                                {
-                    "id_goods":1,
-                    "id_series":"3",
-                    "name_series":"Красные",
-                    "active":true
-                }
-            ]
+    + Attributes (array[SeriesStructure])   
     
 ### Добавить серию для товара [POST]
+Добавление новой серии для товара.  Атрибут id_series в JSON-е запроса игнорируется. TODO: Добавление серии по умолчанию ("-") как?
 
 + Request (application/json)
 
-    + Body
-    
-            {
-                "id_series":"1",
-                "id_goods":1,
-                "name_series":"Белые",
-                "active":true
-            }
+    + Attributes (SeriesStructure)   
                 
 + Response 201 (application/json)
-
-    + Body
-
-            {
-                "id_goods":1,
-                "id_series":"1",
-                "name_series":"Белые",
-                "active":true
-            }  
-   
-            
-## Серия [/api/series/{id_goods,id_series}]
-
-### Получить данные о серии товара [GET]
-
-+ Parameters
-    + id_goods (integer, required) - Код товара
-    + id_series (string, required) - Код серии 
-
-+ Response 200 (application/json)
 
     + Headers
 
             Location: /api/series/1/1
 
-    + Body         
-    
-            {
-                "id_goods":1,
-                "id_series":"1",
-                "name_series":"Белые",
-                "active":true
-            } 
+    + Attributes (SeriesStructure) 
+   
             
-### Изменить данные о серии товара [PUT]
+## Серия [/api/series/{id_goods}/{id_series}]
 
 + Parameters
     + id_goods (integer, required) - Код товара
     + id_series (string, required) - Код серии 
 
+### Получить данные о серии товара [GET]
+Получение данных о серии товара по коду товара и коду серии
+
++ Response 200 (application/json)
+
+    + Attributes (SeriesStructure) 
+            
+### Изменить данные о серии товара [PUT]
+Изменение данных о серии товара по коду товара и коду серии
+
 + Request (application/json)
 
-    + Body
-
-            {
-                "id_goods":1,
-                "name_series":"Белые",
-                "active":true
-            } 
+    + Attributes (SeriesStructure) 
             
-+ Response 204
++ Response 200 (application/json)
+
+    + Attributes (SeriesStructure) 
             
 ### Деактивировать данные о серии товара [DELETE]
 
