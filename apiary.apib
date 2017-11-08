@@ -7,43 +7,50 @@ API для приложения Scout
 
 #Group Группы товаров 
 
-## Дерево групп товаров [/api/groups_goods{?active}]
+## Дерево групп товаров [/api/groupsGoods{?active}]
 
 ### Получить все группы товаров в виде дерева [GET]
 
 + Parameters 
-    + active (string, optional) - Если параметр равен "true", то возвращается дерево, с использованием только активных групп товаров.
+    + active (string, optional) - Если параметр присутствует и равен "true", то возвращается дерево, с использованием только активных групп товаров.
 
 + Response 200 (application/json)
 
     + Body
 
-            [ 
+            [
                 {
-                    "id_group": 0,
-                    "name_group": "Корневая группа товаров",
-                    "active":true,
-                    "children": 
-                    [
-                        { 
-                            "id_group":1,
-                            "name_group":"Хлебобулочные изделия",
-                            "active":true,
+                    "id_group": 1,
+                    "name_group": "Пополнение счета",
+                    "id_owner_group": 0,
+                    "active": true,
+                    "id_image": null,
+                    "children": [
+                        {
+                            "id_group": 2,
+                            "name_group": "Для пополнения",
+                            "id_owner_group": 1,
+                            "active": true,
+                            "id_image": null,
                             "children": []
                         },
-                        { 
-                            "id_group":2,
-                            "name_group":"Мясо",
-                            "active":true,
-                            "children": []
-                        },
-                        { 
-                            "id_group":3,
-                            "name_group":"Безалкогольные напитки",
-                            "active":true,
+                        {
+                            "id_group": 3,
+                            "name_group": "Пополнение с комиссией",
+                            "id_owner_group": 1,
+                            "active": true,
+                            "id_image": null,
                             "children": []
                         }
                     ]
+                },
+                {
+                    "id_group": 4,
+                    "name_group": "Брюки",
+                    "id_owner_group": 0,
+                    "active": true,
+                    "id_image": null,
+                    "children": []
                 }
             ]
         
@@ -71,7 +78,7 @@ API для приложения Scout
                 }
             }
 
-## Группа товаров [/api/groups_goods/{id_group}]
+## Группа товаров [/api/groupsGoods/{id_group}]
 
 Параметр id_group при получении, изменении, деактивировании группы указывает на целевую группу. 
 При добавлении группы - на родительскую группу товаров
@@ -80,60 +87,26 @@ API для приложения Scout
     + id_group (number) - Код группы товаров - целое число
 
 ### Добавить группу товаров [POST]
+Добавление группы товаров. Параметр id_group указывает на родительскую группу (0 - корневая группа товаров)
 
 + Request (application/json)
 
-    + Body
+    + Request (application/json)
 
-            { 
-                "name_group":"Алкогольные напитки"
-            }
-            
-    + Schema
+    + Attributes
     
-            {
-                "type":"object",
-                "properties": {
-                    "name_group":"string"
-                }
-            }
-            
+        + name_group: Алкогольные напитки (required)
             
 + Response 201 (application/json)
 
-     + Body
-
-            { 
-                "id_group":4,
-                "name_group":"Алкогольные напитки",
-                "active":true,
-                "children": []
-            }
-            
-    + Schema
+    + Attributes
     
-            {
-                "$schema": "http://json-schema.org/draft-06/schema#",
-                "type": "object",
-                "properties": {
-                    "id_group": {
-                        "type": "integer"
-                    },
-                    "name_group": {
-                        "type": "string"
-                    },
-                    "active": {
-                        "type":"boolean"
-                    },
-                    "children": {
-                        "type":"array"
-                        "items": {
-                            "type":"object"
-                        }
-                    }
-                }
-            }
+        + id_group: 4 (number, required)
+        + id_owner_group: 0 (number, required)
+        + name_group: Алкогольные напитки (string, required)
+        + active: true (boolean, required)
 
+    
 ### Получить группу товаров [GET]
 
 + Response 200 (application/json)
