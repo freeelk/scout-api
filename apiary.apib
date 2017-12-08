@@ -13,13 +13,20 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 ## Data Structures
 
-### GroupsGoodsStructure
+### GroupsGoodsTreeStructure
 + id_group: 4 (number, required)
 + name_group: Пополнение счета (string, required)
 + id_owner_group: 0 (number, required)
 + active: true (boolean, required)
 + id_image: 123 (number, required)
-+ children: [] (array[GroupsGoodsStructure], required)
++ children: [] (array[GroupsGoodsTreeStructure], required)
+
+### GroupsGoodsListStructure
++ id_group 4 (number, required)
++ name_group Пополнение счета (string, required)
++ id_owner_group 0 (number, required)
++ id_image 123 (number, required)
++ active true (boolean, required)
 
 ### GroupGoodsStructure
 + id_group: 4 (number, required)
@@ -49,6 +56,10 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + use_series: false (boolean, required)
 + id_text: 1 (number, required, nullable)
 + id_modificator_group: 1 (number, required, nullable)
+
+### TypesGoodsStructure
++ type_goods: 1 (number, required)
++ name: Обычный товар (string, required)
 
 ### BarCodesStructure
 + bar_code: 4052557303215 (string,required)
@@ -116,20 +127,39 @@ HOST: private-01ace7-scout7.apiary-mock.com
 ### CountStructure
 + count: 10 (number, required) 
 
+
 #Group Группы товаров 
 
-## Дерево групп товаров [/api/groupsGoods{?active,unprotect_keys}]
+## Дерево групп товаров [/api/groupsGoods/tree{?active,order}]
 
 ### Получить все группы товаров в виде дерева [GET]
 
 + Parameters 
 
     + active (string, optional) - Если параметр присутствует и равен "true", то возвращается дерево, с использованием только активных групп товаров.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов.
 
 + Response 200 (application/json)
 
-    + Attributes (array[GroupsGoodsStructure])
-    
+    + Attributes (array[GroupsGoodsTreeStructure])
+
+## Список групп товаров [/api/groupsGoods/list{?active,order,offset,limit}]
+
+### Получить все группы товаров в виде списка [GET]
+
++ Parameters 
+
+    + active (string, optional) - Если параметр присутствует и равен "true", то возвращается дерево, с использованием только активных групп товаров.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов.
+    + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (integer, optional) - Возвращать указанное количество записей
+
++ Response 200 (application/json)
+
+    + Attributes (array[GroupsGoodsListStructure])
+
+## Добавление группы товаров [/api/groupsGoods/tree{?unprotect_keys}]
+
 ### Добавить группу товаров [POST]
 - Атрибут `id_group` в JSON-е запроса  игнорируется, если не указан параметр `unprotect_keys=true`.
 
@@ -287,7 +317,16 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
     + id_goods (integer, required) - Код товара
 
-+ Response 204            
++ Response 204   
+
+## Типы товаров [/api/typesGoods]
+Типы товаров нельзя редактировать. Только получить список.
+
+### Получить список типов товаров [GET]
+
++ Response 200 (application/json)
+
+    + Attributes (array[TypesGoodsStructure])
 
 
 #Group Штрих-коды
