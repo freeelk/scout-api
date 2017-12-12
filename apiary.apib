@@ -331,13 +331,14 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 #Group Штрих-коды
 
-## Список штрих-кодов [/api/barCodes{?bar_code,active,order,offset,limit}]
+## Список штрих-кодов [/api/barCodes{?bar_code,id_goods,active,order,offset,limit}]
 
 ### Получить все штрих-коды [GET]
 
 + Parameters
 
     + bar_code (integer, optional) - Штрих-код товара. Если указать, будет возвращен список для данного штрих-кода
+    + id_goods (integer, optional) - Код товара. Если указать, будет возвращен список для данного товара
     + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
     + order (string, optional) - Список полей сортировки через запятую без пробелов
     + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
@@ -424,15 +425,15 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 #Group Контрагенты
 
-## Список контрагентов [/api/clients{?supplier,buyer,active,order,offset,limit,unprotect_keys}]
+## Список контрагентов [/api/clients{?is_supplier,is_buyer,active,order,offset,limit,unprotect_keys}]
 
 ### Получить список контрагентов [GET]
 Получение списка контрагентов. Если не указаны дополнительные параметры, возвращаются сразу и поставщики, и покупатели.
 Параметры supplier, buyer со значением true дают возможность получать отдельно списки поставщиков или покупателей
 
 + Parameters
-    + supplier (string, optional) - Если параметр равен "true", то возвращается (добавляется запись) список покупателей 
-    + buyer (string, optional) - Если параметр равен "true", то возвращается (добавляется запись) список ппоставщиков 
+    + is_supplier (string, optional) - Если параметр равен "true", то возвращается (добавляется запись) список покупателей 
+    + is_buyer (string, optional) - Если параметр равен "true", то возвращается (добавляется запись) список ппоставщиков 
     + active (string, optional) - Если параметр равен "true", то возвращаются только активные контрагенты.
     + order (string, optional) - Список полей сортировки через запятую без пробелов    
     + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
