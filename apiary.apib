@@ -7,8 +7,9 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 - При создании, изменении записей  ключевое поле (в JSON-е тела запроса) стандартно игнорируется. 
   При создании его значение будет присвоено автоматически.  
-- Если необходимо явно указать или изменить значение ключевого поля, это можно сделать с дополнительным параметром запроса unprotect_keys=true   
+- Если необходимо явно указать значение ключевого поля, это можно сделать с дополнительным параметром запроса unprotect_keys=true   
 - При изменении записей в JSON-е тела запроса можно указывать только те поля, которые должны быть изменены.
+- При создании или изменени записей все атрибуты в JSON-е, которые не являются атрибутами модели, игнорируются. 
 - Операция `DELETE` состоит в установке значения поля `active` в false.
 
 ## Data Structures
@@ -224,7 +225,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 #Group Товары
 
-## Список товаров [/api/goods{?id_group,immediate_parent,order,active,offset,limit,unprotect_keys}]
+## Список товаров [/api/goods{?id_group,immediate_parent,order,active,type_goods,offset,limit,unprotect_keys}]
 
 ### Получить все товары [GET]
 Получение списка товаров. Если не указывать код группы, возвращаются все товары, если immediate_parent не равен "true", будут возвращены также товары, которые входят в подчиненные группы, указаной группы товаров 
@@ -235,6 +236,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + immediate_parent (string, optional) - Если параметр равен "true", то возвращаются товары, принадлежащие непосредственно к данной группе
     + order (string, optional) - Список полей сортировки через запятую без пробелов
     + active (string, optional) - Если параметр равен "true", то возвращаются только активные товары.
+    + type_goods (number, optional) - Фильтрация по типу товара
     + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
     + limit (integer, optional) - Возвращать указанное количество записей
     
@@ -265,7 +267,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
     + Attributes (GoodsStructure)
     
-## Количество товаров [/api/goods/count{?id_group,immediate_parent,active}]
+## Количество товаров [/api/goods/count{?id_group,immediate_parent,active,type_goods}]
 
 ### Получить количество товаров [GET]
 Возвращает количество записей 
@@ -275,6 +277,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + id_group (integer, optional) - Код группы товаров, к которой принадлежит товар
     + immediate_parent (string, optional) - Если параметр равен "true", то возвращаются товары, принадлежащие непосредственно к данной группе
     + active (string, optional) - Если параметр равен "true", то возвращаются только активные товары.
+    + type_goods (number, optional) - Фильтрация по типу товара
 
 + Response 200 (application/json)
 
@@ -295,12 +298,11 @@ HOST: private-01ace7-scout7.apiary-mock.com
             
 ### Изменить товар [PUT]
 Изменение товара. 
-- Атрибут id_goods в JSON-е запроса игнорируется, если не указан параметр `unprotect_keys=true`
+- Попытка изменить id_goods игнорируется
 
 + Parameters
 
     + id_goods (integer, required) - Код товара
-    + unprotect_keys (string, optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
 
 + Request (application/json)
 
