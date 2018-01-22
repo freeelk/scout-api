@@ -66,8 +66,8 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + bar_code: 4052557303215 (string,required)
 + id_unit: 1 (number,required)
 + id_goods: 910 (number,required)
-+ id_series: 1 (string,required)
-+ ext_bar_code: 44 (string,required)
++ id_series: `-` (string,required)
++ ext_bar_code: `-` (string,required)
 + active: true (boolean, required)
 
 ### ClientsStructure
@@ -124,6 +124,13 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + id_series: 1 (string, required)
 + name_series: Синие (string, required)
 + active: true  (boolean, required)
+
+### ContainStructure
++ id_contain_goods: 1 (number, required)
++ id_unit: 1 (number, required)
++ id_series: `-` (string, required)
++ quantity: 10 (number, required)
++ active: true (boolean, required)
 
 ### CountStructure
 + count: 10 (number, required) 
@@ -1032,5 +1039,105 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
     + id_goods (integer, required) - Код товара
     + id_series (string, optional) - Код серии. Если не указан, предполагается значение по умолчанию ("-") 
+
++ Response 204
+
+
+#Group Состав наборов, коллекций и сервисов
+
+## Список товаров составного товара [/api/contain/{?id_contain_goods,active,order,offset,limit}]
+
+### Получить все товары составного товара [GET]
+Получение списка всех товаров составного товара.
+
++ Parameters
+
+    + id_contain_goods (integer, required) - Код составного товара 
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов      
+    + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (integer, optional) - Возвращать указанное количество записей
+
++ Response 200 (application/json)
+
+    + Attributes (array[ContainStructure])   
+
+### Добавить товар в составной товар [POST]
+Добавление нового товара в содержимое составного товара 
+
++ Parameters
+
+     + id_contain_goods (integer,required) - Код составного товара 
+
++ Request (application/json)
+
+    + Attributes (ContainStructure)   
+                
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /api/contain/1/1/1/1
+
+    + Attributes (SeriesStructure) 
+   
+
+## Количество записей товаров в составном товаре [/api/contain/count/{?id_contain_goods,active}]
+
+### Получить количество записей товаров  [GET]
+Возвращает количество записей    
+
++ Parameters
+
+    + id_contain_goods (integer, required) - Код составного товара 
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+
++ Response 200 (application/json)
+
+    + Attributes (CountStructure)      
+            
+
+## Товар в составном товаре [/api/contain/{id_contain_goods}/{id_goods}/{id_unit}/{id_series}{?unprotect_keys}]
+
+### Получить данные о товаре в составном товаре [GET]
+Получение данных о товаре в составном товаре
+
++ Parameters
+    + id_contain_goods (integer, required) - Код составного товара 
+    + id_goods (integer, required) - Код товара в составе
+    + id_unit (integer, required) - Код единицы измерения
+    + id_series (string, required) - Код серии
+
++ Response 200 (application/json)
+
+    + Attributes (ContainStructure) 
+    
+
+### Изменить данные о товаре в составе составного товара [PUT]
+Изменение данных товаре в составном товаре
+
++ Parameters
+    + id_contain_goods (integer, required) - Код составного товара (часть ключа)
+    + id_goods (integer, required) - Код товара в составе (часть ключа)
+    + id_unit (integer, required) - Код единицы измерения (часть ключа)
+    + id_series (string, required) - Код серии (часть ключа)
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true" значения ключевых полей не игнорируются
++ Request (application/json)
+
+    + Attributes (SeriesStructure) 
+            
++ Response 200 (application/json)
+
+    + Attributes (SeriesStructure) 
+
+### Деактивировать данные о товаре в составе составного товара [DELETE]
+Деактивация данных о товаре в составе составного товара
+
++ Parameters
+
+    + id_contain_goods (integer, required) - Код составного товара 
+    + id_goods (integer, required) - Код товара в составе
+    + id_unit (integer, required) - Код единицы измерения
+    + id_series (string, required) - Код серии    
 
 + Response 204
