@@ -1045,14 +1045,15 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 #Group Составные товары
 
-## Список товаров составного товара [/api/contain/{?id_contain_goods,active,order,offset,limit}]
+## Состав составных товаров [/api/contain/{?id_contain_goods,with,active,order,offset,limit}]
 
-### Получить все товары составного товара [GET]
-Получение списка всех товаров составного товара.
+### Получить список товаров составных товаров [GET]
+Получение содержимого составных товаров.
 
 + Parameters
 
-    + id_contain_goods (integer, required) - Код составного товара 
+    + id_contain_goods (integer, optional) - Код составного товара 
+    + with (string,optional) - Связанные данные. Возможные связи: containGoods, goods, unit, series, price_income. Названия связей указываются через запятую без пробелов.
     + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
     + order (string, optional) - Список полей сортировки через запятую без пробелов      
     + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
@@ -1097,13 +1098,14 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + Attributes (CountStructure)      
             
 
-## Товар в составном товаре [/api/contain/{id_contain_goods}/{id_goods}/{id_unit}/{id_series}{?unprotect_keys}]
+## Товар в составном товаре [/api/contain/{id_contain_goods}/{id_goods}/{id_unit}/{id_series}{?unprotect_keys,with}]
 
 ### Получить данные о товаре в составном товаре [GET]
 Получение данных о товаре в составном товаре
 
 + Parameters
     + id_contain_goods (integer, required) - Код составного товара 
+    + with (string, optional) - Связанные данные. Возможные связи: containGoods, goods, unit, series, price_income. Названия связей указываются через запятую без пробелов.
     + id_goods (integer, required) - Код товара в составе
     + id_unit (integer, required) - Код единицы измерения
     + id_series (string, required) - Код серии
