@@ -141,6 +141,10 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + id_dcard_type:  1 (number)
 + active: true (boolean, required)
 
+### DiscountCardTypesStructure
++ id_dcard_type:  1 (number, required)
++ name: Card type one (string)
++ active: true (boolean, required)
 
 ### CountStructure
 + count: 10 (number, required) 
@@ -1246,5 +1250,99 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + Parameters
 
     + id_discount_card (integer, required) - Код дисконтной карты
+
++ Response 204
+
+
+
+#Group Типы дисконтных карт
+
+## Список типов дисконтных карт [/api/discount_card_types{?active,order,offset,limit,unprotect_keys}]
+
+### Получить все типы дисконтных карт [GET]
+Получение списка всех типов дисконтных карт.
+
++ Parameters
+
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов      
+    + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (integer, optional) - Возвращать указанное количество записей
+
++ Response 200 (application/json)
+
+    + Attributes (array[DiscountCardTypesStructure])   
+    
+### Добавить тип дисконтных карт [POST]
+Добавление типа дисконтных карт.  
+- Атрибут `id_dcard_type` в JSON-е запроса игнорируется, если не указан параметр `unprotect_keys=true`.
+
++ Parameters
+
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
+
++ Request (application/json)
+
+    + Attributes (DiscountCardTypesStructure)   
+                
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /api/discount_card_types/1/1
+
+    + Attributes (DiscountCardTypesStructure) 
+   
+
+    
+## Количество типов дисконтных карт [/api/discount_card_types/count{?active}]
+
+### Получить количество типов дисконтных карт  [GET]
+Возвращает количество записей    
+
++ Parameters
+
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
+
++ Response 200 (application/json)
+
+    + Attributes (CountStructure)      
+            
+
+## Тип дисконтной карты [/api/discount_cards/{id_dcard_type}/{?unprotect_keys}]
+
+### Получить данные о типе дисконтной карты [GET]
+Получение данных о типе дисконтной карты
+
++ Parameters
+    + id_dcard_type (integer, required) - Код типа дисконтной карты
+
++ Response 200 (application/json)
+
+    + Attributes (DiscountCardTypesStructure) 
+
+### Изменить данные о типе дисконтной карте [PUT]
+Изменение данных о типе дисконтной карты по коду
+
++ Parameters
+
+    + id_dcard_type (integer, required) - Код типа дисконтной карты
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
+
++ Request (application/json)
+
+    + Attributes (DiscountCardTypesStructure) 
+            
++ Response 200 (application/json)
+
+    + Attributes (DiscountCardTypesStructure) 
+
+### Деактивировать данные о типе дисконтной карты [DELETE]
+
+Деактивация данных о типе дисконтной карты
+
++ Parameters
+
+    + id_dcard_type (integer, required) - Код типа дисконтной карты
 
 + Response 204
