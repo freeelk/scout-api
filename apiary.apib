@@ -1163,7 +1163,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 #Group Дисконтные карты
 
-## Список дисконтных карт [/api/discount_cards{?active,order,offset,limit,unprotect_keys}]
+## Список дисконтных карт [/api/discountCards{?active,order,offset,limit,unprotect_keys}]
 
 ### Получить все дисконтные карты [GET]
 Получение списка всех дисконтных карт.
@@ -1178,7 +1178,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + Response 200 (application/json)
 
     + Attributes (array[DiscountCardsStructure])   
-    
+
 ### Добавить дисконтную карту [POST]
 Добавление дисконтной карты.  
 - Атрибут `id_discount_card` в JSON-е запроса игнорируется, если не указан параметр `unprotect_keys=true`.
@@ -1195,13 +1195,13 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
     + Headers
 
-            Location: /api/discount_cards/1/1
+            Location: /api/discountCards/1/1
 
     + Attributes (DiscountCardsStructure) 
    
 
     
-## Количество дисконтных карт [/api/discount_cards/count{?active}]
+## Количество дисконтных карт [/api/discountCards/count{?active}]
 
 ### Получить количество дисконтных карт  [GET]
 Возвращает количество записей    
@@ -1215,10 +1215,10 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + Attributes (CountStructure)      
             
      
-## Дисконтная карта [/api/discount_cards/{id_discount_card}/{?unprotect_keys}]
+## Дисконтная карта [/api/discountCards/{id_discount_card}/{?unprotect_keys}]
 
 ### Получить данные о дисконтной карте [GET]
-Получение данных о 
+Получение данных о дисконтной карте
 
 + Parameters
     + id_discount_card (integer, required) - Код дисконтной карты
@@ -1226,7 +1226,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + Response 200 (application/json)
 
     + Attributes (DiscountCardsStructure) 
-            
+
 ### Изменить данные о дисконтной карте [PUT]
 Изменение данных о дисконтной карте по коду
 
@@ -1257,7 +1257,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 #Group Типы дисконтных карт
 
-## Список типов дисконтных карт [/api/discount_card_types{?active,order,offset,limit,unprotect_keys}]
+## Список типов дисконтных карт [/api/discountCardTypes{?active,order,offset,limit,unprotect_keys}]
 
 ### Получить все типы дисконтных карт [GET]
 Получение списка всех типов дисконтных карт.
@@ -1289,13 +1289,13 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
     + Headers
 
-            Location: /api/discount_card_types/1/1
+            Location: /api/discountCardTypes/1/1
 
     + Attributes (DiscountCardTypesStructure) 
    
 
     
-## Количество типов дисконтных карт [/api/discount_card_types/count{?active}]
+## Количество типов дисконтных карт [/api/discountCardTypes/count{?active}]
 
 ### Получить количество типов дисконтных карт  [GET]
 Возвращает количество записей    
@@ -1309,7 +1309,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + Attributes (CountStructure)      
             
 
-## Тип дисконтной карты [/api/discount_cards/{id_dcard_type}/{?unprotect_keys}]
+## Тип дисконтной карты [/api/discountCardTypes/{id_dcard_type}/{?unprotect_keys}]
 
 ### Получить данные о типе дисконтной карты [GET]
 Получение данных о типе дисконтной карты
