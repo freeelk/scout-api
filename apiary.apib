@@ -132,6 +132,16 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + quantity: 10 (number, required)
 + active: true (boolean, required)
 
+### DiscountCardsStructure
++ id_discount_card:  1 (number, required)
++ id_client:  1 (number, required)
++ bar_code: 4052557303215 (string,required)
++ phone_number: 5555555555 (string, required)
++ id_price_level: 1 (number)
++ type:  1 (number)
++ active: true (boolean, required)
+
+
 ### CountStructure
 + count: 10 (number, required) 
 
@@ -1045,7 +1055,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 #Group Составные товары
 
-## Состав составных товаров [/api/contain/{?id_contain_goods,with,active,order,offset,limit}]
+## Состав составных товаров [/api/contain/{?id_contain_goods,with,active,filters,order,offset,limit}]
 
 ### Получить список товаров составных товаров [GET]
 Получение содержимого составных товаров.
@@ -1055,6 +1065,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + id_contain_goods (integer, optional) - Код составного товара 
     + with (string,optional) - Связанные данные. Возможные связи: containGoods, goods, unit, series, price_income. Названия связей указываются через запятую без пробелов.
     + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + filters (string, optional) - Строка формата `field_name::filter|field_nameN::filterN`. Фильтрация записей. Производится текстовое сравнение. 
     + order (string, optional) - Список полей сортировки через запятую без пробелов      
     + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
     + limit (integer, optional) - Возвращать указанное количество записей
@@ -1083,7 +1094,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + Attributes (SeriesStructure) 
    
 
-## Количество записей товаров в составном товаре [/api/contain/count/{?id_contain_goods,active}]
+## Количество записей товаров в составном товаре [/api/contain/count/{?id_contain_goods,active,filters}]
 
 ### Получить количество записей товаров  [GET]
 Возвращает количество записей    
@@ -1092,6 +1103,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
     + id_contain_goods (integer, required) - Код составного товара 
     + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + filters (string, optional) - Строка формата `field_name::filter|field_nameN::filterN`. Фильтрация записей. Производится текстовое сравнение.
 
 + Response 200 (application/json)
 
@@ -1141,5 +1153,98 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + id_goods (integer, required) - Код товара в составе
     + id_unit (integer, required) - Код единицы измерения
     + id_series (string, required) - Код серии    
+
++ Response 204
+
+
+#Group Дисконтные карты
+
+## Список дисконтных карт [/api/discount_cards{?active,order,offset,limit,unprotect_keys}]
+
+### Получить все дисконтные карты [GET]
+Получение списка всех дисконтных карт.
+
++ Parameters
+
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов      
+    + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (integer, optional) - Возвращать указанное количество записей
+
++ Response 200 (application/json)
+
+    + Attributes (array[DiscountCardsStructure])   
+    
+### Добавить дисконтную карту [POST]
+Добавление дисконтной карты.  
+- Атрибут `id_discount_card` в JSON-е запроса игнорируется, если не указан параметр `unprotect_keys=true`.
+
++ Parameters
+
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
+
++ Request (application/json)
+
+    + Attributes (DiscountCardsStructure)   
+                
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /api/discount_cards/1/1
+
+    + Attributes (DiscountCardsStructure) 
+   
+
+    
+## Количество дисконтных карт [/api/discount_cards/count{?active}]
+
+### Получить количество дисконтных карт  [GET]
+Возвращает количество записей    
+
++ Parameters
+
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
+
++ Response 200 (application/json)
+
+    + Attributes (CountStructure)      
+            
+     
+## Дисконтная карта [/api/discount_cards/{id_discount_card}/{?unprotect_keys}]
+
+### Получить данные о дисконтной карте [GET]
+Получение данных о 
+
++ Parameters
+    + id_discount_card (integer, required) - Код дисконтной карты
+
++ Response 200 (application/json)
+
+    + Attributes (DiscountCardsStructure) 
+            
+### Изменить данные о дисконтной карте [PUT]
+Изменение данных о дисконтной карте по коду
+
++ Parameters
+
+    + id_discount_card (integer, required) - Код дисконтной карты
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
+
++ Request (application/json)
+
+    + Attributes (DiscountCardsStructure) 
+            
++ Response 200 (application/json)
+
+    + Attributes (DiscountCardsStructure) 
+            
+### Деактивировать данные о дисконтной карте [DELETE]
+
+Деактивация данных о дисконтной карте
+
++ Parameters
+
+    + id_discount_card (integer, required) - Код дисконтной карты
 
 + Response 204
