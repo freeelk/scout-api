@@ -159,26 +159,46 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + Parameters 
 
     + active (string, optional) - Если параметр присутствует и равен "true", то возвращается дерево, с использованием только активных групп товаров.
-    + order (string, optional) - Список полей сортировки через запятую без пробелов.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов. Для обратной сортировки поставить `-` перед именеи поля.
 
 + Response 200 (application/json)
 
     + Attributes (array[GroupsGoodsTreeStructure])
 
-## Список групп товаров [/api/groupsGoods/list{?active,order,offset,limit}]
+## Список групп товаров [/api/groupsGoods/list{?active,ids_list,filters,order,offset,limit}]
 
 ### Получить все группы товаров в виде списка [GET]
 
 + Parameters 
 
     + active (string, optional) - Если параметр присутствует и равен "true", то возвращается дерево, с использованием только активных групп товаров.
-    + order (string, optional) - Список полей сортировки через запятую без пробелов.
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + order (string, optional) - Список полей сортировки через запятую без пробелов. Для обратной сортировки поставить `-` перед именеи поля.
     + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
     + limit (integer, optional) - Возвращать указанное количество записей
 
 + Response 200 (application/json)
 
     + Attributes (array[GroupsGoodsListStructure])
+
+
+## Количество групп товаров [/api/groupsGoods/count{?filters,ids_list,active}]
+
+### Получить количество групп товаров  [GET]
+Возвращает количество записей    
+
++ Parameters
+
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
+
++ Response 200 (application/json)
+
+    + Attributes (CountStructure)  
+
+
 
 ## Добавление группы товаров [/api/groupsGoods/tree{?unprotect_keys}]
 
@@ -246,16 +266,18 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 #Group Товары
 
-## Список товаров [/api/goods{?id_group,immediate_parent,order,active,type_goods,offset,limit,unprotect_keys}]
+## Список товаров [/api/goods{?id_group,immediate_parent,order,ids_list,filters,active,type_goods,offset,limit,unprotect_keys}]
 
-### Получить все товары [GET]
+### Получить список товаров [GET]
 Получение списка товаров. Если не указывать код группы, возвращаются все товары, если immediate_parent не равен "true", будут возвращены также товары, которые входят в подчиненные группы, указаной группы товаров 
 
 + Parameters
 
     + id_group (integer, optional) - Код группы товаров, к которой принадлежит товар
     + immediate_parent (string, optional) - Если параметр равен "true", то возвращаются товары, принадлежащие непосредственно к данной группе
-    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + order (string, optional) - Список полей сортировки через запятую без пробелов. Для обратной сортировки поставить `-` перед именеи поля.
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
     + active (string, optional) - Если параметр равен "true", то возвращаются только активные товары.
     + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
     + limit (integer, optional) - Возвращать указанное количество записей
@@ -287,7 +309,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
     + Attributes (GoodsStructure)
     
-## Количество товаров [/api/goods/count{?id_group,immediate_parent,active,type_goods}]
+## Количество товаров [/api/goods/count{?id_group,immediate_parent,ids_list,filters,active,type_goods}]
 
 ### Получить количество товаров [GET]
 Возвращает количество записей 
@@ -296,6 +318,8 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
     + id_group (integer, optional) - Код группы товаров, к которой принадлежит товар
     + immediate_parent (string, optional) - Если параметр равен "true", то возвращаются товары, принадлежащие непосредственно к данной группе
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
     + active (string, optional) - Если параметр равен "true", то возвращаются только активные товары.
 
 + Response 200 (application/json)
@@ -352,16 +376,17 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 #Group Штрих-коды
 
-## Список штрих-кодов [/api/barCodes{?bar_code,id_goods,active,order,offset,limit}]
+## Список штрих-кодов [/api/barCodes{?bar_code,id_goods,filters,active,order,offset,limit}]
 
-### Получить все штрих-коды [GET]
+### Получить список штрих-кодов [GET]
 
 + Parameters
 
     + bar_code (integer, optional) - Штрих-код товара. Если указать, будет возвращен список для данного штрих-кода
     + id_goods (integer, optional) - Код товара. Если указать, будет возвращен список для данного товара
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
     + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
-    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + order (string, optional) - Список полей сортировки через запятую без пробелов. Для обратной сортировки поставить `-` перед именеи поля.
     + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
     + limit (integer, optional) - Возвращать указанное количество записей
     
@@ -386,7 +411,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
     + Attributes (BarCodesStructure)  
     
-## Количество штрих-кодов [/api/barCodes/count{?id_goods,bar_code,active}]
+## Количество штрих-кодов [/api/barCodes/count{?id_goods,bar_code,filters,active}]
 
 ### Получить количество штрих-кодов [GET]
 Возвращает количество записей 
@@ -395,6 +420,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
     + id_goods (integer, optional) - Код товара
     + bar_code (string, optional) - Штрих-код
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
     + active (string, optional) - Если параметр равен "true", то возвращаются только активные товары.
 
 + Response 200 (application/json)
@@ -446,7 +472,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 #Group Контрагенты
 
-## Список контрагентов [/api/clients{?is_supplier,is_buyer,active,order,offset,limit,unprotect_keys}]
+## Список контрагентов [/api/clients{?is_supplier,is_buyer,ids_list,filters,active,order,offset,limit,unprotect_keys}]
 
 ### Получить список контрагентов [GET]
 Получение списка контрагентов. Если не указаны дополнительные параметры, возвращаются сразу и поставщики, и покупатели.
@@ -455,6 +481,8 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + Parameters
     + is_supplier (string, optional) - Если параметр равен "true", то возвращается (добавляется запись) список покупателей 
     + is_buyer (string, optional) - Если параметр равен "true", то возвращается (добавляется запись) список ппоставщиков 
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
     + active (string, optional) - Если параметр равен "true", то возвращаются только активные контрагенты.
     + order (string, optional) - Список полей сортировки через запятую без пробелов    
     + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
@@ -484,7 +512,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
     + Attributes (ClientsStructure)  
             
-## Количество контрагентов [/api/clients/count{?is_supplier,is_buyer,active}]
+## Количество контрагентов [/api/clients/count{?is_supplier,is_buyer,,ids_list,filters,active}]
 
 ### Получить количество контрагентов [GET]
 Возвращает количество записей    
@@ -493,6 +521,8 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
     + is_supplier (string, optional) - Если параметр равен "true", то учитываются покупатели 
     + is_buyer (string, optional) - Если параметр равен "true", то учитываются поставщики 
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>    
     + active (string, optional) - Если параметр равен "true", то учитываются только активные контрагенты.
 
 + Response 200 (application/json)
@@ -1163,7 +1193,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 #Group Дисконтные карты
 
-## Список дисконтных карт [/api/discountCards{?active,order,with,filters,offset,limit,unprotect_keys}]
+## Список дисконтных карт [/api/discountCards{?active,order,with,filters,ids_list,offset,limit,unprotect_keys}]
 
 ### Получить список дисконтных карт [GET]
 Получение списка всех дисконтных карт.
@@ -1174,6 +1204,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + order (string, optional) - Список полей сортировки через запятую без пробелов      
     + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: priceLevel, discountCardType, client  
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список идентификаторов дисконтных карт, которые нужно возвратить. Указывается через запятую без пробела 
     + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
     + limit (integer, optional) - Возвращать указанное количество записей
 
@@ -1203,7 +1234,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
    
 
     
-## Количество дисконтных карт [/api/discountCards/count{?filters,active}]
+## Количество дисконтных карт [/api/discountCards/count{?filters,ids_list,active}]
 
 ### Получить количество дисконтных карт  [GET]
 Возвращает количество записей    
@@ -1211,6 +1242,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + Parameters
 
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
     + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
 
 + Response 200 (application/json)
@@ -1260,7 +1292,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 #Group Типы дисконтных карт
 
-## Список типов дисконтных карт [/api/discountCardTypes{?active,order,with,filters,offset,limit,unprotect_keys}]
+## Список типов дисконтных карт [/api/discountCardTypes{?active,order,with,filters,ids_list,offset,limit,unprotect_keys}]
 
 ### Получить список типов дисконтных карт [GET]
 Получение списка всех типов дисконтных карт.
@@ -1270,6 +1302,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
     + order (string, optional) - Список полей сортировки через запятую без пробелов      
     + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: priceLevel, discountCardType, client  
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
     + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
     + limit (integer, optional) - Возвращать указанное количество записей
@@ -1300,13 +1333,14 @@ HOST: private-01ace7-scout7.apiary-mock.com
    
 
     
-## Количество типов дисконтных карт [/api/discountCardTypes/count{?filters,active}]
+## Количество типов дисконтных карт [/api/discountCardTypes/count{?filters,ids_list,active}]
 
 ### Получить количество типов дисконтных карт  [GET]
 Возвращает количество записей    
 
 + Parameters
 
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
     + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
 
