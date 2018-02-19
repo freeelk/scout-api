@@ -156,7 +156,6 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + name_group: Outlets group (string, required)
 + id_owner_group: 1 (number)
 + active: true (boolean, required)
-    - default: true 
 
 ### OutletsStructure
 + id_outlet: 2 (number, required)
@@ -166,32 +165,28 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + id_teller_setting: 1 (number, required)
 + id_group_outlet: 1 (number, required)
 + active: true (boolean, required)
-    - default: true 
 
 ### WorkplacesStructure
 + id_workplace: 2 (number, required)
 + id_outlet: 1 (number, required)
 + name_workplace: This is workplace (string, required)
 + control_rest: false (boolean, required)
-    - default: false 
-    
 + control_bar_code: false (boolean, required)
-    - default: false 
-    
 + control_showcase: false (boolean, required)
-    - default: false 
-    
 + allow_free_price: false (boolean, required)
-    - default: false 
-    
 + control_goods: false (boolean, required)
-    - default: false 
-    
 + ads_enabled: false (boolean, required)
-    - default:false 
-    
 + active: true (boolean, required)
-    - default:true 
+
+### OutletsListsStructure
++ id_outlet_list:  1 (number, required)
++ name: This is outlets list (string, required)
++ active: true (boolean, required)
+
+### WorkplacesListsStructure
++ id_workplace_list:  1 (number, required)
++ name: This is workplaces list (string, required)
++ active: true (boolean, required)
 
 
 ### CountStructure
