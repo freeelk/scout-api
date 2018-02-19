@@ -146,6 +146,54 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + name: Card type one (string)
 + active: true (boolean, required)
 
+### GoodsListsStructure
++ id_goods_list:  1 (number, required)
++ name: Goods list name (string, required)
++ active: true (boolean, required)
+
+### GroupOutletsStructure
++ id_group_outlet: 2 (number, required)
++ name_group: Outlets group (string, required)
++ id_owner_group: 1 (number)
++ active: true (boolean, required)
+    - default: true 
+
+### OutletsStructure
++ id_outlet: 2 (number, required)
++ name_outlet: This is outlet (string, required)
++ id_price_level: 1 (number, required)
++ id_employee: 1 (number, required)
++ id_teller_setting: 1 (number, required)
++ id_group_outlet: 1 (number, required)
++ active: true (boolean, required)
+    - default: true 
+
+### WorkplacesStructure
++ id_workplace: 2 (number, required)
++ id_outlet: 1 (number, required)
++ name_workplace: This is workplace (string, required)
++ control_rest: false (boolean, required)
+    - default: false 
+    
++ control_bar_code: false (boolean, required)
+    - default: false 
+    
++ control_showcase: false (boolean, required)
+    - default: false 
+    
++ allow_free_price: false (boolean, required)
+    - default: false 
+    
++ control_goods: false (boolean, required)
+    - default: false 
+    
++ ads_enabled: false (boolean, required)
+    - default:false 
+    
++ active: true (boolean, required)
+    - default:true 
+
+
 ### CountStructure
 + count: 10 (number, required) 
 
@@ -1250,7 +1298,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + Attributes (CountStructure)      
             
      
-## Дисконтная карта [/api/discountCards/{id_discount_card}/{?unprotect_keys}]
+## Дисконтная карта [/api/discountCards/{id_discount_card}/{?unprotect_keys,with}]
 
 ### Получить данные о дисконтной карте [GET]
 Получение данных о дисконтной карте
@@ -1269,6 +1317,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
     + id_discount_card (integer, required) - Код дисконтной карты
     + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: priceLevel, discountCardType, client  
 
 + Request (application/json)
 
@@ -1292,7 +1341,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 #Group Типы дисконтных карт
 
-## Список типов дисконтных карт [/api/discountCardTypes{?active,order,with,filters,ids_list,offset,limit,unprotect_keys}]
+## Список типов дисконтных карт [/api/discountCardTypes{?active,order,filters,ids_list,offset,limit,unprotect_keys}]
 
 ### Получить список типов дисконтных карт [GET]
 Получение списка всех типов дисконтных карт.
@@ -1301,7 +1350,6 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
     + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
     + order (string, optional) - Список полей сортировки через запятую без пробелов      
-    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: priceLevel, discountCardType, client  
     + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
     + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
@@ -1327,7 +1375,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
     + Headers
 
-            Location: /api/discountCardTypes/1/1
+            Location: /api/discountCardTypes/1
 
     + Attributes (DiscountCardTypesStructure) 
    
@@ -1378,11 +1426,381 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + Attributes (DiscountCardTypesStructure) 
 
 ### Деактивировать данные о типе дисконтной карты [DELETE]
-
 Деактивация данных о типе дисконтной карты
 
 + Parameters
 
     + id_dcard_type (integer, required) - Код типа дисконтной карты
 
++ Response 204
+
+
+#Group Списки товаров
+
+## Список списков товаров [/api/goodsLists{?active,order,filters,ids_list,offset,limit,unprotect_keys}]
+
+### Получить список списков товаров [GET]
+Получение списка списков товаров.
+
++ Parameters
+
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов      
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (integer, optional) - Возвращать указанное количество записей
+
++ Response 200 (application/json)
+
+    + Attributes (array[DiscountCardTypesStructure])   
+
+### Добавить список товаров [POST]
+Добавление списка товаров.  
+- Атрибут `id_goods_list` в JSON-е запроса игнорируется, если не указан параметр `unprotect_keys=true`.
+
++ Parameters
+
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
+
++ Request (application/json)
+
+    + Attributes (GoodsListsStructure)   
+                
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /api/goodsLists/1
+
+    + Attributes (GoodsListsStructure) 
+   
+
+    
+## Количество списков товаров [/api/goodsLists/count{?filters,ids_list,active}]
+
+### Получить количество списков товаров  [GET]
+Возвращает количество записей    
+
++ Parameters
+
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
+
++ Response 200 (application/json)
+
+    + Attributes (CountStructure)      
+            
+
+## Список товаров  [/api/goodsLists/{id_goods_list}/{?unprotect_keys}]
+
+### Получить данные о списке товаров [GET]
+Получение данных о типе дисконтной карты
+
++ Parameters
+    + id_goods_list (integer, required) - Код типа дисконтной карты
+
++ Response 200 (application/json)
+
+    + Attributes (GoodsListsStructure) 
+
+### Изменить данные о списке товаров [PUT]
+Изменение данных о списке товаров по коду
+
++ Parameters
+
+    + id_goods_list (integer, required) - Код списка товаров
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
+
++ Request (application/json)
+
+    + Attributes (GoodsListsStructure) 
+            
++ Response 200 (application/json)
+
+    + Attributes (GoodsListsStructure) 
+
+### Деактивировать данные о списке товаров [DELETE]
+Деактивация данных о списке товаров
+
++ Parameters
+
+    + id_goods_list (integer, required) - Код списка товаров
++ Response 204
+
+
+#Group Группы торговых точек
+
+## Список групп торговых точек [/api/groupOutlets{?active,with,order,filters,ids_list,offset,limit,unprotect_keys}]
+
+### Получить список групп торговых точек [GET]
+
++ Parameters
+
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: owner, child, outlets  
+    + order (string, optional) - Список полей сортировки через запятую без пробелов      
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (integer, optional) - Возвращать указанное количество записей
+
++ Response 200 (application/json)
+
+    + Attributes (array[GroupOutletsStructure])   
+
+### Добавить группу торговых точек [POST]
+  
+- Атрибут `id_group_outlet` в JSON-е запроса игнорируется, если не указан параметр `unprotect_keys=true`.
+
++ Parameters
+
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
+
++ Request (application/json)
+
+    + Attributes (GroupOutletsStructure)   
+                
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /api/groupOutlets/1
+
+    + Attributes (GroupOutletsStructure) 
+   
+
+    
+## Количество групп торговых точек [/api/groupOutlets/count{?filters,ids_list,active}]
+
+### Получить количество групп торговых точек  [GET]
+
++ Parameters
+
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
+
++ Response 200 (application/json)
+
+    + Attributes (CountStructure)      
+            
+
+## Группа торговых точек  [/api/groupOutlets/{id_group_outlet}/{?unprotect_keys,with}]
+
+### Получить данные о группе торговых точек [GET]
+
++ Parameters
+    + id_group_outlet (integer, required) - Код группы торговых точек
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: owner, child, outlets  
+
++ Response 200 (application/json)
+
+    + Attributes (GroupOutletsStructure) 
+
+### Изменить данные о группе торговых точек [PUT]
+
++ Parameters
+
+    + id_group_outlet (integer, required) - Код группы торговых точек
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
+
++ Request (application/json)
+
+    + Attributes (GroupOutletsStructure) 
+            
++ Response 200 (application/json)
+
+    + Attributes (GroupOutletsStructure) 
+
+### Деактивировать данные о группе торговых точек [DELETE]
+
++ Parameters
+
+    + id_group_outlet (integer, required) - Код группы торговых точек
++ Response 204
+
+
+#Group Торговые точки
+
+## Список торговых точек [/api/outlets{?active,with,order,filters,ids_list,offset,limit,unprotect_keys}]
+
+### Получить список торговых точек [GET]
+
++ Parameters
+
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: priceLevel, workplace, groupOutlet  
+    + order (string, optional) - Список полей сортировки через запятую без пробелов      
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (integer, optional) - Возвращать указанное количество записей
+
++ Response 200 (application/json)
+
+    + Attributes (array[OutletsStructure])   
+
+### Добавить торговую точку [POST]
+  
+- Атрибут `id_outlet` в JSON-е запроса игнорируется, если не указан параметр `unprotect_keys=true`.
+
++ Parameters
+
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
+
++ Request (application/json)
+
+    + Attributes (OutletsStructure)   
+                
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /api/outlets/1
+
+    + Attributes (GroupOutletsStructure) 
+   
+
+    
+## Количество торговых точек [/api/outlets/count{?filters,ids_list,active}]
+
+### Получить количество торговых точек  [GET]
+
++ Parameters
+
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
+
++ Response 200 (application/json)
+
+    + Attributes (CountStructure)      
+            
+
+## Торговая точка  [/api/outlets/{id_outlet}/{?unprotect_keys,with}]
+
+### Получить данные о торговой точке [GET]
+
++ Parameters
+    + id_outlet (integer, required) - Код торговой точки
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: priceLevel, workplace, groupOutlet  
+
++ Response 200 (application/json)
+
+    + Attributes (OutletsStructure) 
+
+### Изменить данные о торговой точке [PUT]
+
++ Parameters
+
+    + id_outlet (integer, required) - Код торговой точки
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
+
++ Request (application/json)
+
+    + Attributes (OutletsStructure) 
+            
++ Response 200 (application/json)
+
+    + Attributes (OutletsStructure) 
+
+### Деактивировать данные о торговой точке [DELETE]
+
++ Parameters
+
+    + id_outlet (integer, required) - Код торговой точки
++ Response 204
+
+
+
+#Group Рабочие места
+
+## Список рабочих мест [/api/workplaces{?active,with,order,filters,ids_list,offset,limit,unprotect_keys}]
+
+### Получить список рабочих мест [GET]
+
++ Parameters
+
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: outlet  
+    + order (string, optional) - Список полей сортировки через запятую без пробелов      
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (integer, optional) - Возвращать указанное количество записей
+
++ Response 200 (application/json)
+
+    + Attributes (array[WorkplacesStructure])   
+
+### Добавить рабочее место [POST]
+  
+- Атрибут `id_workplace` в JSON-е запроса игнорируется, если не указан параметр `unprotect_keys=true`.
+
++ Parameters
+
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
+
++ Request (application/json)
+
+    + Attributes (WorkplacesStructure)   
+                
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /api/workplaces/1
+
+    + Attributes (WorkplacesStructure) 
+   
+
+## Количество  рабочих мест [/api/workplaces/count{?filters,ids_list,active}]
+
+### Получить количество  рабочих мест  [GET]
+
++ Parameters
+
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
+
++ Response 200 (application/json)
+
+    + Attributes (CountStructure)      
+            
+
+## Рабочее место  [/api/workplaces/{id_outlet}/{?unprotect_keys,with}]
+
+### Получить данные о рабочем месте [GET]
+
++ Parameters
+    + id_outlet (integer, required) - Код рабочего места
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: outlet  
+
++ Response 200 (application/json)
+
+    + Attributes (WorkplacesStructure) 
+
+### Изменить данные о рабочем месте [PUT]
+
++ Parameters
+
+    + id_outlet (integer, required) - Код рабочего места
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
+
++ Request (application/json)
+
+    + Attributes (WorkplacesStructure) 
+            
++ Response 200 (application/json)
+
+    + Attributes (WorkplacesStructure) 
+
+### Деактивировать данные о рабочем месте [DELETE]
+
++ Parameters
+
+    + id_outlet (integer, required) - Код рабочего места
 + Response 204
