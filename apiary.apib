@@ -188,6 +188,13 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + name: This is workplaces list (string, required)
 + active: true (boolean, required)
 
+### LoyaltyProgramsStructure
++ id_program:  1 (number, required)
++ program_text: Loyalty program JSON must be here. (string, required)
++ state  1 (number, required)
++ active: true (boolean, required)
+
+
 
 ### CountStructure
 + count: 10 (number, required) 
@@ -1798,4 +1805,96 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + Parameters
 
     + id_outlet (integer, required) - Код рабочего места
++ Response 204
+
+
+
+#Group Программы лояльности
+
+## Список програм лояльности [/api/loyaltyPrograms{?active,order,filters,ids_list,offset,limit,unprotect_keys}]
+
+### Получить список програм лояльности [GET]
+
++ Parameters
+
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов      
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (integer, optional) - Возвращать указанное количество записей
+
++ Response 200 (application/json)
+
+    + Attributes (array[LoyaltyProgramsStructure])   
+
+### Добавить программу лояльности [POST]
+  
+- Атрибут `id_program` в JSON-е запроса игнорируется, если не указан параметр `unprotect_keys=true`.
+
++ Parameters
+
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
+
++ Request (application/json)
+
+    + Attributes (LoyaltyProgramsStructure)   
+                
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /api/loyaltyPrograms/1
+
+    + Attributes (LoyaltyProgramsStructure) 
+   
+
+## Количество  программ лояльности [/api/loyaltyPrograms/count{?filters,ids_list,active}]
+
+### Получить количество  рабочих мест  [GET]
+
++ Parameters
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
+
++ Response 200 (application/json)
+    + Attributes (CountStructure)      
+
+## Текущая программа лояльности  [/api/loyaltyPrograms/current]
+
+### Получить данные о текущей программе лояльности [GET]
+Получение программы лояльности, в которой поле state = 1 (текущая программа)
+
++ Response 200 (application/json)
+    + Attributes (LoyaltyProgramsStructure)     
+            
+
+## Программа лояльности  [/api/loyaltyPrograms/{id_program}/{?unprotect_keys,with}]
+
+### Получить данные о программе лояльности [GET]
+
++ Parameters
+    + id_program (integer, required) - Код программы лояльности
+
++ Response 200 (application/json)
+    + Attributes (LoyaltyProgramsStructure) 
+
+### Изменить данные о программе лояльности [PUT]
+
++ Parameters
+    + id_program (integer, required) - Код программы лояльности
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
+
++ Request (application/json)
+    + Attributes (LoyaltyProgramsStructure) 
+            
++ Response 200 (application/json)
+    + Attributes (LoyaltyProgramsStructure) 
+
+### Деактивировать данные о программе лояльности [DELETE]
+
++ Parameters
+    + id_program (integer, required) - Код программы лояльности
+    
 + Response 204
