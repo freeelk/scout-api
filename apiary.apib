@@ -286,7 +286,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + Response 200 (application/json)
 
     + Attributes (GroupGoodsStructure)
-    
+
 ### Изменить группу товаров [PUT]
 Изменение группы товаров. 
 - Атрибут `id_group` в JSON-е запроса  игнорируется, если не указан параметр `unprotect_keys=true`.
@@ -303,7 +303,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + Response 200 (application/json)
 
     + Attributes (GroupGoodsStructure)
-            
+
 ### Деактивировать группу товаров [DELETE]
 Деактивация группы товаров
 
@@ -336,7 +336,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
     + Attributes (array[GoodsStructure])
     
-    
+
 ### Добавить товар [POST]
 Добавление нового товара. 
 - Атрибут id_goods в JSON-е запроса игнорируется (значение будет установлено автоматически), если не указан параметр `unprotect_keys=true`
@@ -388,7 +388,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + Response 200 (application/json)
 
     + Attributes (GoodsStructure)
-            
+
 ### Изменить товар [PUT]
 Изменение товара. 
 - Попытка изменить id_goods игнорируется
@@ -404,7 +404,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + Response 200 (application/json)
 
     + Attributes (GoodsStructure)
-            
+
 ### Деактивировать товар [DELETE]
 Деактивация товара
 
@@ -488,8 +488,8 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + bar_code (integer, required) - Штрих-код товара
     + id_goods (integer, required) - Код товара
     + id_unit (integer, required) - Код единицы измерения
-    + ext_bar_code (string, optional) - Расширенный штрих-код (Для указания значения по умолчанию использовать слово `default`)
-    + id_series (string, optional) - Код серии (Для указания значения по умолчанию использовать слово `default`)
+    + ext_bar_code (string, required) - Расширенный штрих-код
+    + id_series (string, required) - Код серии
 
 + Response 200 (application/json)
 
@@ -504,9 +504,8 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + bar_code (integer, required) - Штрих-код товара
     + id_goods (integer, required) - Код товара
     + id_unit (integer, required) - Код единицы измерения
-    + ext_bar_code (string, optional) - Расширенный штрих-код (Для указания значения по умолчанию использовать слово `default`)
-    + id_series (string, optional) - Код серии (Для указания значения по умолчанию использовать слово `default`) 
-
+    + ext_bar_code (string, required) - Расширенный штрих-код
+    + id_series (string, required) - Код серии
 + Request (application/json)
 
     + Attributes (BarCodesStructure)
@@ -1102,7 +1101,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 + Parameters
     + id_goods (integer, required) - Код товара
-    + id_series (string, optional) - Код серии. Если не указан, предполагается значение по умолчанию ("-") 
+    + id_series (string, required) - Код серии
 
 + Response 200 (application/json)
 
@@ -1114,7 +1113,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + Parameters
 
     + id_goods (integer, required) - Код товара
-    + id_series (string, optional) - Код серии. Если не указан, предполагается значение по умолчанию ("-") 
+    + id_series (string, required) - Код серии.
     + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
 
 + Request (application/json)
@@ -1132,7 +1131,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + Parameters
 
     + id_goods (integer, required) - Код товара
-    + id_series (string, optional) - Код серии. Если не указан, предполагается значение по умолчанию ("-") 
+    + id_series (string, required) - Код серии
 
 + Response 204
 
