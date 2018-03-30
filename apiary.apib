@@ -196,6 +196,13 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 
 
+### AdsStructure
++ id_ads 1  (number, required)
++ id_workplace 1 (number, required)
++ ads_text This is ads text example (string)
++ is_unique false (boolean)
++ use_count 0 (number)
++ active: true (boolean, required)
 ### CountStructure
 + count: 10 (number, required) 
 
@@ -1895,5 +1902,88 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 + Parameters
     + id_program (integer, required) - Код программы лояльности
+    
++ Response 204
+
+
+
+#Group Рекламные сообщения для чеков
+
+## Список рекламных сообщений для чеков[/api/ads{?active,order,filters,ids_list,offset,limit,unprotect_keys}]
+
+### Получить список рекламных сообщений для чеков [GET]
+
++ Parameters
+
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов      
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (integer, optional) - Возвращать указанное количество записей
+
++ Response 200 (application/json)
+
+    + Attributes (array[AdsStructure])   
+
+### Добавить рекламное сообщение для чеков [POST]
+  
+- Атрибут `id_ads` в JSON-е запроса игнорируется, если не указан параметр `unprotect_keys=true`.
+
++ Parameters
+
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
+
++ Request (application/json)
+
+    + Attributes (AdsStructure)   
+                
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /api/ads/1
+
+    + Attributes (AdsStructure) 
+   
+
+## Количество рекламных сообщений для чеков [/api/ads/count{?filters,ids_list,active}]
+
+### Получить количество  рабочих мест  [GET]
+
++ Parameters
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
+
++ Response 200 (application/json)
+    + Attributes (CountStructure)      
+            
+
+## Рекламное сообщение для чеков  [/api/ads/{id_ads}/{?unprotect_keys,with}]
+
+### Получить данные о рекламном сообщении [GET]
+
++ Parameters
+    + id_ads (integer, required) - Идентификатор рекламного сообщения
++ Response 200 (application/json)
+    + Attributes (AdsStructure) 
+
+### Изменить данные о рекламном сообщении [PUT]
+
++ Parameters
+    + id_ads (integer, required) - Идентификатор рекламного сообщения
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
+
++ Request (application/json)
+    + Attributes (AdsStructure) 
+            
++ Response 200 (application/json)
+    + Attributes (AdsStructure) 
+
+### Деактивировать данные о рекламном сообщении [DELETE]
+
++ Parameters
+    + id_ads (integer, required) - Идентификатор рекламного сообщения
     
 + Response 204
