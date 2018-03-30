@@ -194,7 +194,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + state:  1 (number, required)
 + active: true (boolean, required)
 
-### AdsStructure
+### AdsMessagesStructure
 + id_ads: 1  (number, required)
 + id_workplace: 1 (number, required)
 + ads_text: This is ads text example (string)
@@ -1908,7 +1908,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 #Group Рекламные сообщения для чеков
 
-## Список рекламных сообщений для чеков [/api/ads{?active,order,filters,ids_list,offset,limit,unprotect_keys}]
+## Список рекламных сообщений для чеков [/api/AdsMessages{?active,order,filters,ids_list,offset,limit,unprotect_keys}]
 
 ### Получить список рекламных сообщений для чеков [GET]
 
@@ -1923,7 +1923,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 + Response 200 (application/json)
 
-    + Attributes (array[AdsStructure])   
+    + Attributes (array[AdsMessagesStructure])   
 
 ### Добавить рекламное сообщение для чеков [POST]
   
@@ -1935,18 +1935,18 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 + Request (application/json)
 
-    + Attributes (AdsStructure)   
+    + Attributes (AdsMessagesStructure)   
                 
 + Response 201 (application/json)
 
     + Headers
 
-            Location: /api/ads/1
+            Location: /api/AdsMessages/1
 
-    + Attributes (AdsStructure) 
+    + Attributes (AdsMessagesStructure) 
    
 
-## Количество рекламных сообщений для чеков [/api/ads/count{?filters,ids_list,active}]
+## Количество рекламных сообщений для чеков [/api/AdsMessages/count{?filters,ids_list,active}]
 
 ### Получить количество рекламных сообщений для чеков  [GET]
 
@@ -1959,14 +1959,14 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + Attributes (CountStructure)      
             
 
-## Рекламное сообщение для чеков  [/api/ads/{id_ads}/{?unprotect_keys,with}]
+## Рекламное сообщение для чеков  [/api/AdsMessages/{id_ads}/{?unprotect_keys,with}]
 
 ### Получить данные о рекламном сообщении [GET]
 
 + Parameters
     + id_ads (integer, required) - Идентификатор рекламного сообщения
 + Response 200 (application/json)
-    + Attributes (AdsStructure) 
+    + Attributes (AdsMessagesStructure) 
 
 ### Изменить данные о рекламном сообщении [PUT]
 
@@ -1975,10 +1975,10 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
 
 + Request (application/json)
-    + Attributes (AdsStructure) 
+    + Attributes (AdsMessagesStructure) 
             
 + Response 200 (application/json)
-    + Attributes (AdsStructure) 
+    + Attributes (AdsMessagesStructure) 
 
 ### Деактивировать данные о рекламном сообщении [DELETE]
 
