@@ -191,18 +191,17 @@ HOST: private-01ace7-scout7.apiary-mock.com
 ### LoyaltyProgramsStructure
 + id_program:  1 (number, required)
 + program_text: Loyalty program JSON must be here. (string, required)
-+ state  1 (number, required)
++ state:  1 (number, required)
 + active: true (boolean, required)
-
-
 
 ### AdsStructure
-+ id_ads 1  (number, required)
-+ id_workplace 1 (number, required)
-+ ads_text This is ads text example (string)
-+ is_unique false (boolean)
-+ use_count 0 (number)
++ id_ads: 1  (number, required)
++ id_workplace: 1 (number, required)
++ ads_text: This is ads text example (string)
++ is_unique: false (boolean)
++ use_count: 0 (number)
 + active: true (boolean, required)
+
 ### CountStructure
 + count: 10 (number, required) 
 
@@ -1857,7 +1856,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 ## Количество  программ лояльности [/api/loyaltyPrograms/count{?filters,ids_list,active}]
 
-### Получить количество  рабочих мест  [GET]
+### Получить количество программ лояльности  [GET]
 
 + Parameters
     + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
@@ -1909,7 +1908,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 #Group Рекламные сообщения для чеков
 
-## Список рекламных сообщений для чеков[/api/ads{?active,order,filters,ids_list,offset,limit,unprotect_keys}]
+## Список рекламных сообщений для чеков [/api/ads{?active,order,filters,ids_list,offset,limit,unprotect_keys}]
 
 ### Получить список рекламных сообщений для чеков [GET]
 
@@ -1949,7 +1948,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 ## Количество рекламных сообщений для чеков [/api/ads/count{?filters,ids_list,active}]
 
-### Получить количество  рабочих мест  [GET]
+### Получить количество рекламных сообщений для чеков  [GET]
 
 + Parameters
     + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
