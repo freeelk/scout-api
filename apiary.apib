@@ -1908,7 +1908,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 #Group Рекламные сообщения для чеков
 
-## Список рекламных сообщений для чеков [/api/AdsMessages{?active,order,filters,ids_list,offset,limit,unprotect_keys}]
+## Список рекламных сообщений для чеков [/api/AdsMessages{?active,order,filters,with,ids_list,offset,limit,unprotect_keys}]
 
 ### Получить список рекламных сообщений для чеков [GET]
 
@@ -1918,6 +1918,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + order (string, optional) - Список полей сортировки через запятую без пробелов      
     + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: workplace  
     + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
     + limit (integer, optional) - Возвращать указанное количество записей
 
