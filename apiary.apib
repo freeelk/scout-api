@@ -527,7 +527,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 #Group Контрагенты
 
-## Список контрагентов [/api/clients{?is_supplier,is_buyer,ids_list,filters,active,order,offset,limit,unprotect_keys}]
+## Список контрагентов [/api/clients{?is_supplier,is_buyer,ids_list,filters,with,active,order,offset,limit,unprotect_keys}]
 
 ### Получить список контрагентов [GET]
 Получение списка контрагентов. Если не указаны дополнительные параметры, возвращаются сразу и поставщики, и покупатели.
@@ -538,6 +538,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + is_buyer (string, optional) - Если параметр равен "true", то возвращается (добавляется запись) список ппоставщиков 
     + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: priceLevel, discountCards  
     + active (string, optional) - Если параметр равен "true", то возвращаются только активные контрагенты.
     + order (string, optional) - Список полей сортировки через запятую без пробелов    
     + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
@@ -584,7 +585,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
     + Attributes (CountStructure)             
             
-## Контрагент [/api/clients/{id_client}{?unprotect_keys}]
+## Контрагент [/api/clients/{id_client}{?unprotect_keys,with}]
 
 ### Получить данные о контрагенте [GET]
 Получение данных о клиенте по коду
@@ -592,6 +593,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + Parameters
 
     + id_client (integer, required) - Код клиента
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: priceLevel, discountCards  
 
 + Response 200 (application/json)
 
