@@ -568,7 +568,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
     + Attributes (ClientsStructure)  
             
-## Количество контрагентов [/api/clients/count{?is_supplier,is_buyer,,ids_list,filters,active}]
+## Количество контрагентов [/api/clients/count{?is_supplier,is_buyer,ids_list,filters,active}]
 
 ### Получить количество контрагентов [GET]
 Возвращает количество записей    
@@ -1314,6 +1314,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 + Parameters
     + id_discount_card (integer, required) - Код дисконтной карты
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: priceLevel, discountCardType, client      
 
 + Response 200 (application/json)
 
