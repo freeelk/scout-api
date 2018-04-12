@@ -1250,7 +1250,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 #Group Дисконтные карты
 
-## Список дисконтных карт [/api/discountCards{?active,order,with,filters,ids_list,offset,limit,unprotect_keys}]
+## Список дисконтных карт [/api/discountCards{?active,order,id_client,with,filters,ids_list,offset,limit,unprotect_keys}]
 
 ### Получить список дисконтных карт [GET]
 Получение списка всех дисконтных карт.
@@ -1259,6 +1259,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
     + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
     + order (string, optional) - Список полей сортировки через запятую без пробелов      
+    + id_client (integer,optional) - Код клиента
     + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: priceLevel, discountCardType, client  
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
     + ids_list (string,optional) - Список идентификаторов дисконтных карт, которые нужно возвратить. Указывается через запятую без пробела 
@@ -1291,13 +1292,13 @@ HOST: private-01ace7-scout7.apiary-mock.com
    
 
     
-## Количество дисконтных карт [/api/discountCards/count{?filters,ids_list,active}]
+## Количество дисконтных карт [/api/discountCards/count{?id_client,filters,ids_list,active}]
 
 ### Получить количество дисконтных карт  [GET]
 Возвращает количество записей    
 
 + Parameters
-
+    + id_client (integer,optional) - Код клиента
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
     + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
     + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
