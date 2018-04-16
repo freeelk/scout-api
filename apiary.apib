@@ -2001,7 +2001,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 #Group Статьи движения денег
 
-## Список статей движения денег [/api/cachFlow{?active,order,filters,with,ids_list,offset,limit,unprotect_keys}]
+## Список статей движения денег [/api/cachFlows{?active,order,filters,ids_list,offset,limit,unprotect_keys}]
 
 ### Получить список статей движения денег [GET]
 
@@ -2011,7 +2011,6 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + order (string, optional) - Список полей сортировки через запятую без пробелов      
     + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
-    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: workplace  
     + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
     + limit (number, optional) - Возвращать указанное количество записей
 
@@ -2035,12 +2034,12 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
     + Headers
 
-            Location: /api/CacheFlow/1
+            Location: /api/CacheFlows/1
 
     + Attributes (CashFlowStructure) 
    
 
-## Количество статей движения денег [/api/cachFlow/count{?filters,ids_list,active}]
+## Количество статей движения денег [/api/cachFlows/count{?filters,ids_list,active}]
 
 ### Получить количество статей движения денег  [GET]
 
@@ -2053,7 +2052,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + Attributes (CountStructure)      
             
 
-## Статья движения денег  [/api/cachFlow/{id_article}/{?unprotect_keys,with}]
+## Статья движения денег  [/api/cachFlows/{id_article}/{?unprotect_keys,with}]
 
 ### Получить данные о статье движения денег [GET]
 
