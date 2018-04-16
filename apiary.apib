@@ -203,9 +203,9 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + active: true (boolean, required)
 
 ### CashFlowStructure
-+id_article (integer, required)
-+name_cash_flow (string, required)
-+type_cash_flow (integer, required)
++ id_article: 15 (number, required)
++ name_cash_flow: Инкассация в основную кассу (string, required)
++ type_cash_flow: 1 (number, required)
 + active: true (boolean, required)
 
 ### CountStructure
@@ -237,8 +237,8 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
     + order (string, optional) - Список полей сортировки через запятую без пробелов. Для обратной сортировки поставить `-` перед именеи поля.
-    + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
-    + limit (integer, optional) - Возвращать указанное количество записей
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
 
 + Response 200 (application/json)
 
@@ -2012,8 +2012,8 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
     + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: workplace  
-    + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
-    + limit (integer, optional) - Возвращать указанное количество записей
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
 
 + Response 200 (application/json)
 
@@ -2058,14 +2058,14 @@ HOST: private-01ace7-scout7.apiary-mock.com
 ### Получить данные о статье движения денег [GET]
 
 + Parameters
-    + id_article (integer, required) - Идентификатор статьи движения денег
+    + id_article (number, required) - Идентификатор статьи движения денег
 + Response 200 (application/json)
     + Attributes (CashFlowStructure) 
 
 ### Изменить данные о статье движения денег [PUT]
 
 + Parameters
-    + id_article (integer, required) - Идентификатор статьи движения денег
+    + id_article (number, required) - Идентификатор статьи движения денег
     + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
 
 + Request (application/json)
@@ -2077,6 +2077,6 @@ HOST: private-01ace7-scout7.apiary-mock.com
 ### Деактивировать данные о статье движения денег [DELETE]
 
 + Parameters
-    + id_article (integer, required) - Идентификатор статьи движения денег
+    + id_article (number, required) - Идентификатор статьи движения денег
     
 + Response 204
