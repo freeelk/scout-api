@@ -202,6 +202,12 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + use_count: 0 (number)
 + active: true (boolean, required)
 
+### CashFlowStructure
++id_article (integer, required)
++name_cash_flow (string, required)
++type_cash_flow (integer, required)
++ active: true (boolean, required)
+
 ### CountStructure
 + count: 10 (number, required) 
 
@@ -1989,5 +1995,88 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 + Parameters
     + id_ads (integer, required) - Идентификатор рекламного сообщения
+    
++ Response 204
+
+
+#Group Статьи движения денег
+
+## Список статей движения денег [/api/cachFlow{?active,order,filters,with,ids_list,offset,limit,unprotect_keys}]
+
+### Получить список статей движения денег [GET]
+
++ Parameters
+
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов      
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: workplace  
+    + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (integer, optional) - Возвращать указанное количество записей
+
++ Response 200 (application/json)
+
+    + Attributes (array[CashFlowStructure])   
+
+### Добавить статью движения денег [POST]
+  
+- Атрибут `unprotect_keys=true` и значение `id_article` в теле запроса указывать обязательно. Значение ключа `id_article` автоматически не генерируется при создании записи.
+
++ Parameters
+
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
+
++ Request (application/json)
+
+    + Attributes (CashFlowStructure)   
+                
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /api/CacheFlow/1
+
+    + Attributes (CashFlowStructure) 
+   
+
+## Количество статей движения денег [/api/cachFlow/count{?filters,ids_list,active}]
+
+### Получить количество статей движения денег  [GET]
+
++ Parameters
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
+
++ Response 200 (application/json)
+    + Attributes (CountStructure)      
+            
+
+## Статья движения денег  [/api/cachFlow/{id_article}/{?unprotect_keys,with}]
+
+### Получить данные о статье движения денег [GET]
+
++ Parameters
+    + id_article (integer, required) - Идентификатор статьи движения денег
++ Response 200 (application/json)
+    + Attributes (CashFlowStructure) 
+
+### Изменить данные о статье движения денег [PUT]
+
++ Parameters
+    + id_article (integer, required) - Идентификатор статьи движения денег
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
+
++ Request (application/json)
+    + Attributes (CashFlowStructure) 
+            
++ Response 200 (application/json)
+    + Attributes (CashFlowStructure) 
+
+### Деактивировать данные о статье движения денег [DELETE]
+
++ Parameters
+    + id_article (integer, required) - Идентификатор статьи движения денег
     
 + Response 204
