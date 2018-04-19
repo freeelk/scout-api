@@ -2191,7 +2191,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + order (string, optional) - Список полей сортировки через запятую без пробелов      
     + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
-    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: currenciesExchange  
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: currency  
     + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
     + limit (number, optional) - Возвращать указанное количество записей
 
@@ -2237,7 +2237,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 + Parameters
     + id_exchange (number, required) - Идентификатор валюты
-    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: currenciesExchange  
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: currency  
 + Response 200 (application/json)
     + Attributes (CurrencyExchangeStructure) 
 
