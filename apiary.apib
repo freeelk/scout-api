@@ -208,6 +208,21 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + type_cash_flow: 1 (number, required)
 + active: true (boolean, required)
 
+### CurrencyStructure
++ id_currency: 1 (number, required)
++ symbol_currency: `UAH` (string, required)
++ name_currency: `Гривны` (string, required)
++ is_default: true (boolean, required)
++ active: true (boolean, required)
+
+### CurrencyExchangeStructure
++ id_exchange 1 (number, required)
++ id_currency 1 (number, required)
++ multiple 1 (number, required)
++ exchange 1 (number, required)
++ time_exchange `2018-04-01` (string, required)
++ active: true (boolean, required)
+
 ### CountStructure
 + count: 10 (number, required) 
 
@@ -1976,6 +1991,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 + Parameters
     + id_ads (integer, required) - Идентификатор рекламного сообщения
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: workplace  
 + Response 200 (application/json)
     + Attributes (AdsMessagesStructure) 
 
@@ -2001,7 +2017,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 #Group Статьи движения денег
 
-## Список статей движения денег [/api/cachFlows{?active,order,filters,ids_list,offset,limit,unprotect_keys}]
+## Список статей движения денег [/api/cashFlows{?active,order,filters,ids_list,offset,limit,unprotect_keys}]
 
 ### Получить список статей движения денег [GET]
 
@@ -2034,12 +2050,12 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
     + Headers
 
-            Location: /api/CacheFlows/1
+            Location: /api/cashFlows/1
 
     + Attributes (CashFlowStructure) 
    
 
-## Количество статей движения денег [/api/cachFlows/count{?filters,ids_list,active}]
+## Количество статей движения денег [/api/cashFlows/count{?filters,ids_list,active}]
 
 ### Получить количество статей движения денег  [GET]
 
@@ -2052,7 +2068,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + Attributes (CountStructure)      
             
 
-## Статья движения денег  [/api/cachFlows/{id_article}/{?unprotect_keys,with}]
+## Статья движения денег  [/api/cashFlows/{id_article}/{?unprotect_keys}]
 
 ### Получить данные о статье движения денег [GET]
 
@@ -2064,7 +2080,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 ### Изменить данные о статье движения денег [PUT]
 
 + Parameters
-    + id_article (number, required) - Идентификатор статьи движения денег
+    + id_article (number, required) - Идентификатор валюты
     + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
 
 + Request (application/json)
@@ -2076,6 +2092,169 @@ HOST: private-01ace7-scout7.apiary-mock.com
 ### Деактивировать данные о статье движения денег [DELETE]
 
 + Parameters
-    + id_article (number, required) - Идентификатор статьи движения денег
+    + id_article (number, required) - Идентификатор валюты
     
++ Response 204
+
+#Group Валюты
+
+## Список валют [/api/currencies{?active,order,filters,with,ids_list,offset,limit,unprotect_keys}]
+
+### Получить список валют [GET]
+
++ Parameters
+
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов      
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: currenciesExchange  
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
+
++ Response 200 (application/json)
+
+    + Attributes (array[CurrencyStructure])   
+
+### Добавить валюту [POST]
+  
+- Атрибут `unprotect_keys=true` и значение `id_currency` в теле запроса указывать обязательно. Значение ключа `id_currency` автоматически не генерируется при создании записи.
+
++ Parameters
+
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
+
++ Request (application/json)
+
+    + Attributes (CurrencyStructure)   
+                
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /api/currencies/1
+
+    + Attributes (CurrencyStructure) 
+   
+
+## Количество валют [/api/currencies/count{?filters,ids_list,active}]
+
+### Получить количество валют  [GET]
+
++ Parameters
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
+
++ Response 200 (application/json)
+    + Attributes (CountStructure)      
+            
+
+## Валюта  [/api/currencies/{id_currency}/{?unprotect_keys,with}]
+
+### Получить данные о валюте [GET]
+
++ Parameters
+    + id_currency (number, required) - Идентификатор валюты
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: currenciesExchange  
++ Response 200 (application/json)
+    + Attributes (CurrencyStructure) 
+
+### Изменить данные о валюте [PUT]
+
++ Parameters
+    + id_currency (number, required) - Идентификатор валюты
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
+
++ Request (application/json)
+    + Attributes (CurrencyStructure) 
+            
++ Response 200 (application/json)
+    + Attributes (CurrencyStructure) 
+
+### Деактивировать данные о валюте [DELETE]
+
++ Parameters
+    + id_currency (number, required) - Идентификатор валюты
++ Response 204
+
+
+#Group Курсы валют
+
+## Список курсов валют [/api/currenciesExchanges{?active,order,filters,with,ids_list,offset,limit,unprotect_keys}]
+
+### Получить список курсов валют [GET]
+
++ Parameters
+
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов      
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: currenciesExchange  
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
+
++ Response 200 (application/json)
+
+    + Attributes (array[CurrencyExchangeStructure])   
+
+### Добавить курс валюты [POST]
+  
++ Parameters
+
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
+
++ Request (application/json)
+
+    + Attributes (CurrencyExchangeStructure)   
+                
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /api/currenciesExchanges/1
+
+    + Attributes (CurrencyExchangeStructure) 
+   
+
+## Количество курсов валют [/api/currenciesExchanges/count{?filters,ids_list,active}]
+
+### Получить количество курсов валют  [GET]
+
++ Parameters
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
+
++ Response 200 (application/json)
+    + Attributes (CurrencyExchangeStructure)      
+            
+
+## Валюта  [/api/currenciesExchanges/{id_exchange}/{?unprotect_keys,with}]
+
+### Получить данные о курсе валюты [GET]
+
++ Parameters
+    + id_exchange (number, required) - Идентификатор валюты
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: currenciesExchange  
++ Response 200 (application/json)
+    + Attributes (CurrencyExchangeStructure) 
+
+### Изменить данные о курсе валюты [PUT]
+
++ Parameters
+    + id_exchange (number, required) - Идентификатор валюты
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
+
++ Request (application/json)
+    + Attributes (CurrencyExchangeStructure) 
+            
++ Response 200 (application/json)
+    + Attributes (CurrencyExchangeStructure) 
+
+### Деактивировать данные о курсе валюты [DELETE]
+
++ Parameters
+    + id_exchange (number, required) - Идентификатор валюты
 + Response 204
