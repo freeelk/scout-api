@@ -219,7 +219,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + id_exchange 1 (number, required)
 + id_currency 1 (number, required)
 + multiple 1 (number, required)
-+ exchange 1 (number, required)
++ Current Exchange 1 (number, required)
 + time_exchange `2018-04-01` (string, required)
 + active: true (boolean, required)
 
@@ -2108,7 +2108,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + order (string, optional) - Список полей сортировки через запятую без пробелов      
     + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
-    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: currenciesExchange  
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: currenciesExchange,currentCurrencyExchange  
     + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
     + limit (number, optional) - Возвращать указанное количество записей
 
@@ -2156,7 +2156,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 + Parameters
     + id_currency (number, required) - Идентификатор валюты
-    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: currenciesExchange  
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: currenciesExchange,currentCurrencyExchange   
 + Response 200 (application/json)
     + Attributes (CurrencyStructure) 
 
@@ -2241,22 +2241,4 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + id_exchange (number, required) - Идентификатор валюты
     + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: currency  
 + Response 200 (application/json)
-    + Attributes (CurrencyExchangeStructure) 
-
-### Изменить данные о курсе валюты [PUT]
-
-+ Parameters
-    + id_exchange (number, required) - Идентификатор валюты
-    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
-
-+ Request (application/json)
-    + Attributes (CurrencyExchangeStructure) 
-            
-+ Response 200 (application/json)
-    + Attributes (CurrencyExchangeStructure) 
-
-### Деактивировать данные о курсе валюты [DELETE]
-
-+ Parameters
-    + id_exchange (number, required) - Идентификатор валюты
-+ Response 204
+    + Attributes (CurrencyExchangeStructure)
