@@ -2183,13 +2183,16 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
  История изменения курсов валют.
 
-## Список курсов валют [/api/currenciesExchanges{?active,order,filters,with,ids_list,offset,limit,unprotect_keys}]
+## Список курсов валют [/api/currenciesExchanges{?active,id_currency,from,to,order,filters,with,ids_list,offset,limit,unprotect_keys}]
 
 ### Получить список курсов валют [GET]
 
 + Parameters
 
     + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + id_currency (number, required) - Идентификатор валюты
+    + from (string, optional) - Начальная дата, с которой возвращать результат
+    + to (string, optional) - Конечная дата, по которую возвращать результат
     + order (string, optional) - Список полей сортировки через запятую без пробелов      
     + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
