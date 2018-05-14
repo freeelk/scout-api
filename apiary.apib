@@ -14,6 +14,15 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 ## Data Structures
 
+### LoginStructure
++ username: demo (string, required)
++ password: demo (string, required)
++ rememberMe: false (boolean) 
+
+### ResponseResultStructure
++ status: Ok (string, required)
++ message: Successful (string)
+
 ### GroupsGoodsTreeStructure
 + id_group: 4 (number, required)
 + name_group: Пополнение счета (string, required)
@@ -225,6 +234,37 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 ### CountStructure
 + count: 10 (number, required) 
+
+#Group Аутентификация пользователя
+Аутентификация производится на основе cookie.
+После успешной аутентификации пользователю отправляется cookie `PHPSESSID`.
+Также будут установлены cookie:
+- `lang` - текущий язык
+- `currency` - текущая валюта
+
+*Данный метод аутентификации используется временно как зависимость от текущей архитектуры.
+В будущем планируется заменить на JWT.*
+
+
+## Аутентификация [/user/loginApi]
+
+### Вход в систему [POST]
+
++ Request (application/json)
+
+    + Attributes (LoginStructure)
+            
++ Response 200 (application/json)
+
+    + Attributes (ResponseResultStructure)
+
+## Выход из системы [/user/logoutApi]
+
+### Выход [GET]
+
++ Response 200 (application/json)
+
+    + Attributes (ResponseResultStructure)
 
 
 #Group Группы товаров 
