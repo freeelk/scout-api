@@ -232,6 +232,31 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + time_exchange: `2018-04-01` (string, required)
 + active: true (boolean, required)
 
+### EmployeesStructure
++ id_employee: 1 (number, required)
++ login: `ivanov` (string)
++ name_employee: `Иванов` (string)
++ passwd: `password` (string)
++ bar_code: `2800000000011` (string)
++ id_profile: 1 (number, required)
++ show_in_doc: true (boolean, required)
++ all_outlets: true (boolean, required)
++ active: true (boolean, required)
+
+### ProfileStructure
++ id_profile: 1 (number, required)
++ id_permissions_list: 1 (number, required)
++ name: `Кассир` (string)
++ active: true (boolean, required)
+
+### PermissionsListStructure
++ id_permissions_list: 1 (number, required)
++ id_permission: 1 (number, required)
+
+### PermissionsStructure
++ id_permission: 1 (number, required)
++ name: `перезагружать ПК` (string, required)
+
 ### CountStructure
 + count: 10 (number, required) 
 
@@ -2138,7 +2163,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 #Group Валюты
 
-## Список валют [/api/currencies{?active,order,filters,with,ids_list,offset,limit,unprotect_keys}]
+## Список валют [/api/currencies/{?active,order,filters,with,ids_list,offset,limit,unprotect_keys}]
 
 ### Получить список валют [GET]
 
@@ -2273,7 +2298,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
 
 + Response 200 (application/json)
-    + Attributes (CurrencyExchangeStructure)      
+    + Attributes (CountStructure)      
             
 
 ## Курс валюты  [/api/currenciesExchanges/{id_exchange}/{?unprotect_keys,with}]
@@ -2285,3 +2310,155 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: currency  
 + Response 200 (application/json)
     + Attributes (CurrencyExchangeStructure)
+
+#Group Сотрудники
+Работа с сотрудниками организации.
+
+*В операциях получения данных поле `password` опускается*
+
+## Список сотрудников [/api/employees/{?active,order,filters,ids_list,with,offset,limit,unprotect_keys}]
+
+### Получить список сотрудников [GET]
++ Parameters
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: outlet,profile 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[EmployeesStructure])
+
+### Добавить сотрудника [POST]
++ Parameters
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
++ Request (application/json)
+    + Attributes (EmployeesStructure)
++ Response 201 (application/json)
+            + Headers
+                Location: /api/employees/1
+    + Attributes (EmployeesStructure) 
+    
+## Количество сотрудников [/api/employees/count/{?filters,ids_list,active}]    
+    
+### Получить количество сотрудников  [GET]
++ Parameters
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
++ Response 200 (application/json)
+    + Attributes (CountStructure)
+
+## Сотрудник  [/api/employees/{id_employee}/{?unprotect_keys,with}]
+
+### Получить данные о сотруднике [GET]
++ Parameters
+    + id_employee (number, required) - Идентификатор сотрудника
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи:   
++ Response 200 (application/json)
+    + Attributes (EmployeesStructure)
+
+### Изменить данные о сотруднике [PUT]
+
++ Parameters
+    + id_employee (number, required) - Идентификатор сотрудника
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
++ Request (application/json)
+    + Attributes (EmployeesStructure) 
++ Response 200 (application/json)
+    + Attributes (EmployeesStructure) 
+
+### Деактивировать данные о сотруднике [DELETE]
+
++ Parameters
+    + id_employee (number, required) - Идентификатор сотрудника
++ Response 204
+
+#Group Профили сотрудников
+Работа с профилями сотрудников организации.
+
+## Список профилей сотрудников [/api/profiles/{?active,order,filters,ids_list,with,offset,limit,unprotect_keys}]
+
+### Получить список профилей сотрудников [GET]
++ Parameters
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: employees 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[ProfileStructure])
+
+### Добавить профиль сотрудника [POST]
++ Parameters
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
++ Request (application/json)
+    + Attributes (ProfileStructure)
++ Response 201 (application/json)
+            + Headers
+                Location: /api/profiles/1
+    + Attributes (ProfileStructure)
+    
+## Количество профилей сотрудников [/api/profiles/count/{?filters,ids_list,active}] 
+ 
+### Получить количество профилей сотрудников  [GET]
++ Parameters
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
++ Response 200 (application/json)
+    + Attributes (CountStructure)
+
+## Профиль сотрудника  [/api/profiles/{id_profile}/{?unprotect_keys,with}]
+
+### Получить профиль сотрудника  [GET]
++ Parameters
+    + id_profile (number, required) - Идентификатор профиля сотрудника
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: employees  
++ Response 200 (application/json)
+    + Attributes (ProfileStructure)
+
+### Изменить данные о профиле сотрудника [PUT]
++ Parameters
+    + id_profile (number, required) - Идентификатор профиля сотрудника
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
++ Request (application/json)
+    + Attributes (ProfileStructure) 
++ Response 200 (application/json)
+    + Attributes (ProfileStructure) 
+
+### Деактивировать данные о профиле сотрудника [DELETE]
++ Parameters
+    + id_profile (number, required) - Идентификатор профиля сотрудника
++ Response 204    
+
+#Group Списки разрешений
+Работа со списками разрешений профилей сотрудников организации.
+
+## Список списков разрешений профилей сотрудников [/api/permissionsLists/{?active,id_permissions_list,order,filters,ids_list,with,offset,limit,unprotect_keys}]
+
+### Получить список списков разрешений профилей сотрудников [GET]
++ Parameters
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + id_permissions_list (number, optional) - Идентификатор списка разрешений
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: employees 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[PermissionsListStructure])
+
+### Добавить списков разрешений профиля сотрудника [POST]
++ Parameters
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
++ Request (application/json)
+    + Attributes (ProfileStructure)
++ Response 201 (application/json)
+            + Headers
+                Location: /api/permissionsLists/1
+    + Attributes (PermissionsListStructure)
