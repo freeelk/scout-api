@@ -2393,6 +2393,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + Attributes (array[ProfileStructure])
 
 ### Добавить профиль сотрудника [POST]
+При добавлении профиля, если значение поля `id_permissions_list` не указано, оно будет установлено равным `id_profile`. 
 + Parameters
     + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
 + Request (application/json)
@@ -2437,19 +2438,22 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 #Group Списки разрешений
 Работа со списками разрешений профилей сотрудников организации.
+Есть возможность получить список установленных разрешений по идентификатору списка разрешений, устанавливать и удалять конкретные разрешения,
+устанавливать разрешения списком при помощи одного запроса. Также можно получить список существующих типов разрешений.
 
-## Список разрешений профилей сотрудников [/api/permissionsLists/{id_permissions_list}/{?order}]
-Возвращает список разрешений для профиля сотрудника для конкретного идентификатора списка разрешений
+## Список разрешений профилей сотрудников [/api/permissionsLists/{?id_permissions_list,order}]
+Возвращает список разрешений для профиля сотрудника для конкретного идентификатора списка разрешений.
+Без параметра `id_permissions_list` возвращает все записи.
 
 ### Получить список разрешений профилей сотрудников [GET]
 + Parameters
-    + id_permissions_list (number, required) - Идентификатор списка разрешений
+    + id_permissions_list (number, optional) - Идентификатор списка разрешений
     + order (string, optional) - Список полей сортировки через запятую без пробелов
     
 + Response 200 (application/json)
     + Attributes (array[PermissionsListStructure])
 
-## Установка и удаление разрешений профиля сотрудников [/api/permissionsLists/{id_permissions_list,id_permission}/{?order}]
+## Установка и удаление отдельных разрешений профиля сотрудников [/api/permissionsLists/{id_permissions_list}/{id_permission}]
 
 ### Установить разрешение профиля сотрудника [POST]
 + Parameters
@@ -2461,13 +2465,33 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + Parameters
     + id_permissions_list (number, required) - Идентификатор списка разрешений
     + id_permission (number, required) - Идентификатор разрешения
-+ Response 204    
++ Response 204
 
-## Список разрешений [/api/permissions/{?order}]
+## Установка набора разрешений профиля сотрудников [/api/permissionsLists/{id_permissions_list}/{?permissions}]
+### Установить набор разрешений профиля сотрудников [PUT]
+Имеющиеся разрешения будут сброшены и установлены те, что переданы в параметре `permissions`. 
+Пользователю будет отправлен JSON с установленными разрешениями.
++ Parameters
+    + id_permissions_list (number, required) - Идентификатор списка разрешений
+    + permissions (string, required) - Список идентификаторов устанавливаемых разрешений в виде строки чисел через запятую без пробела
++ Response 200 (application/json)
+    + Attributes (array[PermissionsListStructure])
+
+## Список разрешений [/api/permissions/{?order,with}]
 
 ### Получить список типов разрешений профилей сотрудников [GET]
 Получение списка возможных типов разрешений с идентификаторами и названиями
 + Parameters
     + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: permissionsLists  
 + Response 200 (application/json)
     + Attributes (array[PermissionStructure])
+
+## Разрешение [/api/permissions/{id_permission}/{?with}]
+
+### Получить тип разрешения по идентификатору  [GET]
++ Parameters
+    + id_permission (number, required) - Идентификатор разрешения
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: permissionsLists  
++ Response 200 (application/json)
+    + Attributes (ProfileStructure)
