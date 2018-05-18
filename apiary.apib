@@ -257,6 +257,45 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + id_permission: 1 (number, required)
 + name: `перезагружать ПК` (string, required)
 
+### TellerSettingsStructure
++ id_setting: 1 (number, required)
++ name_teller_setting: Основная настройка (string)
++ print_clishe: 1 (number, default) 
++ count_head: 3 (number, default)
++ count_footer: 0 (number, default)
++ count_head_repl: 3 (number, default)
++ count_footer_repl: 0 (number, default)
++ print_count_sell: 0 (number, default)
++ print_code_goods: 0 (number, default)
++ print_name_operator: 0 (number, default)
++ print_number_check: 0 (number, default)
++ separate_sum: 1 (number, default)
++ permitted_number_copies: 0 (number)
++ count_service_check: 0 (number)
++ check_head_1 (string)
++ check_head_2 (string)
++ check_head_3 (string)
++ check_head_4 (string)
++ check_head_5 (string)
++ check_head_6 (string)
++ check_footer_1 (string)
++ check_footer_2 (string)
++ check_footer_3 (string)
++ check_footer_4 (string)
++ check_footer_5 (string)
++ check_head_repl_1 (string)
++ check_head_repl_2 (string)
++ check_head_repl_3 (string)
++ check_head_repl_4 (string)
++ check_head_repl_5 (string)
++ check_head_repl_6 (string)
++ check_footer_repl_1 (string)
++ check_footer_repl_2 (string)
++ check_footer_repl_3 (string)
++ check_footer_repl_4 (string)
++ check_footer_repl_5 (string)
++ active: true (boolean, default)
+
 ### CountStructure
 + count: 10 (number, required) 
 
@@ -1728,7 +1767,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + Parameters
 
     + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
-    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: priceLevel, workplace, groupOutlet  
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: priceLevel, workplace, groupOutlet, employees  
     + order (string, optional) - Список полей сортировки через запятую без пробелов      
     + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
@@ -1782,7 +1821,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 + Parameters
     + id_outlet (integer, required) - Код торговой точки
-    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: priceLevel, workplace, groupOutlet  
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: priceLevel, workplace, groupOutlet, employees  
 
 + Response 200 (application/json)
 
@@ -2495,3 +2534,67 @@ HOST: private-01ace7-scout7.apiary-mock.com
     + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: permissionsLists  
 + Response 200 (application/json)
     + Attributes (ProfileStructure)
+
+
+#Group Настройки ККМ рабочих мест торговой точки
+Настройки шапки и подвала чека
+
+## Список настроек ККМ и добавление записи [/api/tellerSettings{?active,order,filters,with,ids_list,offset,limit,unprotect_keys}]
+
+### Получить список настроек [GET]
++ Parameters
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов      
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: outlet 
+    + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (integer, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[TellerSettingsStructure])   
+
+### Добавить настройку [POST]
++ Parameters
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
++ Request (application/json)
+    + Attributes (TellerSettingsStructure)
++ Response 201 (application/json)
+        + Headers
+            Location: /api/TellerSettings/1
+    + Attributes (TellerSettingsStructure)
+
+## Количество настроек ККМ [/api/tellerSettings/count{?filters,ids_list,active}]
+
+### Получить количество настроек  [GET]
++ Parameters
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
++ Response 200 (application/json)
+    + Attributes (CountStructure)     
+
+## Настройки ККМ  [/api/tellerSettings/{id_setting}/{?unprotect_keys,with}]
+
+### Получить настройку [GET]
+
++ Parameters
+    + id_setting (integer, required) - Идентификатор настройки
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: workplace  
++ Response 200 (application/json)
+    + Attributes (TellerSettingsStructure) 
+
+### Изменить настройку [PUT]
+
++ Parameters
+    + id_setting (integer, required) - Идентификатор настройки
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются
++ Request (application/json)
+    + Attributes (TellerSettingsStructure) 
++ Response 200 (application/json)
+    + Attributes (TellerSettingsStructure) 
+
+### Деактивировать настройку [DELETE]
+
++ Parameters
+    + id_setting (integer, required) - Идентификатор настройки
++ Response 204
