@@ -296,6 +296,12 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + check_footer_repl_5 (string)
 + active: true (boolean, default)
 
+### GoodsOnWorkplaceStructure
++ id_goods: 1 (number, required)
++ id_workplace: 1 (number, required)
++ active: true (boolean, default)
+
+
 ### CountStructure
 + count: 10 (number, required) 
 
@@ -2597,4 +2603,88 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 + Parameters
     + id_setting (integer, required) - Идентификатор настройки
++ Response 204
+
+
+#Group Разрешенные товары для рабочих мест
+Cписок товаров, доступных на каждом рабочем месте
+
+## Список доступных товаров [/api/goodsOnWorkplace/{?id_workplace,active,order,filters,with,ids_list,offset,limit,unprotect_keys}]
+Возвращает список доступных товаров для рабочего места.
+Без параметра `id_workplace` возвращает все записи.
+
+### Получить список доступных товаров [GET]
++ Parameters
+    + id_workplace (number, optional) - Идентификатор рабочего места
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов      
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи:
+    + offset (integer, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (integer, optional) - Возвращать указанное количество записей
+    
++ Response 200 (application/json)
+    + Attributes (array[GoodsOnWorkplaceStructure])
+
+
+
+## Количество доступных товаров [/api/goodsOnWorkplace/count/{?id_workplace,filters,active}] 
+ 
+### Получить количество доступных товаров  [GET]
++ Parameters
+    + id_workplace (number, optional) - Идентификатор рабочего места
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
++ Response 200 (application/json)
+    + Attributes (CountStructure)
+
+## Доступные на рабочем месте товары  [/api/goodsOnWorkplace/{id_workplace}/{id_goods}]
+
+### Получить товар [GET]
+
++ Parameters
+    + id_workplace (number,required) - Идентификатор рабочего места
+    + id_goods (number, required) - Идентификатор товара    
++ Response 200 (application/json)
+    + Attributes (GoodsOnWorkplaceStructure) 
+
+### Добавить товар в список доступных товаров [POST]
++ Request (application/json)
+    + Attributes (GoodsOnWorkplaceStructure)
++ Response 201 (application/json)
+            + Headers
+                Location: /api/goodsOnWorkplace/1/1
+    + Attributes (GoodsOnWorkplaceStructure)    
+
+### Изменить товар [PUT]
+
++ Parameters
+    + id_workplace (number, required) - Идентификатор рабочего места
+    + id_goods (number, required) - Идентификатор товара    
++ Request (application/json)
+    + Attributes (GoodsOnWorkplaceStructure) 
++ Response 200 (application/json)
+    + Attributes (GoodsOnWorkplaceStructure) 
+
+### Деактивировать довар [DELETE]
+
++ Parameters
+    + id_workplace (number, required) - Идентификатор рабочего места
+    + id_goods (number, required) - Идентификатор товара 
++ Response 204
+
+## Доступные на рабочем месте товары - массовые операции  [/api/goodsOnWorkplace/{id_workplace}/{?id_group}]
+Добавление/деактивация товаров, входящих в указанную в параметре `id_group` группу товаров или в ее дочерние группы.
+При добавлении учитываются только активные товары.
+### Добавить товары указанной группы товаров в список доступных товаров [POST]
++ Parameters
+    + id_workplace (number, required) - Идентификатор рабочего места
+    + id_group (number, required) - Идентификатор группы товаров 
++ Response 204
+
+### Убрать товары указанной группы товаров из списка доступных товаров [DELETE]
++ Parameters
+    + id_workplace (number, required) - Идентификатор рабочего места
+    + id_group (number, required) - Идентификатор группы товаров 
 + Response 204
