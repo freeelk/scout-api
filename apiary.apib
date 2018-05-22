@@ -2705,7 +2705,7 @@ Cписок товаров, доступных на каждом рабочем 
     + order (string, optional) - Список полей сортировки через запятую без пробелов
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
     + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
-    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи:  
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: goods 
     + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
     + limit (number, optional) - Возвращать указанное количество записей
 + Response 200 (application/json)
@@ -2735,7 +2735,7 @@ Cписок товаров, доступных на каждом рабочем 
 ### Получить код PLU  [GET]
 + Parameters
     + id_plu (number, required) - Код PLU
-    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: employees  
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: goods  
 + Response 200 (application/json)
     + Attributes (PluStructure)
 
