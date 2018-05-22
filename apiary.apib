@@ -311,6 +311,11 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + additional_text: `Дополнительный текст` (string,required)
 + active: true (boolean, default)
 
+### ModificatorGroupsStructure
++ id_modificator_group: 1 (number, required),
++ modificator_group_name: `Новая группа модификаторов` (string)
++ active: true (boolean, default)
+
 ### CountStructure
 + count: 10 (number, required) 
 
@@ -2811,4 +2816,61 @@ Cписок товаров, доступных на каждом рабочем 
 ### Деактивировать дополнительный текст товара [DELETE]
 + Parameters
     + id_text (number, required) - Идентификатор дополнительного текста товара
++ Response 204   
+
+#Group Группы модификаторов
+
+## Список групп модификаторов [/api/modificatorGroups/{?unprotect_keys,active,order,filters,ids_list,offset,limit}]
+Группы модификаторов для Resto
+
+### Получить список групп модификаторов [GET]
++ Parameters
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[ModificatorGroupsStructure])    
+
+### Добавить группу модификаторов [POST]
++ Request (application/json)
+    + Attributes (PluStructure)
++ Parameters
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются    
++ Response 201 (application/json)
+            + Headers
+                Location: /api/modificatorGroups/1
+    + Attributes (ModificatorGroupsStructure)    
+    
+## Количество групп модификаторов [/api/modificatorGroups/count/{?filters,ids_list,active}] 
+ 
+### Получить количество групп модификаторов  [GET]
++ Parameters
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
++ Response 200 (application/json)
+    + Attributes (CountStructure)
+
+## Группа модификаторов  [/api/modificatorGroups/{id_modificator_group}/{?with}]
+
+### Получить группу модификаторов  [GET]
++ Parameters
+    + id_modificator_group (number, required) - Идентификатор группы модификаторов
++ Response 200 (application/json)
+    + Attributes (ModificatorGroupsStructure)
+
+### Изменить группу модификаторов [PUT]
++ Parameters
+    + id_modificator_group (number, required) - Идентификатор группы модификаторов
++ Request (application/json)
+    + Attributes (ModificatorGroupsStructure) 
++ Response 200 (application/json)
+    + Attributes (ModificatorGroupsStructure) 
+
+### Деактивировать группу модификаторов [DELETE]
++ Parameters
+    + id_modificator_group (number, required) - Идентификатор группы модификаторов
 + Response 204
