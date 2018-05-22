@@ -306,6 +306,10 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + id_goods: 1 (number, required)
 + active: true (boolean, default)
 
+### AdditionalTextStructure
++ id_text: 1 (number, required)
++ additional_text: `Дополнительный текст` (string,required)
++ active: true (boolean, default)
 
 ### CountStructure
 + count: 10 (number, required) 
@@ -2712,7 +2716,7 @@ Cписок товаров, доступных на каждом рабочем 
     + Attributes (array[PluStructure])    
 
 ### Добавить код PLU [POST]
-Обязательно нужно указывать `id_plu` в данных. Автоматически код не создается. 
+Обязательно нужно указывать `id_plu` в данных. Автоматически код не создается. PLU для весов с печатью этикеток
 + Request (application/json)
     + Attributes (PluStructure)
 + Response 201 (application/json)
@@ -2750,4 +2754,61 @@ Cписок товаров, доступных на каждом рабочем 
 ### Деактивировать код PLU [DELETE]
 + Parameters
     + id_plu (number, required) - Код PLU
++ Response 204    
+
+#Group Дополнительные тексты товара
+
+## Список дополнительных текстов товара [/api/additionalTexts/{?unprotect_keys,active,order,filters,ids_list,offset,limit}]
+Используется для печати связанного с товаром текста на весах с чекопечатью, на принтерах этикеток.
+
+### Получить список дополнительных текстов товара [GET]
++ Parameters
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[AdditionalTextStructure])    
+
+### Добавить дополнительный текст товара [POST]
++ Request (application/json)
+    + Attributes (PluStructure)
++ Parameters
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются    
++ Response 201 (application/json)
+            + Headers
+                Location: /api/additionalTexts/1
+    + Attributes (AdditionalTextStructure)    
+    
+## Количество дополнительных текстов товара [/api/additionalTexts/count/{?filters,ids_list,active}] 
+ 
+### Получить количество дополнительных текстов товара  [GET]
++ Parameters
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
++ Response 200 (application/json)
+    + Attributes (CountStructure)
+
+## Дополнительный текст товара  [/api/additionalTexts/{id_text}/{?with}]
+
+### Получить дополнительный текст товара  [GET]
++ Parameters
+    + id_text (number, required) - Идентификатор дополнительного текста товара
++ Response 200 (application/json)
+    + Attributes (AdditionalTextStructure)
+
+### Изменить дополнительный текст товара [PUT]
++ Parameters
+    + id_text (number, required) - Идентификатор дополнительного текста товара
++ Request (application/json)
+    + Attributes (AdditionalTextStructure) 
++ Response 200 (application/json)
+    + Attributes (AdditionalTextStructure) 
+
+### Деактивировать дополнительный текст товара [DELETE]
++ Parameters
+    + id_text (number, required) - Идентификатор дополнительного текста товара
 + Response 204
