@@ -312,19 +312,24 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + active: true (boolean, default)
 
 ### ModificatorGroupsStructure
-+ id_modificator_group: 1 (number, required),
++ id_modificator_group: 1 (number, required)
 + modificator_group_name: `Новая группа модификаторов` (string)
 + active: true (boolean, default)
 
 ### MapPrefixToDirectPayStructure
-+ prefix: `8067` (string,required),
-+ id_goods: 1 (number,required),
++ prefix: `8067` (string,required)
++ id_goods: 1 (number,required)
 + active: true (boolean, default)
 
 ### MaskBarCodeStructure
 + id_mask: 1 (number, required)
-+ name_bar_code: `Весовой` (string,required),
-+ mask_bar_code: `21GGGGGWWWWWC` (string,required),
++ name_bar_code: `Весовой` (string,required)
++ mask_bar_code: `21GGGGGWWWWWC` (string,required)
++ active: true (boolean, default)
+
+### MessageTextStructure
++ id_message_text: 1 (number, required)
++ text_message: `Текст шаблона сообщения` (string,required)
 + active: true (boolean, default)
 
 ### CountStructure
@@ -2715,9 +2720,9 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 204
 
 #Group PLU для весов с печатью этикеток
+Перечень товаров для программирования весов с печатью штрих-кодов.
 
 ## Список PLU [/api/plu/{?active,order,filters,ids_list,with,offset,limit}]
-Перечень товаров для программирования весов с печатью штрих-кодов.
 
 ### Получить список кодов PLU [GET]
 + Parameters
@@ -2773,9 +2778,9 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 204    
 
 #Group Дополнительные тексты товара
+Используется для печати связанного с товаром текста на весах с чекопечатью, на принтерах этикеток.
 
 ## Список дополнительных текстов товара [/api/additionalTexts/{?unprotect_keys,active,order,filters,ids_list,offset,limit}]
-Используется для печати связанного с товаром текста на весах с чекопечатью, на принтерах этикеток.
 
 ### Получить список дополнительных текстов товара [GET]
 + Parameters
@@ -2808,7 +2813,7 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 200 (application/json)
     + Attributes (CountStructure)
 
-## Дополнительный текст товара  [/api/additionalTexts/{id_text}/{?with}]
+## Дополнительный текст товара  [/api/additionalTexts/{id_text}]
 
 ### Получить дополнительный текст товара  [GET]
 + Parameters
@@ -2865,7 +2870,7 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 200 (application/json)
     + Attributes (CountStructure)
 
-## Группа модификаторов  [/api/modificatorGroups/{id_modificator_group}/{?with}]
+## Группа модификаторов  [/api/modificatorGroups/{id_modificator_group}]
 
 ### Получить группу модификаторов  [GET]
 + Parameters
@@ -2887,9 +2892,9 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 204  
 
 #Group Префиксы прямых пополнений
+Связь между префиксом телефонного номера и кодом товара "Прямое пополнение".
 
 ## Список префиксов прямых пополнений [/api/mapPrefixToDirectPay/{?unprotect_keys,active,order,with,filters,ids_list,offset,limit}]
-Связь между префиксом телефонного номера и кодом товара "Прямое пополнение".
 
 ### Получить список префиксов прямых пополнений [GET]
 + Parameters
@@ -2946,9 +2951,9 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 204
 
 #Group Маски весовых штрих-кодов
+Правила преобразования весовых штрих-кодов в идентификатор товара и вес товара.
 
 ## Список масок весовых штрих-кодов [/api/maskBarCodes/{?unprotect_keys,active,order,filters,ids_list,offset,limit}]
-Правила преобразования весовых штрих-кодов в идентификатор товара и вес товара.
 
 ### Получить список масок весовых штрих-кодов [GET]
 + Parameters
@@ -2981,7 +2986,7 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 200 (application/json)
     + Attributes (CountStructure)
 
-## Маска весового штрих-кода  [/api/maskBarCodes/{id_mask}/{?with,unprotect_keys}]
+## Маска весового штрих-кода  [/api/maskBarCodes/{id_mask}/{?unprotect_keys}]
 
 ### Получить маску весового штрих-кода  [GET]
 + Parameters
@@ -3001,4 +3006,64 @@ Cписок товаров, доступных на каждом рабочем 
 ### Деактивировать маску весового штрих-кода [DELETE]
 + Parameters
     + id_mask (string, required) - Идентификатор маски штрих-кода
++ Response 204
+
+#Group Шаблоны тестовых сообщений
+Шаблоны для добавления в текстовые сообщения.
+
+## Список шаблонов тестовых сообщений [/api/messageTexts/{?unprotect_keys,active,order,with,filters,ids_list,offset,limit}]
+
+### Получить шаблон тестового сообщения [GET]
++ Parameters
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: messageInbox 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[MessageTextStructure])    
+
+### Добавить шаблон тестового сообщения [POST]
++ Request (application/json)
+    + Attributes (MessageTextStructure)
++ Parameters
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются    
++ Response 201 (application/json)
+            + Headers
+                Location: /api/messageTexts/1
+    + Attributes (MessageTextStructure)    
+    
+## Количество шаблонов тестовых сообщений [/api/messageTexts/count/{?filters,ids_list,active}] 
+ 
+### Получить количество шаблонов тестовых сообщений  [GET]
++ Parameters
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
++ Response 200 (application/json)
+    + Attributes (CountStructure)
+
+## Маска шаблона тестового сообщения  [/api/messageTexts/{id_message_text}/{?with,unprotect_keys}]
+
+### Получить шаблон тестового сообщения  [GET]
++ Parameters
+    + id_message_text (number, required) - Идентификатор текста сообщения
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: messageInbox 
++ Response 200 (application/json)
+    + Attributes (MessageTextStructure)
+
+### Изменить шаблон тестового сообщения [PUT]
++ Parameters
+    + id_message_text (number, required) - Идентификатор текста сообщения
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются   
++ Request (application/json)
+    + Attributes (MessageTextStructure) 
++ Response 200 (application/json)
+    + Attributes (MessageTextStructure) 
+
+### Деактивировать шаблон тестового сообщения [DELETE]
++ Parameters
+    + id_message_text (number, required) - Идентификатор текста сообщения
 + Response 204
