@@ -316,6 +316,11 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + modificator_group_name: `Новая группа модификаторов` (string)
 + active: true (boolean, default)
 
+### MapPrefixToDirectPayStructure
++ prefix: `8067` (string,required),
++ id_goods: 1 (number,required),
++ active: true (boolean, default)
+
 ### CountStructure
 + count: 10 (number, required) 
 
@@ -2836,7 +2841,7 @@ Cписок товаров, доступных на каждом рабочем 
 
 ### Добавить группу модификаторов [POST]
 + Request (application/json)
-    + Attributes (PluStructure)
+    + Attributes (ModificatorGroupsStructure)
 + Parameters
     + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются    
 + Response 201 (application/json)
@@ -2873,4 +2878,64 @@ Cписок товаров, доступных на каждом рабочем 
 ### Деактивировать группу модификаторов [DELETE]
 + Parameters
     + id_modificator_group (number, required) - Идентификатор группы модификаторов
++ Response 204  
+
+#Group Префиксы прямых пополнений
+
+## Список префиксов прямых пополнений [/api/mapPrefixToDirectPay/{?unprotect_keys,active,order,with,filters,ids_list,offset,limit}]
+Связь между префиксом телефонного номера и кодом товара "Прямое пополнение".
+
+### Получить список префиксов прямых пополнений [GET]
++ Parameters
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: goods 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[MapPrefixToDirectPayStructure])    
+
+### Добавить префикс прямого пополнения [POST]
++ Request (application/json)
+    + Attributes (MapPrefixToDirectPayStructure)
++ Parameters
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются    
++ Response 201 (application/json)
+            + Headers
+                Location: /api/mapPrefixToDirectPay/1
+    + Attributes (MapPrefixToDirectPayStructure)    
+    
+## Количество префиксов прямых пополнений [/api/mapPrefixToDirectPay/count/{?filters,ids_list,active}] 
+ 
+### Получить количество префиксов прямых пополнений  [GET]
++ Parameters
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
++ Response 200 (application/json)
+    + Attributes (CountStructure)
+
+## Префикс прямого пополнения  [/api/mapPrefixToDirectPay/{prefix}/{?with,unprotect_keys}]
+
+### Получить префикс прямого пополнения  [GET]
++ Parameters
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: goods 
+    + prefix (string, required) - Префикс телефонного номера
++ Response 200 (application/json)
+    + Attributes (MapPrefixToDirectPayStructure)
+
+### Изменить префикс прямого пополнения [PUT]
++ Parameters
+    + prefix (string, required) - Префикс телефонного номера
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются   
++ Request (application/json)
+    + Attributes (MapPrefixToDirectPayStructure) 
++ Response 200 (application/json)
+    + Attributes (MapPrefixToDirectPayStructure) 
+
+### Деактивировать префикс прямого пополнения [DELETE]
++ Parameters
+    + prefix (string, required) - Префикс телефонного номера
 + Response 204
