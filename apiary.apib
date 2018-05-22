@@ -321,6 +321,12 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + id_goods: 1 (number,required),
 + active: true (boolean, default)
 
+### MaskBarCodeStructure
++ id_mask: 1 (number, required)
++ name_bar_code: `Весовой` (string,required),
++ mask_bar_code: `21GGGGGWWWWWC` (string,required),
++ active: true (boolean, default)
+
 ### CountStructure
 + count: 10 (number, required) 
 
@@ -2917,11 +2923,10 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 200 (application/json)
     + Attributes (CountStructure)
 
-## Префикс прямого пополнения  [/api/mapPrefixToDirectPay/{prefix}/{?with,unprotect_keys}]
+## Префикс прямого пополнения  [/api/mapPrefixToDirectPay/{prefix}/{?unprotect_keys}]
 
 ### Получить префикс прямого пополнения  [GET]
 + Parameters
-    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: goods 
     + prefix (string, required) - Префикс телефонного номера
 + Response 200 (application/json)
     + Attributes (MapPrefixToDirectPayStructure)
@@ -2938,4 +2943,62 @@ Cписок товаров, доступных на каждом рабочем 
 ### Деактивировать префикс прямого пополнения [DELETE]
 + Parameters
     + prefix (string, required) - Префикс телефонного номера
++ Response 204
+
+#Group Маски весовых штрих-кодов
+
+## Список масок весовых штрих-кодов [/api/maskBarCodes/{?unprotect_keys,active,order,filters,ids_list,offset,limit}]
+Правила преобразования весовых штрих-кодов в идентификатор товара и вес товара.
+
+### Получить список масок весовых штрих-кодов [GET]
++ Parameters
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[MaskBarCodeStructure])    
+
+### Добавить маску весового штрих-кода [POST]
++ Request (application/json)
+    + Attributes (MaskBarCodeStructure)
++ Parameters
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются    
++ Response 201 (application/json)
+            + Headers
+                Location: /api/maskBarCodes/1
+    + Attributes (MaskBarCodeStructure)    
+    
+## Количество масок весовых штрих-кодов [/api/maskBarCodes/count/{?filters,ids_list,active}] 
+ 
+### Получить количество масок весовых штрих-кодов  [GET]
++ Parameters
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
++ Response 200 (application/json)
+    + Attributes (CountStructure)
+
+## Маска весового штрих-кода  [/api/maskBarCodes/{id_mask}/{?with,unprotect_keys}]
+
+### Получить маску весового штрих-кода  [GET]
++ Parameters
+    + id_mask (string, required) - Идентификатор маски штрих-кода
++ Response 200 (application/json)
+    + Attributes (MaskBarCodeStructure)
+
+### Изменить маску весового штрих-кода [PUT]
++ Parameters
+    + id_mask (string, required) - Идентификатор маски штрих-кода
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются   
++ Request (application/json)
+    + Attributes (MaskBarCodeStructure) 
++ Response 200 (application/json)
+    + Attributes (MaskBarCodeStructure) 
+
+### Деактивировать маску весового штрих-кода [DELETE]
++ Parameters
+    + id_mask (string, required) - Идентификатор маски штрих-кода
 + Response 204
