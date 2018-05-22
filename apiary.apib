@@ -301,6 +301,11 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + id_workplace: 1 (number, required)
 + active: true (boolean, default)
 
+### PluStructure
++ id_plu: 1 (number, required)
++ id_goods: 1 (number, required)
++ active: true (boolean, default)
+
 
 ### CountStructure
 + count: 10 (number, required) 
@@ -2667,7 +2672,7 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 200 (application/json)
     + Attributes (GoodsOnWorkplaceStructure) 
 
-### Деактивировать довар [DELETE]
+### Деактивировать товар [DELETE]
 
 + Parameters
     + id_workplace (number, required) - Идентификатор рабочего места
@@ -2687,4 +2692,62 @@ Cписок товаров, доступных на каждом рабочем 
 + Parameters
     + id_workplace (number, required) - Идентификатор рабочего места
     + id_group (number, required) - Идентификатор группы товаров 
++ Response 204
+
+#Group PLU для весов с печатью этикеток
+
+## Список PLU [/api/plu/{?active,order,filters,ids_list,with,offset,limit}]
+Перечень товаров для программирования весов с печатью штрих-кодов.
+
+### Получить список кодов PLU [GET]
++ Parameters
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи:  
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[PluStructure])    
+
+### Добавить код PLU [POST]
+Обязательно нужно указывать `id_plu` в данных. Автоматически код не создается. 
++ Request (application/json)
+    + Attributes (PluStructure)
++ Response 201 (application/json)
+            + Headers
+                Location: /api/plu/1000
+    + Attributes (PluStructure)    
+    
+## Количество кодов PLU [/api/plu/count/{?filters,ids_list,active}] 
+ 
+### Получить количество кодов PLU  [GET]
++ Parameters
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
++ Response 200 (application/json)
+    + Attributes (CountStructure)
+
+## Код PLU  [/api/plu/{id_plu}/{?with}]
+
+### Получить код PLU  [GET]
++ Parameters
+    + id_plu (number, required) - Код PLU
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: employees  
++ Response 200 (application/json)
+    + Attributes (PluStructure)
+
+### Изменить код PLU [PUT]
++ Parameters
+    + id_plu (number, required) - Код PLU
++ Request (application/json)
+    + Attributes (PluStructure) 
++ Response 200 (application/json)
+    + Attributes (PluStructure) 
+
+### Деактивировать код PLU [DELETE]
++ Parameters
+    + id_plu (number, required) - Код PLU
 + Response 204
