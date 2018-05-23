@@ -332,6 +332,15 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + text_message: `Текст шаблона сообщения` (string,required)
 + active: true (boolean, default)
 
+### CommandStructure
++ command : `12345` (string,required)
++ id_action: 1 (number, required)
++ active: true (boolean, default)
+
+### CommandActionsStructure
++ idAction: 100 (number, required)
++ description: `Принудительный старт синхронизации` (string,required)
+
 ### CountStructure
 + count: 10 (number, required) 
 
@@ -3013,7 +3022,7 @@ Cписок товаров, доступных на каждом рабочем 
 
 ## Список шаблонов тестовых сообщений [/api/messageTexts/{?unprotect_keys,active,order,with,filters,ids_list,offset,limit}]
 
-### Получить шаблон тестового сообщения [GET]
+### Получить список шаблонов тестового сообщения [GET]
 + Parameters
     + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
     + order (string, optional) - Список полей сортировки через запятую без пробелов
@@ -3066,4 +3075,68 @@ Cписок товаров, доступных на каждом рабочем 
 ### Деактивировать шаблон тестового сообщения [DELETE]
 + Parameters
     + id_message_text (number, required) - Идентификатор текста сообщения
++ Response 204
+
+
+#Group Системные таблицы
+
+## Список системных команд [/api/commands/{?unprotect_keys,active,order,with,filters,ids_list,offset,limit}]
+
+### Получить список системных команд [GET]
++ Parameters
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: actions  
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[CommandStructure])    
+
+### Добавить системную команду [POST]
++ Request (application/json)
+    + Attributes (CommandStructure)
++ Response 201 (application/json)
+            + Headers
+                Location: /api/commands/1
+    + Attributes (CommandStructure)    
+    
+## Список идентификаторов системного действия [/api/commands/actions]
+
+### Получить список идентификаторов системного действия [GET]
++ Response 200 (application/json)
+    + Attributes (array[CommandActionsStructure])  
+    
+## Количество системных команд [/api/commands/count/{?filters,ids_list,active}] 
+ 
+### Получить количество системных команд  [GET]
++ Parameters
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
++ Response 200 (application/json)
+    + Attributes (CountStructure)
+
+## Системная команда  [/api/commands/{command}/{?unprotect_keys,with}]
+
+### Получить системную команду  [GET]
++ Parameters
+    + command (number, required) - Код или штрих-код, по которому будет выполнятся системное действие
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: actions  
++ Response 200 (application/json)
+    + Attributes (CommandStructure)
+
+### Изменить системную команду [PUT]
++ Parameters
+    + command (number, required) - Код или штрих-код, по которому будет выполнятся системное действие
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях редактирования значения ключевого поля не игнорируются   
++ Request (application/json)
+    + Attributes (CommandStructure) 
++ Response 200 (application/json)
+    + Attributes (CommandStructure) 
+
+### Деактивировать системную команду [DELETE]
++ Parameters
+    + command (number, required) - Код или штрих-код, по которому будет выполнятся системное действие
 + Response 204
