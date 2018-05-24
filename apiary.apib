@@ -341,6 +341,12 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + idAction: 100 (number, required)
 + description: `Принудительный старт синхронизации` (string,required)
 
+### RoleStructure
++ id_role: 10 (number, required)
++ name_role: `Оператор` (string)
++ description: `Оператор по работе с данными` (string)
++ default_role: 0 (number)
+
 ### CountStructure
 + count: 10 (number, required) 
 
@@ -2804,7 +2810,7 @@ Cписок товаров, доступных на каждом рабочем 
 
 ### Добавить дополнительный текст товара [POST]
 + Request (application/json)
-    + Attributes (PluStructure)
+    + Attributes (AdditionalTextStructure)
 + Parameters
     + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются    
 + Response 201 (application/json)
@@ -3077,7 +3083,6 @@ Cписок товаров, доступных на каждом рабочем 
     + id_message_text (number, required) - Идентификатор текста сообщения
 + Response 204
 
-
 #Group Системные команды
 
 ## Список системных команд [/api/commands/{?unprotect_keys,active,order,with,filters,ids_list,offset,limit}]
@@ -3139,4 +3144,67 @@ Cписок товаров, доступных на каждом рабочем 
 ### Деактивировать системную команду [DELETE]
 + Parameters
     + command (number, required) - Код или штрих-код, по которому будет выполнятся системное действие
++ Response 204
+
+
+#Group Роли пользователей Скаута
+Роли со значением `default_role` = 1 являтся предварительно созданными и не могут изменяться. Их можно только просматривать.
+При создании ролей атрибут `default_role` игнорируется: он всегда будет установлен в 0.
+
+## Список ролей пользователей [/api/roles/{?with,unprotect_keys,active,order,filters,ids_list,offset,limit}]
+
+### Получить список ролей [GET]
++ Parameters
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: roleActions,userRoles  
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[RoleStructure])    
+
+### Добавить роль [POST]
++ Request (application/json)
+    + Attributes (RoleStructure)
++ Parameters
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются    
++ Response 201 (application/json)
+            + Headers
+                Location: /api/roles/1
+    + Attributes (RoleStructure)    
+    
+## Количество ролей пользователей [/api/roles/count/{?filters,ids_list,active}] 
+ 
+### Получить количество ролей  [GET]
++ Parameters
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
++ Response 200 (application/json)
+    + Attributes (CountStructure)
+
+## Роль пользователя  [/api/roles/{id_role}/{?with}]
+
+### Получить роль  [GET]
++ Parameters
+    + id_role (number, required) - Идентификатор роли
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: roleActions,userRoles 
++ Response 200 (application/json)
+    + Attributes (RoleStructure)
+
+### Изменить роль [PUT]
+Роль со значением `default_role` = 1 можно только просматривать.
++ Parameters
+    + id_role (number, required) - Идентификатор роли
++ Request (application/json)
+    + Attributes (RoleStructure) 
++ Response 200 (application/json)
+    + Attributes (RoleStructure) 
+
+### Удалить роль [DELETE]
+Роль не деактивируется, а полностью удаляется! Если существуют пользователи с такой ролью, удаление не будет произведено и будет возвращена ошибка 403.
++ Parameters
+    + id_role (number, required) - Идентификатор роли
 + Response 204
