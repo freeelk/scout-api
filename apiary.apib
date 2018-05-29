@@ -347,6 +347,25 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + description: `Оператор по работе с данными` (string)
 + default_role: 0 (number)
 
+### RoleActionStructure
++ id_role: 1 (number,required)  
++ id_resource: 1 (number,required) 
++ parent_id_resource: 1 (number,required) 
++ name: `Invoice` (string,required)
++ route: `/docs/invoice` (string,required)
++ allowed: true (boolean,required)
++ readonly: false (boolean,required)
+
+### RoleActionTreeStructure
++ id_role: 1 (number,required)  
++ id_resourse: 1 (number,required) 
++ parent_id_resourse: 1 (number,required) 
++ name: `Invoice` (string,required)
++ route: `/docs/invoice` (string,required)
++ allowed: true (boolean,required)
++ readonly: false (boolean,required)
++ children: [] (array[RoleActionTreeStructure], required)
+
 ### CountStructure
 + count: 10 (number, required) 
 
@@ -3151,12 +3170,11 @@ Cписок товаров, доступных на каждом рабочем 
 Роли со значением `default_role` = 1 являтся предварительно созданными и не могут изменяться. Их можно только просматривать.
 При создании ролей атрибут `default_role` игнорируется: он всегда будет установлен в 0.
 
-## Список ролей пользователей [/api/roles/{?with,unprotect_keys,active,order,filters,ids_list,offset,limit}]
+## Список ролей пользователей [/api/roles/{?with,unprotect_keys,order,filters,ids_list,offset,limit}]
 
 ### Получить список ролей [GET]
 + Parameters
-    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: roleActions,userRoles  
-    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: roleActions
     + order (string, optional) - Список полей сортировки через запятую без пробелов
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
     + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
@@ -3175,13 +3193,12 @@ Cписок товаров, доступных на каждом рабочем 
                 Location: /api/roles/1
     + Attributes (RoleStructure)    
     
-## Количество ролей пользователей [/api/roles/count/{?filters,ids_list,active}] 
+## Количество ролей пользователей [/api/roles/count/{?filters,ids_list}] 
  
 ### Получить количество ролей  [GET]
 + Parameters
     + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
-    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
 + Response 200 (application/json)
     + Attributes (CountStructure)
 
@@ -3190,7 +3207,7 @@ Cписок товаров, доступных на каждом рабочем 
 ### Получить роль  [GET]
 + Parameters
     + id_role (number, required) - Идентификатор роли
-    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: roleActions,userRoles 
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: roleActions
 + Response 200 (application/json)
     + Attributes (RoleStructure)
 
@@ -3207,4 +3224,42 @@ Cписок товаров, доступных на каждом рабочем 
 Роль не деактивируется, а полностью удаляется! Если существуют пользователи с такой ролью, удаление не будет произведено и будет возвращена ошибка 403.
 + Parameters
     + id_role (number, required) - Идентификатор роли
++ Response 204
+
+# Group Доступы к ресурсам согласно ролей
+
+## Доступы к ресурсам в виде списка [/api/roleActions/list/{id_role}]
+
+### Получить список доступов [GET]
++ Parameters
+    + id_role (number,optional) - Идентификатор роли. Если указан, будут отображены доступы только для этой роли
++ Response 200 (application/json)
+    + Attributes (array[RoleActionStructure])
+
+## Доступы к ресурсам в виде дерева [/api/roleActions/tree/{id_role}]
+### Получить список доступов [GET]
++ Parameters
+    + id_role (number,optional) - Идентификатор роли.
++ Response 200 (application/json)
+    + Attributes (array[RoleActionTreeStructure])
+
+## Доступ к ресурсу [/api/roleActions/{id_role}/{id_resourse}/{?readonly}]
+### Получить данные о доступе к ресурсу [GET]
++ Parameters
+    + id_role (number,required) - Идентификатор роли.
+    + id_resourse (number,required) - Идентификатор ресурса.
++ Response 200 (application/json)
+    + Attributes (RoleActionStructure)
+
+### Разрешить доступ к ресурсу [POST]
++ Parameters
+    + id_role (number,required) - Идентификатор роли.
+    + id_resourse (number,required) - Идентификатор ресурса.
+    + readonly (boolean,optional) - Доступ только для чтения. Если параметр не указан, устанавливается полный доступ.    
++ Response 204
+
+### Запретить доступ к ресурсу [DELETE]
++ Parameters
+    + id_role (number,required) - Идентификатор роли.
+    + id_resourse (number,required) - Идентификатор ресурса.
 + Response 204
