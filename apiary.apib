@@ -3227,23 +3227,28 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 204
 
 # Group Доступы к ресурсам согласно ролей
+- Для предустановленных ролей (ролей по умолчанию) нет возможности изменять доступы.
+- Для роли администратора всегда открыты все доступы
 
-## Доступы к ресурсам в виде списка [/api/roleActions/list/{id_role}]
+
+## Доступы к ресурсам в виде списка [/api/roleActions/list/{id_role}/{?root}]
 
 ### Получить список доступов [GET]
 + Parameters
     + id_role (number,optional) - Идентификатор роли. Если указан, будут отображены доступы только для этой роли
+    + root (number,optional) - Идентификатор ресурса. Если указан, будут отображены данные для этого и его дочерних ресурсов.
 + Response 200 (application/json)
     + Attributes (array[RoleActionStructure])
 
-## Доступы к ресурсам в виде дерева [/api/roleActions/tree/{id_role}]
+## Доступы к ресурсам в виде дерева [/api/roleActions/tree/{id_role}/{?root}]
 ### Получить список доступов [GET]
 + Parameters
     + id_role (number,optional) - Идентификатор роли.
+    + root (number,optional) - Идентификатор ресурса. Если указан, будут отображены данные для этого и его дочерних ресурсов.
 + Response 200 (application/json)
     + Attributes (array[RoleActionTreeStructure])
 
-## Доступ к ресурсу [/api/roleActions/{id_role}/{id_resourse}/{?readonly}]
+## Доступ к ресурсу [/api/roleActions/{id_role}/{id_resourse}/{?readonly,children}]
 ### Получить данные о доступе к ресурсу [GET]
 + Parameters
     + id_role (number,required) - Идентификатор роли.
@@ -3256,10 +3261,12 @@ Cписок товаров, доступных на каждом рабочем 
     + id_role (number,required) - Идентификатор роли.
     + id_resourse (number,required) - Идентификатор ресурса.
     + readonly (boolean,optional) - Доступ только для чтения. Если параметр не указан, устанавливается полный доступ.    
+    + children (boolean,optional) - Если параметр установлен а true, доступы будут установлены также к дочерним ресурсям указанного ресурса
 + Response 204
 
 ### Запретить доступ к ресурсу [DELETE]
 + Parameters
     + id_role (number,required) - Идентификатор роли.
     + id_resourse (number,required) - Идентификатор ресурса.
+    + children (boolean,optional) - Если параметр установлен а true, доступы будут запрещены также к дочерним ресурсям указанного ресурса
 + Response 204
