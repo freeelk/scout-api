@@ -366,6 +366,23 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + readonly: false (boolean,required)
 + children: [] (array[RoleActionTreeStructure], required)
 
+### UserObjectStructure
++ id_user_object: 2001 (number,required)
++ id_user: 1 (number,required)
++ type: `outlet` (string,required)
++ id_object: 1 (number,required)
++ parent_id_user_object: 1001 (number,required)
++ allowed: true (boolean,required)
+
+### UserObjectTreeStructure
++ id_user_object: 1001 (number,required)
++ id_user: 1 (number,required)
++ type: `outlet` (string,required)
++ id_object: 1 (number,required)
++ parent_id_user_object: 1001 (number,required)
++ allowed: true (boolean,required)
++ children: [] (array[UserObjectStructure], required)
+
 ### CountStructure
 + count: 10 (number, required) 
 
@@ -3269,4 +3286,47 @@ Cписок товаров, доступных на каждом рабочем 
     + id_role (number,required) - Идентификатор роли.
     + id_resourse (number,required) - Идентификатор ресурса.
     + children (boolean,optional) - Если параметр установлен а true, доступы будут запрещены также к дочерним ресурсям указанного ресурса
++ Response 204
+
+# Group Доступные торговые объекты
+- Идентификатор объекта `id_user_object` уникально обозначает торговый объект. 
+  Формируется из идентификатора типа торгового объекта (1000 - группа торговых точек, 2000 - торговая точка, 3000 - рабочее место) + идентификатор торгового объекта 
+
+## Доступные торговые объекты в виде списка [/api/userObjects/list/{id_user}/{?root}]
+
+### Получить список доступов [GET]
++ Parameters
+    + id_user (number,optional) - Идентификатор пользователя. Если указан, будут отображены доступные торговые объекты только для этого пользователя
+    + root (number,optional) - Идентификатор ресурса. Если указан, будут отображены данные для этого и его дочерних ресурсов.
++ Response 200 (application/json)
+    + Attributes (array[UserObjectStructure])
+
+## Доступные торговые объекты в виде дерева [/api/userObjects/tree/{id_user}/{?root}]
+### Получить список доступов [GET]
++ Parameters
+    + id_user (number,optional) - Идентификатор пользователя. Если указан, будут отображены доступные торговые объекты только для этого пользователя
+    + root (number,optional) - Идентификатор ресурса. Если указан, будут отображены данные для этого и его дочерних ресурсов.
++ Response 200 (application/json)
+    + Attributes (array[UserObjectTreeStructure])
+
+## Доступный торговый объект [/api/roleActions/{id_user}/{id_user_object}/{?children}]
+### Получить данные о доступе к ресурсу [GET]
++ Parameters
+    + id_user (number,required) - Идентификатор пользователя. Если указан, будут отображены доступные торговые объекты только для этого пользователя
+    + id_user_object (number,required) - Идентификатор объекта.
++ Response 200 (application/json)
+    + Attributes (RoleActionStructure)
+
+### Разрешить доступ к торговому объекту [POST]
++ Parameters
+    + id_user (number,required) - Идентификатор пользователя. Если указан, будут отображены доступные торговые объекты только для этого пользователя
+    + id_user_object (number,required) - Идентификатор объекта
+    + children (boolean,optional) - Если параметр установлен а true, доступы будут установлены также к дочерним объектам
++ Response 204
+
+### Запретить  доступ к торговому объекту [DELETE]
++ Parameters
+    + id_user (number,required) - Идентификатор пользователя. Если указан, будут отображены доступные торговые объекты только для этого пользователя
+    + id_user_object (number,required) - Идентификатор объекта
+    + children (boolean,optional) - Если параметр установлен а true, доступы будут запрещены также к дочерним объектам
 + Response 204
