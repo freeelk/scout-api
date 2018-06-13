@@ -371,15 +371,10 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + id_user: 1 (number,required)
 + type: `outlet` (string,required)
 + id_object: 1 (number,required)
++ name: `Киоск № 18` (string,required)
 + parent_id_user_object: 1001 (number,required)
-+ allowed: true (boolean,required)
-
-### UserObjectTreeStructure
-+ id_user_object: 1001 (number,required)
-+ id_user: 1 (number,required)
-+ type: `outlet` (string,required)
-+ id_object: 1 (number,required)
-+ parent_id_user_object: 1001 (number,required)
++ parent_type: `groupoutlet` (string,required)
++ parent_id_object: 1 (number,required)
 + allowed: true (boolean,required)
 + children: [] (array[UserObjectStructure], required)
 
@@ -3289,44 +3284,49 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 204
 
 # Group Доступные торговые объекты
+- Управление доступами к торговым объектам для различных пользователей. Эти доступы учитываются при формировании отчетов и т.п
+- Предполагается, что доступ к родительскому торговому объекту установлен в том случае, если имеют доступ все его дочерние объекты,
 - Идентификатор объекта `id_user_object` уникально обозначает торговый объект. 
   Формируется из идентификатора типа торгового объекта (1000 - группа торговых точек, 2000 - торговая точка, 3000 - рабочее место) + идентификатор торгового объекта 
 
-## Доступные торговые объекты в виде списка [/api/userObjects/list/{id_user}/{?root}]
+## Доступы к торговым объектам [/api/userObjects/{id_user}/{?type}/{?id_object}/{?without_children}]
 
-### Получить список доступов [GET]
+### Получить дерево доступов к торговым объектам [GET]
+Отображает дерево торговых объектов с доступами к ним (поле allowed). 
+Если указан тип торговой точки и ее идентификатор, дерево строится от указанного объекта,
+иначе - от виртуальной корневой группы торговых точек с идентификатором 0
 + Parameters
-    + id_user (number,optional) - Идентификатор пользователя. Если указан, будут отображены доступные торговые объекты только для этого пользователя
-    + root (number,optional) - Идентификатор ресурса. Если указан, будут отображены данные для этого и его дочерних ресурсов.
+    + id_user (number,required) - Идентификатор пользователя. Будут отображены доступные торговые объекты только для этого пользователя
+    + type (string, optional) - Тип торгового объекта: groupoutlet, outlet, workplace. 
+    + id_object (number, optional) - Идентификатор торгового объекта
+    + without_children (boolean, optional) - Если установлен в true, будут опущены данные о дочерних элементах 
 + Response 200 (application/json)
     + Attributes (array[UserObjectStructure])
 
-## Доступные торговые объекты в виде дерева [/api/userObjects/tree/{id_user}/{?root}]
-### Получить список доступов [GET]
-+ Parameters
-    + id_user (number,optional) - Идентификатор пользователя. Если указан, будут отображены доступные торговые объекты только для этого пользователя
-    + root (number,optional) - Идентификатор ресурса. Если указан, будут отображены данные для этого и его дочерних ресурсов.
-+ Response 200 (application/json)
-    + Attributes (array[UserObjectTreeStructure])
-
-## Доступный торговый объект [/api/roleActions/{id_user}/{id_user_object}/{?children}]
-### Получить данные о доступе к ресурсу [GET]
-+ Parameters
-    + id_user (number,required) - Идентификатор пользователя. Если указан, будут отображены доступные торговые объекты только для этого пользователя
-    + id_user_object (number,required) - Идентификатор объекта.
-+ Response 200 (application/json)
-    + Attributes (RoleActionStructure)
-
 ### Разрешить доступ к торговому объекту [POST]
+Разрешает доступ к торговому объекту с указанными параметрами
+Также устанавливает доступ ко всем дочерним объектам, и к родительским объектам, если все их дочерние объекты имеют доступ.
 + Parameters
-    + id_user (number,required) - Идентификатор пользователя. Если указан, будут отображены доступные торговые объекты только для этого пользователя
-    + id_user_object (number,required) - Идентификатор объекта
-    + children (boolean,optional) - Если параметр установлен а true, доступы будут установлены также к дочерним объектам
+    + id_user (number,required) - Идентификатор пользователя.
+    + type (string, optional) - Тип торгового объекта: groupoutlet, outlet, workplace. 
+    + id_object (number, optional) - Идентификатор торгового объекта
 + Response 204
 
 ### Запретить  доступ к торговому объекту [DELETE]
+Запрещает доступ к торговому объекту с указанными параметрами
+Также снимает доступ с дочерних объектов и с родительских объектов, если хотя бы один их дочерний объект доступа не имеет.
 + Parameters
-    + id_user (number,required) - Идентификатор пользователя. Если указан, будут отображены доступные торговые объекты только для этого пользователя
-    + id_user_object (number,required) - Идентификатор объекта
-    + children (boolean,optional) - Если параметр установлен а true, доступы будут запрещены также к дочерним объектам
+    + id_user (number,required) - Идентификатор пользователя.
+    + type (string, optional) - Тип торгового объекта: groupoutlet, outlet, workplace. 
+    + id_object (number, optional) - Идентификатор торгового объекта
 + Response 204
+
+## Восстанавливление доступов к торговым точкам и группам торговых точек [/api/roleActions/{id_user}/normalize_tree]
+Если добавили или удалили торговый объект, то доступы к родительским объектам могут не соответствовать реальности
+Данный вызов восстанавливает доступы к торговым точкам и группам торговых точек на основе доступов к рабочим местам
+(Предполагается, что к родительскому объекту есть доступ, если есть доступ ко всем дочерним)
+### Восстанавливление доступов к торговым точкам и группам торговых точек [GET]
++ Parameters
+    + id_user (number,required) - Идентификатор пользователя.
++ Response 200 (application/json)
+    + Attributes (UserObjectStructure)
