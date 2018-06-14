@@ -394,6 +394,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
 ### PasswordStructure
 + password: `123` (string,required)
++ password_old: `123` (string,optional)
 
 #Group Аутентификация пользователя
 Аутентификация производится на основе cookie.
@@ -3353,7 +3354,7 @@ Cписок товаров, доступных на каждом рабочем 
 + Parameters
     + active (string, optional) - Если параметр равен "true", то возвращаются только записи со статусом 1 (0 - неактивный пользователь).
     + order (string, optional) - Список полей сортировки через запятую без пробелов
-    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: roles  
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: role  
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
     + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
     + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
@@ -3381,12 +3382,17 @@ Cписок товаров, доступных на каждом рабочем 
     + Attributes (CountStructure)
 
 ## Пароль пользователя  [/api/users/password/{id_user}] 
-### Изменить пароль пользователя Скаута  [GET]
+### Изменить пароль пользователя Скаута  [PUT]
 + Parameters
     + id_user (number, required) - Идентификатор пользователя
 + Request (application/json)
     + Attributes (PasswordStructure) 
 + Response 204
+
+## Текущий пользователь Скаута  [/api/users/current]
+### Получить данные о текущем пользователе Скаута  [GET]
++ Response 200 (application/json)
+    + Attributes (UserStructure)
 
 ## Пользователь Скаута  [/api/users/{id_user}]
 
