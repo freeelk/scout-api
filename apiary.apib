@@ -381,6 +381,8 @@ HOST: private-01ace7-scout7.apiary-mock.com
 ### UserStructure
 + id_user: 1 (number,required) 
 + username: `user` (string,required)
++ lastname: `Ivanov` (string)
++ firstname: `Ivan` (string)
 + email: `user@trest.com` (string)
 + lastvisit_at: `2018-04-01 12:00` (string)
 + superuser: 0 (number, default)
@@ -388,7 +390,10 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + id_role: 1 (number,required)
 
 ### CountStructure
-+ count: 10 (number, required) 
++ count: 10 (number, required)
+
+### PasswordStructure
++ password: `123` (string,required)
 
 #Group Аутентификация пользователя
 Аутентификация производится на основе cookie.
@@ -3337,4 +3342,71 @@ Cписок товаров, доступных на каждом рабочем 
 ### Восстанавливление доступов к торговым точкам и группам торговых точек [GET]
 + Parameters
     + id_user (number,required) - Идентификатор пользователя.
++ Response 204
+
+#Group Пользователи Скаута
+
+
+## Список пользователей Скаута [/api/users/{?unprotect_keys,active,with,order,filters,ids_list,offset,limit}]
+
+### Получить список пользователей Скаута [GET]
++ Parameters
+    + active (string, optional) - Если параметр равен "true", то возвращаются только записи со статусом 1 (0 - неактивный пользователь).
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: roles  
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[UserStructure])
+
+### Добавить пользователя Скаута [POST]
++ Request (application/json)
+    + Attributes (UserStructure)
++ Parameters
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются    
++ Response 201 (application/json)
+            + Headers
+                Location: /api/users/1
+    + Attributes (UserStructure)   
+
+## Количество пользователей Скаута [/api/users/count/{?filters,ids_list,active}] 
+### Получить количество пользователей Скаута  [GET]
++ Parameters
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только со статусом 1.
++ Response 200 (application/json)
+    + Attributes (CountStructure)
+
+## Пароль пользователя  [/api/users/password/{id_user}] 
+### Изменить пароль пользователя Скаута  [GET]
++ Parameters
+    + id_user (number, required) - Идентификатор пользователя
++ Request (application/json)
+    + Attributes (PasswordStructure) 
++ Response 204
+
+## Пользователь Скаута  [/api/users/{id_user}]
+
+### Получить пользователя Скаута по идентификатору  [GET]
++ Parameters
+    + id_user (number, required) - Идентификатор пользователя
++ Response 200 (application/json)
+    + Attributes (UserStructure)
+
+### Изменить пользователя Скаута [PUT]
++ Parameters
+    + id_user (number, required) - Идентификатор пользователя
++ Request (application/json)
+    + Attributes (UserStructure) 
++ Response 200 (application/json)
+    + Attributes (UserStructure) 
+
+### Удалить пользователя Скаута [DELETE]
+**В данном случае происходит физическое удаление пользователя, а не деактивация!**
+Если нужно деактивировать пользователя, установите значение поля `status` в 0.
++ Parameters
+    + id_user (number, required) - Идентификатор пользователя
 + Response 204
