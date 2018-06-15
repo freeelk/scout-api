@@ -388,6 +388,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + superuser: 0 (number, default)
 + status: 0 (number, default)
 + id_role: 1 (number,required)
++ id_buyer: 1 (number,optional)
 
 ### CountStructure
 + count: 10 (number, required)
@@ -3403,6 +3404,9 @@ Cписок товаров, доступных на каждом рабочем 
     + Attributes (UserStructure)
 
 ### Изменить пользователя Скаута [PUT]
+- Если текущий пользователь не админ, необходимо указавать текущий пароль пользователя, которому устанавливается новый пароль
+- Атрибут `id_buyer` имеет смысл только для пользователя с ролью покупателя
+
 + Parameters
     + id_user (number, required) - Идентификатор пользователя
 + Request (application/json)
