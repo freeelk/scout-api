@@ -384,6 +384,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + lastname: `Ivanov` (string)
 + firstname: `Ivan` (string)
 + email: `user@trest.com` (string)
++ password: `12345` (string, optional)
 + lastvisit_at: `2018-04-01 12:00` (string)
 + superuser: 0 (number, default)
 + status: 0 (number, default)
@@ -3347,9 +3348,8 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 204
 
 #Group Пользователи Скаута
-
-
-## Список пользователей Скаута [/api/users/{?unprotect_keys,active,with,order,filters,ids_list,offset,limit}]
+Работа с пользователями Скаута. 
+## Список пользователей Скаута [/api/users/{?active,with,order,filters,ids_list,offset,limit}]
 
 ### Получить список пользователей Скаута [GET]
 + Parameters
@@ -3364,10 +3364,12 @@ Cписок товаров, доступных на каждом рабочем 
     + Attributes (array[UserStructure])
 
 ### Добавить пользователя Скаута [POST]
+- Создавать пользователей может только администратор. При создании пользователя в данных нужно также указывать пароль.
+(Изменение пароля происходит при помощи отдельного запроса)
+- Поле `superuser` игнорируется (нельзя создать суперпользователя)
+- Поле `lastvisit_at` игнорируется
 + Request (application/json)
     + Attributes (UserStructure)
-+ Parameters
-    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются    
 + Response 201 (application/json)
             + Headers
                 Location: /api/users/1
@@ -3384,6 +3386,8 @@ Cписок товаров, доступных на каждом рабочем 
 
 ## Пароль пользователя  [/api/users/password/{id_user}] 
 ### Изменить пароль пользователя Скаута  [PUT]
+- Изменять пароль для любого пользователя без указания старого пароля может только админ. 
+- Обычный пользователь может изменить только собственняй пароль. При этом ему нужно указать также старый пароль.
 + Parameters
     + id_user (number, required) - Идентификатор пользователя
 + Request (application/json)
