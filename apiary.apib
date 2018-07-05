@@ -391,6 +391,28 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + id_role: 1 (number,required)
 + id_buyer: 1 (number,optional)
 
+### InvoiceHeadStructure
++ id_doc: 1 (number,required)
++ date_doc: `2017-12-04 15:33:00+02` (string, required)
++ number_doc: `00001`  (string, required)
++ id_outlet: 1 (number,required)
++ id_workplace: 1 (number,optional)
++ id_employee: 1 (number,optional)
++ id_client: 1 (number,required)
++ status: 0 (number,default)
+
+### InvoiceTableStructure
++ id_line: 1 (number,required)
++ id_doc: 1 (number,required)
++ date_doc: `2017-12-04 15:33:00+02` (string, required)
++ number_doc: `00001`  (string, required)
++ consecutive: 1 (number,required)
++ id_goods:  1 (number,required)
++ id_unit:  1 (number,required)
++ id_series:  `-` (string)
++ quantity: 10 (number,required)
++ price: 10 (number,required)
+
 ### CountStructure
 + count: 10 (number, required)
 
@@ -3423,4 +3445,128 @@ Cписок товаров, доступных на каждом рабочем 
 Если нужно деактивировать пользователя, установите значение поля `status` в 0.
 + Parameters
     + id_user (number, required) - Идентификатор пользователя
++ Response 204
+
+# Group Приходная накладная
+
+## Приходные накладные — шапки [/api/invoices{?with,order,filters,ids_list,offset,limit}]
+
+### Список приходных накладных - шапки [GET]
++ Parameters
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи:   
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[InvoiceHeadStructure])
+
+### Создать приходную накладную [POST]
++ Request (application/json)
+    + Attributes (InvoiceHeadStructure)
++ Response 201 (application/json)
+            + Headers
+                Location: /api/invoices/1
+    + Attributes (InvoiceHeadStructure)
+
+## Приходная накладная [/api/invoices/{id_doc}]
+### Получить шапку приходной накладной [GET]
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
++ Response 200 (application/json)
+    + Attributes (InvoiceHeadStructure)
+
+### Изменить шапку приходной накладной [PUT]
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
++ Request (application/json)
+    + Attributes (InvoiceHeadStructure) 
++ Response 200 (application/json)
+    + Attributes (InvoiceHeadStructure)     
+
+## Создать приходную накладную из другого документа [/api/invoices/{from_doc_type}/{from_id_doc}]
+### Создать приходную накладную из другого документа [POST]
++ Parameters
+    + from_doc_type (string, required) - Тип документа (invoice, refund, movement, reprice, order)
+    + from_id_doc (number,required) - Идентификатор документа
++ Request (application/json)
+    + Attributes (InvoiceHeadStructure)
++ Response 201 (application/json)
+            + Headers
+                Location: /api/invoices/1
+    + Attributes (InvoiceHeadStructure)
+
+## Отправить приходную накладную [/api/invoices/{id_doc}/send]
+### Отправить приходную накладную [POST]
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
++ Response 204
+
+## Провести приходную накладную на сервере [/api/invoices/{id_doc}/carry_out_on_server]
+### Провести приходную накладную на сервере [POST]
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
++ Response 204
+
+## Список строк приходной накладной [/api/invoicesTables/{id_doc}/{?order,filters,ids_list,offset,limit}]
+### Список строк приходной накладной [GET]
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[InvoiceTableStructure])
+
+### Добавить строку в таблицу приходной накладной [POST]
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
++ Request (application/json)
+    + Attributes (InvoiceTableStructure)
++ Response 201 (application/json)
+            + Headers
+                Location: /api/invoicesTables/1/1
+    + Attributes (InvoiceTableStructure)
+
+## Добавить строки в таблицу документа по принадлежности товара к группе товаров или по поставщику [/api/invoicesTables/{?id_group,id_supplier}]
+Массовое добавление товаров в документ. Добавление производится по группе товаров или по поставщику товаров
+TODO: Ответ пользователю должна бы статистика по добавленным товарам
+### Добавить строки в таблицу документа по принадлежности товара к группе товаров или по поставщику [POST]
++ Parameters
+    + id_group (number, optional) - Идентификатор группы товаров
+    + id_supplier (number,required) - Идентификатор поставщика
++ Request (application/json)
+    + Attributes (InvoiceTableStructure)
++ Response 204
+
+## Строка таблицы приходной накладной [/api/invoicesTables/{id_doc}/{id_line} ]
+### Получить строку таблицы приходной накладной [GET]
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
+    + id_line (number, required) - Идентификатор строки
++ Response 200 (application/json)
+    + Attributes (InvoiceTableStructure)
+
+### Изменить строку таблицы приходной накладной [PUT]
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
+    + id_line (number, required) - Идентификатор строки
++ Request (application/json)
+    + Attributes (InvoiceTableStructure) 
++ Response 200 (application/json)
+    + Attributes (InvoiceTableStructure) 
+
+### Удалить строку таблицы приходной накладной [DELETE]
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
+    + id_line (number, required) - Идентификатор строки
++ Response 204
+
+## Удалить все строки приходной накладной [/api/invoicesTables/{id_doc}/all ]
+### Удалить все строки приходной накладной [DELETE]
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
 + Response 204
