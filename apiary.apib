@@ -413,6 +413,17 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + quantity: 10 (number,required)
 + price: 10 (number,required)
 
+### MassiveDocAddLogStructure
++ id_goods: 1 (number,required)
++ name_goods: `Товар` (string,required)
++ id_unit: 1 (number,optional)
++ name_unit: `шт` (string,optional)
++ id_series:  `-` (string,optional)
++ name_series:  `-` (string,optional)
++ message: `Цена не найдена` (string,required) 
++ message_type: `warning` (string,required)
+
+
 ### CountStructure
 + count: 10 (number, required)
 
@@ -3317,7 +3328,7 @@ Cписок товаров, доступных на каждом рабочем 
 
 ### Запретить доступ к ресурсу [DELETE]
 + Parameters
-    + id_role (number,required) - Идентификатор роли.
+    + id_role (number,required) - Идентификатор роли. 
     + id_resourse (number,required) - Идентификатор ресурса.
     + children (boolean,optional) - Если параметр установлен а true, доступы будут запрещены также к дочерним ресурсям указанного ресурса
 + Response 204
@@ -3342,7 +3353,7 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 200 (application/json)
     + Attributes (array[UserObjectStructure])
 
-### Разрешить доступ к торговому объекту [POST]
+### Разрешить доступ к торговому объекту [POST] 
 Разрешает доступ к торговому объекту с указанными параметрами
 Также устанавливает доступ ко всем дочерним объектам, и к родительским объектам, если все их дочерние объекты имеют доступ.
 + Parameters
@@ -3532,15 +3543,17 @@ Cписок товаров, доступных на каждом рабочем 
     + Attributes (InvoiceTableStructure)
 
 ## Добавить строки в таблицу документа по принадлежности товара к группе товаров или по поставщику [/api/invoicesTables/{?id_group,id_supplier}]
-Массовое добавление товаров в документ. Добавление производится по группе товаров или по поставщику товаров
-TODO: Ответ пользователю должна бы статистика по добавленным товарам
+- Массовое добавление товаров в документ. Добавление производится по группе товаров или по поставщику товаров
+- Ответ пользователю: лог результата добавления товаров в документ
+
 ### Добавить строки в таблицу документа по принадлежности товара к группе товаров или по поставщику [POST]
 + Parameters
     + id_group (number, optional) - Идентификатор группы товаров
     + id_supplier (number,required) - Идентификатор поставщика
 + Request (application/json)
     + Attributes (InvoiceTableStructure)
-+ Response 204
++ Response 200 (application/json)
+    + Attributes (array[MassiveDocAddLogStructure])
 
 ## Строка таблицы приходной накладной [/api/invoicesTables/{id_doc}/{id_line} ]
 ### Получить строку таблицы приходной накладной [GET]
