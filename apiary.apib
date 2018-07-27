@@ -413,6 +413,28 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + quantity: 10 (number,required)
 + price: 10 (number,required)
 
+###RefundHeadStructure
++ id_doc: 1 (number,required)
++ date_doc: `2017-12-04 15:33:00+02` (string, required)
++ number_doc: `00001`  (string, required)
++ id_outlet: 1 (number,required)
++ id_workplace: 1 (number,optional)
++ id_employee: 1 (number,optional)
++ id_client: 1 (number,required)
++ status: 0 (number,default)
+
+### RefundTableStructure
++ id_line: 1 (number,required)
++ id_doc: 1 (number,required)
++ date_doc: `2017-12-04 15:33:00+02` (string, required)
++ number_doc: `00001`  (string, required)
++ consecutive: 1 (number,required)
++ id_goods:  1 (number,required)
++ id_unit:  1 (number,required)
++ id_series:  `-` (string)
++ quantity: 10 (number,required)
++ price: 10 (number,required)
+
 ### MassiveDocAddLogStructure
 + id: 1 (number,required)
 + id_goods: 1 (number,required)
@@ -3475,7 +3497,6 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 200 (application/json)
     + Attributes (array[InvoiceHeadStructure])
 
-
 ### Создать приходную накладную [POST]
 - Поле `status` в переданных данных игнорируется - оно будет установлено в -1 (в процессе редактирования)
 + Request (application/json)
@@ -3609,6 +3630,161 @@ Cписок товаров, доступных на каждом рабочем 
 
 ## Удалить все строки приходной накладной [/api/invoicesTables/all/{id_doc}]
 ### Удалить все строки приходной накладной [DELETE]
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
++ Response 204
+
+# Group Возвратная накладная
+
+## Возвратные накладные — шапки [/api/refunds{?with,order,filters,ids_list,offset,limit,from,to}]
+
+### Список возвратных накладных - шапки [GET]
++ Parameters
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: table, outlet, client, employee  
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
+    + from (string,optional) - Возвращать документы, начиная с указанной даты
+    + to (string,optional) - Возвращать документы до указанной даты
++ Response 200 (application/json)
+    + Attributes (array[RefundHeadStructure])
+
+### Создать возвратную накладную [POST]
+- Поле `status` в переданных данных игнорируется - оно будет установлено в -1 (в процессе редактирования)
++ Request (application/json)
+    + Attributes (RefundHeadStructure)
++ Response 201 (application/json)
+            + Headers
+                Location: /api/refunds/1
+    + Attributes (RefundHeadStructure)
+    
+## Количество возвратных накладных [/api/refunds/count/{?filters,ids_list,from,to}] 
+### Получить количество возвратных накладных  [GET]
++ Parameters
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + from (string,optional) - Возвращать документы, начиная с указанной даты
+    + to (string,optional) - Возвращать документы до указанной даты
++ Response 200 (application/json)
+    + Attributes (CountStructure)
+
+## Возвратная накладная [/api/refunds/{id_doc}/{?with}]
+### Получить шапку возвратной накладной [GET]
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: table, outlet, client, employee  
++ Response 200 (application/json)
+    + Attributes (RefundHeadStructure)
+
+### Изменить шапку возвратной накладной [PUT]
+- Изменять можно только неотправленный документ (status = -1)
+- Поле `status` в переданных данных игнорируется
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
++ Request (application/json)
+    + Attributes (RefundHeadStructure) 
++ Response 200 (application/json)
+    + Attributes (RefundHeadStructure)
+
+## Создать возвратную накладную из другого документа [/api/refunds/{from_doc_type}/{from_id_doc}]
+### Создать возвратную накладную из другого документа [POST]
++ Parameters
+    + from_doc_type (string, required) - Тип документа (invoice, refund, movement, reprice, order)
+    + from_id_doc (number,required) - Идентификатор документа
++ Request (application/json)
+    + Attributes (RefundHeadStructure)
++ Response 201 (application/json)
+            + Headers
+                Location: /api/refunds/1
+    + Attributes (RefundHeadStructure)
+    
+## Отправить возвратную накладную [/api/refunds/{id_doc}/send]
+### Отправить возвратную накладную [POST]
+- отправить можно только документ со статусом -1, не пустой, с ненулевой общей суммой
+- статус документа устанавливается равным 0
+- для каждого товара в документе закупочная цена (Price) устанавливается равной цене в документе.
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
++ Response 204
+
+## Провести возвратную накладную на сервере [/api/refunds/{id_doc}/post_on_server]
+### Провести возвратную накладную на сервере [POST]
+- Провести можно только документ со статусом -1, не пустой, с ненулевой общей суммой
+- статус документа устанавливается равным 4
+- для каждого товара в документе закупочная цена (Price) устанавливается равной цене в документе.
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
++ Response 204
+
+
+## Список строк возвратной накладной [/api/refundsTables/{?id_doc,with,order,filters,ids_list,offset,limit}]
+### Список строк возвратной накладной [GET]
++ Parameters
+    + id_doc (number, optional) - Идентификатор документа
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: doc, goods, unit, series  
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[InvoiceTableStructure])
+
+## Добавление строк в таблицу возвратной накладной [/api/refundsTables/{id_doc}/{?id_group,id_supplier}]
+### Добавить строку или строки в таблицу возвратной накладной [POST]
+- Добавление одного товара. Добавляет строку в документ с идентификатором, указанным в параметре id_doc. Актуальные поля в JSON-е запроса:
+    - id_goods - обязательное
+    - id_unit - если не указано, устанавливается единица изменения по умолчанию
+    - id_series - если не указано, устанавливается значение по умолчанию (-) 
+    - quantity - обязательное
+    - price - если не указано, устанавливается значение закупочной цены
+- Массовое добавление товаров. Добавляются товары по группе товаров или поставщику. 
+Должен быть указан один из следующих параметров:
+    - id_group - идентификатор группы товаров
+    - id_supplier - идентификатор поставщика
+
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
+    + id_group (number, optional) - Идентификатор группы товаров
+    + id_supplier (number,required) - Идентификатор поставщика
+    
++ Request (application/json)
+    + Attributes (InvoiceTableStructure)
++ Response 201 (application/json)
+            + Headers
+                Location: /api/refundsTables/1/1
+    + Attributes (RefundTableStructure)
+    
++ Response 200 (application/json)
+    + Attributes (array[MassiveDocAddLogStructure])     
+    
+
+## Строка таблицы возвратной накладной [/api/refundsTables/{id_line}/{?with} ]
+### Получить строку таблицы возвратной накладной [GET]
++ Parameters
+    + id_line (number, required) - Идентификатор строки
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: doc, goods, unit, series
++ Response 200 (application/json)
+    + Attributes (RefundTableStructure)
+
+### Изменить строку таблицы возвратной накладной [PUT]
+- Поля `id_line`, `id_doc`, `date_doc`, `number_doc`, `consecutive` игнорируются
++ Parameters
+    + id_line (number, required) - Идентификатор строки
++ Request (application/json)
+    + Attributes (RefundTableStructure) 
++ Response 200 (application/json)
+    + Attributes (RefundTableStructure) 
+
+### Удалить строку таблицы возвратной накладной [DELETE]
++ Parameters
+    + id_line (number, required) - Идентификатор строки
++ Response 204
+
+## Удалить все строки возвратной накладной [/api/refundsTables/all/{id_doc}]
+### Удалить все строки возвратной накладной [DELETE]
 + Parameters
     + id_doc (number, required) - Идентификатор документа
 + Response 204
