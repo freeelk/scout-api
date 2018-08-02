@@ -458,6 +458,34 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + quantity: 10 (number,required)
 + price: 10 (number,required)
 
+###RepriceHeadStructure
++ id_doc: 1 (number,required) 
++ date_doc: `2017-12-04 15:33:00+02` (string, required)
++ number_doc: `00001`  (string, required)
++ id_outlet: 1 (number,required)
++ id_workplace: 1 (number,optional)
++ id_employee: 1 (number,optional)
++ id_price_level: 1 (number,required)
++ date_auto `2017-12-10 00:00:00+02` (string, required) 
++ date_permitted `2017-12-20 00:00:00+02` (string, required)
++ status: 0 (number,default)
+
+###RepriceTableStructure
++ id_line: 1 (number,required)
++ id_doc: 1 (number,required)
++ date_doc: `2017-12-04 15:33:00+02` (string, required)
++ number_doc: `00001`  (string, required)
++ consecutive: 1 (number,required)
++ id_goods:  1 (number,required)
++ id_unit:  1 (number,required)
++ id_series:  `-` (string)
++ quantity: 10 (number,required)
++ price: 0 (number,default)
++ price_new: 0 (number,default)
++ min_price_new: 0 (number,default)
++ max_price_new: 0 (number,default)
+
+
 ### MassiveDocAddLogStructure
 + id: 1 (number,required)
 + id_goods: 1 (number,required)
@@ -3625,7 +3653,7 @@ Cписок товаров, доступных на каждом рабочем 
     + Attributes (InvoiceTableStructure)
 + Response 201 (application/json)
             + Headers
-                Location: /api/invoicesTables/1/1
+                Location: /api/invoicesTables/1
     + Attributes (InvoiceTableStructure)
     
 + Response 200 (application/json)
@@ -3782,7 +3810,7 @@ Cписок товаров, доступных на каждом рабочем 
     + Attributes (RefundTableStructure)
 + Response 201 (application/json)
             + Headers
-                Location: /api/refundsTables/1/1
+                Location: /api/refundsTables/1
     + Attributes (RefundTableStructure)
     
 + Response 200 (application/json)
@@ -3954,7 +3982,7 @@ Cписок товаров, доступных на каждом рабочем 
     + Attributes (MovementTableStructure)
 + Response 201 (application/json)
             + Headers
-                Location: /api/movementTables/1/1
+                Location: /api/movementTables/1
     + Attributes (MovementTableStructure)
     
 + Response 200 (application/json)
@@ -3983,7 +4011,166 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 204
 
 ## Удалить все строки документа "Перемещение" [/api/movementsTables/all/{id_doc}]
-### Удалить все строки возвратной накладной [DELETE]
+### Удалить все строки перемещения [DELETE]
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
++ Response 204
+
+# Group Документ "Переоценка"
+
+## Переоценка — шапки [/api/reprices{?with,order,filters,ids_list,offset,limit,from,to}]
+### Список документов "Переоценка" - шапки [GET]
++ Parameters
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: table, outlet, workplace, operator, employee  
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
+    + from (string,optional) - Возвращать документы, начиная с указанной даты
+    + to (string,optional) - Возвращать документы до указанной даты
++ Response 200 (application/json)
+    + Attributes (array[RepriceHeadStructure])
+
+### Создать переоценку [POST]
++ Request (application/json)
+    + Attributes (RepriceHeadStructure)
++ Response 201 (application/json)
+            + Headers
+                Location: /api/reprices/1
+    + Attributes (RepriceHeadStructure)
+
+## Количество документов "Переоценка" [/api/reprices/count/{?filters,ids_list,from,to}] 
+### Получить количество документов "Переоценка"  [GET]
++ Parameters
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + from (string,optional) - Возвращать документы, начиная с указанной даты
+    + to (string,optional) - Возвращать документы до указанной даты
++ Response 200 (application/json)
+    + Attributes (CountStructure) 
+
+## Документ "Переоценка" [/api/reprices/{id_doc}/{?with}]
+### Получить шапку документа [GET]
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: 
++ Response 200 (application/json)
+    + Attributes (RepriceHeadStructure)
+
+### Изменить шапку документа "Переоценка" [PUT]
+- Изменять можно только неотправленный документ (status = -1)
+- Поле `status` в переданных данных игнорируется
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
++ Request (application/json)
+    + Attributes (RepriceHeadStructure) 
++ Response 200 (application/json)
+    + Attributes (RepriceHeadStructure)
+
+## Создать переоценку из другого документа [/api/reprices/{from_doc_type}/{from_id_doc}]
+- Значения тех полей, которые переданы в теле запроса, будут установлены вместо значений шапки исходного документа
+- Значения полей, не переданных в теле запроса, будут установлены из шапки исходного документа/по умолчанию.
+- Если в теле запроса вообще ничего не передавать, все поля будут установлены по умолчанию
+
+### Создать переоценку из другого документа [POST]
++ Parameters
+    + from_doc_type (string, required) - Тип документа (invoice, refund, movement, reprice, order)
+    + from_id_doc (number,required) - Идентификатор документа
++ Request (application/json)
+    + Attributes (MovementHeadStructure)
++ Response 201 (application/json)
+            + Headers
+                Location: /api/reprices/1
+    + Attributes (RepriceHeadStructure)
+
+## Отправить документ "Переоценка" [/api/reprices/{id_doc}/send]
+### Отправить переоценку [POST]
+- отправить можно только документ со статусом -1, не пустой, с ненулевой общей суммой
+- статус документа устанавливается равным 0
+- для каждого товара в документе закупочная цена (Price) устанавливается равной цене в документе.
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
++ Response 204
+
+## Отправить дубль документа "Переоценка" на другую торговую точку [/api/reprices/{id_doc}/send_to_outlet/{id_outlet}]
+- Отправлять можно документ с любым статусом. Создается копия документа и отправляется на другую торговую точку
+### Отправить дубль на другую точку  [POST]
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
+    + id_outlet  (number, required) - Идентификатор торговоорй точки
++ Request (application/json)
+    + Attributes (MovementHeadStructure)
++ Response 201 (application/json)
+            + Headers
+                Location: /api/movements/1
+    + Attributes (RepriceHeadStructure)
+    
+## Список строк документа "Переоценка" [/api/repricesTables/{?id_doc,with,order,filters,ids_list,offset,limit}]
+### Список строк переоценки [GET]
++ Parameters
+    + id_doc (number, optional) - Идентификатор документа
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: doc, goods, unit, series  
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[MovementTableStructure])
+
+## Добавление строк в таблицу документа "Переоценка" [/api/repricesTables/{id_doc}/{?id_group,id_supplier}]
+### Добавить строку или строки в таблицу документа "Переоценка" [POST]
+- Добавление одного товара. Добавляет строку в документ с идентификатором, указанным в параметре id_doc. Актуальные поля в JSON-е запроса:
+    - id_goods - обязательное
+    - id_unit - если не указано, устанавливается единица изменения по умолчанию
+    - id_series - если не указано, устанавливается значение по умолчанию (-) 
+    - quantity - обязательное
+    - price - если не указано, устанавливается значение закупочной цены
+- Массовое добавление товаров. Добавляются товары по группе товаров или поставщику. 
+Должен быть указан один из следующих параметров:
+    - id_group - идентификатор группы товаров
+    - id_supplier - идентификатор поставщика
+
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
+    + id_group (number, optional) - Идентификатор группы товаров
+    + id_supplier (number,required) - Идентификатор поставщика
+    
++ Request (application/json)
+    + Attributes (MovementTableStructure)
++ Response 201 (application/json)
+            + Headers
+                Location: /api/repricesTables/1
+    + Attributes (MovementTableStructure)
+    
++ Response 200 (application/json)
+    + Attributes (array[MassiveDocAddLogStructure])  
+
+## Строка таблицы документа "Переоценка" [/api/repricesTables/{id_line}/{?with} ]
+### Получить строку таблицы документа "Переоценка" [GET]
++ Parameters
+    + id_line (number, required) - Идентификатор строки
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: doc, goods, unit, series
++ Response 200 (application/json)
+    + Attributes (MovementTableStructure)
+
+### Изменить строку таблицы документа "Переоценка" [PUT]
+- Поля `id_line`, `id_doc`, `date_doc`, `number_doc`, `consecutive` игнорируются
++ Parameters
+    + id_line (number, required) - Идентификатор строки
++ Request (application/json)
+    + Attributes (MovementTableStructure) 
++ Response 200 (application/json)
+    + Attributes (MovementTableStructure) 
+
+### Удалить строку таблицы документа "Переоценка" [DELETE]
++ Parameters
+    + id_line (number, required) - Идентификатор строки
++ Response 204
+
+## Удалить все строки документа "Переоценка" [/api/repricesTables/all/{id_doc}]
+### Удалить все строки переоценки [DELETE]
 + Parameters
     + id_doc (number, required) - Идентификатор документа
 + Response 204
