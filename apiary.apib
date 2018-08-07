@@ -485,7 +485,6 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + min_price_new: 0 (number,default)
 + max_price_new: 0 (number,default)
 
-
 ### MassiveDocAddLogStructure
 + id: 1 (number,required)
 + id_goods: 1 (number,required)
@@ -496,7 +495,6 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + name_series:  `-` (string,optional)
 + message: `Цена не найдена` (string,required) 
 + critical: false (boolean,required)
-
 
 ### CountStructure
 + count: 10 (number, required)
@@ -4068,6 +4066,25 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 200 (application/json)
     + Attributes (RepriceHeadStructure)
 
+## Рассчитать цены в документе "Переоценка" [/api/reprices/{id_doc}/calculate_prices/{?id_price_level,percentage_markup,rounding_rule}]
+### Рассчитать цены [PUT]
+- Рассчитывает значения поля `price_new` в таблице документа. 
+- Используется уровень цен для базы расчёта (`id_price_level`),  процент наценки (`percentage_markup`), правило округления (`rounding_rule`)
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
+    + id_price_level (number,required) - Идентификатор уровня цен
+    + percentage_markup (number,required) - Процент наценки
+    + rounding_rule(number,required) -Правило округления
++ Response 204
+
+## Обновление цен на сервере [/api/reprices/{id_doc}/update_prices_on_server]
+### Обновить цены на сервере [PUT]
+- Цены обновляются на сервере, после чего автоматически будут обновлены на всех точках. Если необходимо обновить цены на точках позже документом переоценка, например, с отсрочкой проведения, то данную операцию не стоит делать: цены разойдутся по товарам из переоценки по назначенному уровню цен по всем точкам при ближайшей синхронизации,
+- Применяется для документов со статусом равным или больше 0 
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
++ Response 204
+
 ## Создать переоценку из другого документа [/api/reprices/{from_doc_type}/{from_id_doc}]
 - Значения тех полей, которые переданы в теле запроса, будут установлены вместо значений шапки исходного документа
 - Значения полей, не переданных в теле запроса, будут установлены из шапки исходного документа/по умолчанию.
@@ -4127,6 +4144,9 @@ Cписок товаров, доступных на каждом рабочем 
     - id_series - если не указано, устанавливается значение по умолчанию (-) 
     - quantity - обязательное
     - price - если не указано, устанавливается значение закупочной цены
+    - price_new - - если не указано, устанавливается равным 0
+    - max_price_new - если не указано, устанавливается равным 0
+    - min_price_new - если не указано, устанавливается равным 0
 - Массовое добавление товаров. Добавляются товары по группе товаров или поставщику. 
 Должен быть указан один из следующих параметров:
     - id_group - идентификатор группы товаров
