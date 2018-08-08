@@ -485,6 +485,34 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + min_price_new: 0 (number,default)
 + max_price_new: 0 (number,default)
 
+###InventoryHeadStructure
++ id_doc: 1 (number,required) 
++ date_doc: `2017-12-04 15:33:00+02` (string, required)
++ number_doc: `00001`  (string, required)
++ id_outlet: 1 (number,required)
++ id_workplace: 1 (number,optional)
++ id_employee: 1 (number,optional)
++ transfer: true (boolean,default)
++ date_save: `2017-12-04 15:33:00+02` (string,optional)
++ status: 0 (number,default)
+
+###InventoryTableStructure
++ id_line: 1 (number,required)
++ id_doc: 1 (number,required)
++ date_doc: `2017-12-04 15:33:00+02` (string, required)
++ number_doc: `00001`  (string, required)
++ consecutive: 1 (number,required)
++ id_goods:  1 (number,required)
++ id_unit:  1 (number,required)
++ id_series:  `-` (string)
++ quantity: 10 (number,required)
++ price: 0 (number,default)
++ quantity_actual: 1 (number,optional),
++ been_edited: false (boolean,default)
++ number_edits: 0 (number,default)
++ motion_rest: 0.0 (number,default)
++ time_edit: `2017-12-04 15:33:00+02` (string,optional)
+
 ### MassiveDocAddLogStructure
 + id: 1 (number,required)
 + id_goods: 1 (number,required)
@@ -3758,7 +3786,6 @@ Cписок товаров, доступных на каждом рабочем 
 ### Отправить возвратную накладную [POST]
 - отправить можно только документ со статусом -1, не пустой, с ненулевой общей суммой
 - статус документа устанавливается равным 0
-- для каждого товара в документе закупочная цена (Price) устанавливается равной цене в документе.
 + Parameters
     + id_doc (number, required) - Идентификатор документа
 + Response 204
@@ -3767,7 +3794,6 @@ Cписок товаров, доступных на каждом рабочем 
 ### Провести возвратную накладную на сервере [POST]
 - Провести можно только документ со статусом -1, не пустой, с ненулевой общей суммой
 - статус документа устанавливается равным 4
-- для каждого товара в документе закупочная цена (Price) устанавливается равной цене в документе.
 + Parameters
     + id_doc (number, required) - Идентификатор документа
 + Response 204
@@ -3927,7 +3953,6 @@ Cписок товаров, доступных на каждом рабочем 
 ### Провести перемещение на сервере [POST]
 - Провести можно только документ со статусом -1, не пустой, с ненулевой общей суммой
 - статус документа устанавливается равным 4
-- для каждого товара в документе закупочная цена (Price) устанавливается равной цене в документе.
 + Parameters
     + id_doc (number, required) - Идентификатор документа
 + Response 204
@@ -4105,7 +4130,6 @@ Cписок товаров, доступных на каждом рабочем 
 ### Отправить переоценку [POST]
 - отправить можно только документ со статусом -1, не пустой, с ненулевой общей суммой
 - статус документа устанавливается равным 0
-- для каждого товара в документе закупочная цена (Price) устанавливается равной цене в документе.
 + Parameters
     + id_doc (number, required) - Идентификатор документа
 + Response 204
@@ -4190,6 +4214,124 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 204
 
 ## Удалить все строки документа "Переоценка" [/api/repricesTables/all/{id_doc}]
+### Удалить все строки переоценки [DELETE]
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
++ Response 204
+
+# Group Документ "Инвентаризация"
+
+## Инвентаризация — шапки [/api/inventory{?with,order,filters,ids_list,offset,limit,from,to}]
+### Список документов "Инвентаризация" - шапки [GET]
++ Parameters
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи:  
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
+    + from (string,optional) - Возвращать документы, начиная с указанной даты
+    + to (string,optional) - Возвращать документы до указанной даты
++ Response 200 (application/json)
+    + Attributes (array[InventoryHeadStructure])
+
+### Создать инвентаризацию [POST]
++ Request (application/json)
+    + Attributes (InventoryHeadStructure)
++ Response 201 (application/json)
+            + Headers
+                Location: /api/inventory/1
+    + Attributes (InventoryHeadStructure)
+    
+## Количество документов "Инвентаризация" [/api/inventory/count/{?filters,ids_list,from,to}] 
+### Получить количество документов "Инвентаризация"  [GET]
++ Parameters
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + from (string,optional) - Возвращать документы, начиная с указанной даты
+    + to (string,optional) - Возвращать документы до указанной даты
++ Response 200 (application/json)
+    + Attributes (CountStructure) 
+    
+## Документ "Инвентаризация" [/api/inventory/{id_doc}/{?with}]
+### Получить шапку документа [GET]
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: 
++ Response 200 (application/json)
+    + Attributes (InventoryHeadStructure)
+
+### Изменить шапку документа "Инвентаризация" [PUT]
+- Изменять можно только неотправленный документ (status = -1)
+- Поле `status` в переданных данных игнорируется
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
++ Request (application/json)
+    + Attributes (InventoryHeadStructure) 
++ Response 200 (application/json)
+    + Attributes (InventoryHeadStructure)
+
+## Отправить документ "Инвентаризация" [/api/inventory/{id_doc}/send]
+### Отправить инвентаризацию [POST]
+- отправить можно только документ со статусом -1, не пустой
+- статус документа устанавливается равным 0
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
++ Response 204
+
+## Список строк документа "Инвентаризация" [/api/inventoryTables/{?id_doc,with,order,filters,ids_list,offset,limit}]
+### Список строк инвентаризации [GET]
++ Parameters
+    + id_doc (number, optional) - Идентификатор документа
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи:   
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[InventoryTableStructure])
+
+## Добавление строк в таблицу документа "Инвентаризация" [/api/inventoryTables/{id_doc}/{?id_group,id_supplier}]
+### Добавить строку или строки в таблицу документа "Инвентаризация" [POST]
+- Добавление одного товара. Добавляет строку в документ с идентификатором, указанным в параметре id_doc. Актуальные поля в JSON-е запроса:
+    - id_goods - обязательное
+    - id_unit - если не указано, устанавливается единица изменения по умолчанию
+    - id_series - если не указано, устанавливается значение по умолчанию (-) 
+- Массовое добавление товаров. Добавляются товары по группе товаров или поставщику. 
+Должен быть указан один из следующих параметров:
+    - id_group - идентификатор группы товаров
+    - id_supplier - идентификатор поставщика
+
++ Parameters
+    + id_doc (number, required) - Идентификатор документа
+    + id_group (number, optional) - Идентификатор группы товаров
+    + id_supplier (number,required) - Идентификатор поставщика
+    
++ Request (application/json)
+    + Attributes (InventoryTableStructure)
++ Response 201 (application/json)
+            + Headers
+                Location: /api/inventoryTables/1
+    + Attributes (InventoryTableStructure)
+    
++ Response 200 (application/json)
+    + Attributes (array[MassiveDocAddLogStructure])
+
+## Строка таблицы документа "Инвентаризация" [/api/inventoryTables/{id_line}/{?with} ]
+### Получить строку таблицы документа "Инвентаризация" [GET]
++ Parameters
+    + id_line (number, required) - Идентификатор строки
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: 
++ Response 200 (application/json)
+    + Attributes (InventoryTableStructure)    
+
+### Удалить строку таблицы документа "Инвентаризация" [DELETE]
++ Parameters
+    + id_line (number, required) - Идентификатор строки
++ Response 204
+
+## Удалить все строки документа "Инвентаризация" [/api/inventoryTables/all/{id_doc}]
 ### Удалить все строки переоценки [DELETE]
 + Parameters
     + id_doc (number, required) - Идентификатор документа
