@@ -524,6 +524,29 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + message: `Цена не найдена` (string,required) 
 + critical: false (boolean,required)
 
+### PromCurrencyStructure
++ id: 1 (number,required)
++ special_rate: `CB` (string,required)
+
+### PromCategoriesStructure
++ id: 1 (number,required)
++ portal_id_category (number,optional) 
++ portal_url `http:\some.url.com` (string,optional)
+
+### PromPricesStructure
++ id: 1 (number,required)
++ id_goods: 1 (number,required)
++ price: 1 (number,required)
++ quantity: 1 (number,required)
++ active: true (boolean, default)
+
+### PromOffersParamsStructure
++ id: 1 (number,required)
++ id_goods: 1 (number,required)
++ param_name: `размер экрана` (string, required)
++ param_value: `5` (string, required)
++ unit: `дюймы` (string, required)
+
 ### CountStructure
 + count: 10 (number, required)
 
@@ -1663,7 +1686,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 
     + Attributes (CountStructure)      
             
-     
+
 ## Дисконтная карта [/api/discountCards/{id_discount_card}/{?unprotect_keys,with}]
 
 ### Получить данные о дисконтной карте [GET]
@@ -4229,7 +4252,7 @@ Cписок товаров, доступных на каждом рабочем 
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
     + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
     + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
-    + limit (number, optional) - Возвращать указанное количество записей
+    + limit (number, optional) - Возвращать указанное количество запи### Получить данные о дисконтной карте [GET]
     + from (string,optional) - Возвращать документы, начиная с указанной даты
     + to (string,optional) - Возвращать документы до указанной даты
 + Response 200 (application/json)
@@ -4333,4 +4356,158 @@ Cписок товаров, доступных на каждом рабочем 
 ### Удалить все строки инвентаризации [DELETE]
 + Parameters
     + id_doc (number, required) - Идентификатор документа
++ Response 204
+
+#Group Интеграция с порталом prom.ua. Курсы Валют
+
+- Cпециальные значения для курсов валют позволяют установить автоматический курс валюты, равный курсу нацбанка. 
+- Если значение special_rate = 'CB', то курс валюты будет установлен автоматически
+
+## Список специальных значений для курсов валют [/api/promCurrencies/{?with,order,filters,ids_list,offset,limit}]
+### Список [GET]
++ Parameters
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: currencies 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
+
++ Response 200 (application/json)
+    + Attributes (array[PromCurrencyStructure])
+
+## Cпециальное значение для курса валюты  [/api/promCurrencies/{id_currency}/{?unprotect_keys,with}]
+### Получить запись [GET]
++ Parameters
+    + id_currency (integer, required) - Код валюты
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: currencies      
++ Response 200 (application/json)
+    + Attributes (PromCurrencyStructure) 
+
+## Установить значение курса валют равное курсу нацбанка  [/api/promCurrencies/{id_currency}/setDefaultRate]
+### Установить значение курса валют равное курсу нацбанка  [POST]
+ + Parameters
+    + id_currency (integer, required) - Код валюты
++ Response 204
+
+## Убрать значение курса валют равное курсу нацбанка  [/api/promCurrencies/{id_currency}/removeDefaultRate]
+### Убрать значение курса валют равное курсу нацбанка  [POST]
+ + Parameters
+    + id_currency (integer, required) - Код валюты
++ Response 204
+
+# Group Интеграция с порталом prom.ua. Категории /группы/. товаров
+
+- Дополнительные значения для групп товаров на prom.ua
+- `portal_id_category` - идентификатор категории на общем портале в prom.ua
+- `portal_url` - ссылка на категорию на общем портале в prom.ua
+
+## Список дополнительных значений категорий /групп/ товаров на prom.ua [/api/promCategories/{?with,order,filters,ids_list,offset,limit}]
+### Список [GET]
++ Parameters
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: goods
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[PromCategoriesStructure])
+
+## Категории /группы/ товаров на prom.ua [/api/promCategories/{id_goods}]
+### Получить дополнительные значения для групп товаров на prom.ua  [GET]
++ Parameters
+    + id_goods (integer, required) - Код товара
++ Request (application/json)
+    + Attributes (PromCategoriesStructure)
++ Response 200 (application/json)
+    + Attributes (PromCategoriesStructure)
+
+### Изменить дополнительные значения для групп товаров на prom.ua  [PUT]
++ Parameters
+    + id_goods (integer, required) - Код товара
++ Request (application/json)
+    + Attributes (PromCategoriesStructure)
++ Response 200 (application/json)
+    + Attributes (PromCategoriesStructure)
+
+### Удалить дополнительные значения для групп товаров на prom.ua [DELETE]
++ Parameters
+    + id_goods (integer, required) - Код товара
++ Response 204
+
+# Group Интеграция с порталом prom.ua. Оптовые цены
+- Указание цен для товаров, которые могут продаваться оптом на prom.ua
+
+## Список оптовых цен на товары [/api/promPrices/{?id_goods,with,order,filters,ids_list,offset,limit}]
+### Список [GET]
++ Parameters
+    + id_goods (integer, optional) - Код товара
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: goods
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[PromPricesStructure])
+
+## Оптовая цена на товар [/api/promPrices/{id_price}]
+### Получить оптовую цену на товар [GET]
++ Parameters
+    + id_price (integer, required) - Идентификатор записи
++ Request (application/json)
+    + Attributes (PromPricesStructure)
++ Response 200 (application/json)
+    + Attributes (PromPricesStructure)
+
+### Изменить оптовую цену на товар  [PUT]
++ Parameters
+    + id_price (integer, required) - Идентификатор записи
++ Request (application/json)
+    + Attributes (PromPricesStructure)
++ Response 200 (application/json)
+    + Attributes (PromPricesStructure)
+
+### Удалить оптовую цену на товар [DELETE]
++ Parameters
+    + id_price (integer, required) - Идентификатор записи
++ Response 204   
+
+# Group Интеграция с порталом prom.ua. Параметры товара
+- Указание дополнительных характеристик для товаров
+
+## Список параметров товара [/api/promOfferParams/{?id_goods,with,order,filters,ids_list,offset,limit}]
+### Список [GET]
++ Parameters
+    + id_goods (integer, optional) - Код товара
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: goods
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[PromOffersParamsStructure])
+
+## Оптовая цена на товар [/api/promOfferParams/{id_param}]
+### Получить оптовую цену на товар [GET]
++ Parameters
+    + id_param (integer, required) - Идентификатор записи
++ Request (application/json)
+    + Attributes (PromOffersParamsStructure)
++ Response 200 (application/json)
+    + Attributes (PromOffersParamsStructure)
+
+### Изменить оптовую цену на товар  [PUT]
++ Parameters
+    + id_price (integer, required) - Идентификатор записи
++ Request (application/json)
+    + Attributes (PromOffersParamsStructure)
++ Response 200 (application/json)
+    + Attributes (PromOffersParamsStructure)
+
+### Удалить оптовую цену на товар [DELETE]
++ Parameters
+    + id_price (integer, required) - Идентификатор записи
 + Response 204
