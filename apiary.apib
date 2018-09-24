@@ -547,6 +547,67 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + param_value: `5` (string, required)
 + unit: `дюймы` (string, required)
 
+### PromOfferStructure
++ id_goods: 1 (number,required)
++ id_prom_goods: 1 (number,required)
++ available: `true` (string)    
++ presence_sure: false (boolean)
++ vendor_model_type: false (boolean)
++ selling_type: `` (string)
++ type_prefix: `` (string)
++ oldprice: 2300 (number)
++ minimum_order_quantity 10 (number)
++ quantity_in_stock 10 (number)
++ discount 0 (number)
++ is_discount_percent true (boolean),
++ id_currency `UAH` (string)
++ vendor `Название компании` (string)
++ vendor_code `10` (string)
++ country `Украина` (string)
++ description `Брюки мужские белые` (string)
++ keywords `одежда,мужская,брюки`
++ portal_category_id 100 (number)
++ portal_category_url `http::\\some.url.com.ua`
+
+###PromOrderStructure
++ id_order: 1 (number,required)
++ date_created: `` (string)
++ client_first_name: `Иван` (string)
++ client_last_name: `Иванов` (string)
++ client_notes: `сообщение клиента к заказу` (string)
++ phone: `09566878123` (string)
++ email: `client@gmail.com` (string)
++ price: 1200 (number)
++ id_delivery_option: 10 (number)
++ name_delivery_option: `Самовывоз`  (string)
++ delivery_address: `Адрес доставки` (string)
++ id_payment_option: 1 (number)
++ name_payment_option: `Наличными` (string)
++ status: `delivered` (string)
++ source: `company_cabinet` (string)
+
+###PromOrderContentStructure
++ id_order_content: 1 (number,required)
++ id_order: 1 (number,required)
++ id_prom_goods: 1 (number,required)
++ external_id: 1 (number)
++ image: `` (string)
++ quantity: 1 (number,required)
++ price: 10000 (number,required)
++ url: `http//some.url.com` (string)
++ name: 'Название товара', (string)
++ total_price: 100000 (number)
++ measure_unit: `шт` (string)
++ sku `1`  (string)
+
+### PromLogStructure
++ id_prom_log: 1 (number,required)
++ run_time: `2018-09-11 13:20:58+03` (string,required)
++ module_name: `goods` (string)
++ sync_result: true (boolean,required)
++ response_text: `response from the internet shop` (string)
++ message: `Error/inform message about sychronisation result` (string)
+
 ### CountStructure
 + count: 10 (number, required)
 
@@ -4452,6 +4513,24 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 200 (application/json)
     + Attributes (array[PromPricesStructure])
 
+### Добавить оптовую цену на товар  [POST]
++ Request (application/json)
+    + Attributes (PromPricesStructure)
++ Response 201 (application/json)
+        + Headers
+            Location: /api/PromPricesStructure/1
+    + Attributes (PromPricesStructure)        
+    
+## Количество оптовых цен на товар [/api/promPrices/count{?id_goods,filters,ids_list,active}]
+### Получить количество оптовых цен на товар  [GET]
++ Parameters
+    + id_goods (integer, optional) - Код товара
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
++ Response 200 (application/json)
+    + Attributes (CountStructure)      
+
 ## Оптовая цена на товар [/api/promPrices/{id_price}]
 ### Получить оптовую цену на товар [GET]
 + Parameters
@@ -4477,8 +4556,8 @@ Cписок товаров, доступных на каждом рабочем 
 # Group Интеграция с порталом prom.ua. Параметры товара
 - Указание дополнительных характеристик для товаров
 
-## Список параметров товара [/api/promOfferParams/{?id_goods,with,order,filters,ids_list,offset,limit}]
-### Список [GET]
+## Список характеристик товара [/api/promOfferParams/{?id_goods,with,order,filters,ids_list,offset,limit}]
+### Получить список характеристик товара [GET]
 + Parameters
     + id_goods (integer, optional) - Код товара
     + order (string, optional) - Список полей сортировки через запятую без пробелов
@@ -4490,8 +4569,26 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 200 (application/json)
     + Attributes (array[PromOffersParamsStructure])
 
-## Оптовая цена на товар [/api/promOfferParams/{id_param}]
-### Получить оптовую цену на товар [GET]
+### Добавить характеристику товара  [POST]
++ Request (application/json)
+    + Attributes (PromOffersParamsStructure)
++ Response 201 (application/json)
+        + Headers
+            Location: /api/promOfferParams/1
+    + Attributes (PromOffersParamsStructure)
+
+## Количество характеристик товара [/api/promOfferParams/count{?id_goods,filters,ids_list,active}]
+### Получить количество характеристик товара  [GET]
++ Parameters
+    + id_goods (integer, optional) - Код товара
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
++ Response 200 (application/json)
+    + Attributes (CountStructure)      
+
+## Характеристика товара [/api/promOfferParams/{id_param}]
+### Получить характеристику товара [GET]
 + Parameters
     + id_param (integer, required) - Идентификатор записи
 + Request (application/json)
@@ -4499,15 +4596,178 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 200 (application/json)
     + Attributes (PromOffersParamsStructure)
 
-### Изменить оптовую цену на товар  [PUT]
+### Изменить характеристику товара  [PUT]
 + Parameters
-    + id_price (integer, required) - Идентификатор записи
+    + id_param (integer, required) - Идентификатор записи
 + Request (application/json)
     + Attributes (PromOffersParamsStructure)
 + Response 200 (application/json)
     + Attributes (PromOffersParamsStructure)
 
-### Удалить оптовую цену на товар [DELETE]
+### Удалить характеристику товара [DELETE]
 + Parameters
-    + id_price (integer, required) - Идентификатор записи
+    + id_param (integer, required) - Идентификатор записи
 + Response 204
+
+# Group Интеграция с порталом prom.ua. Предложения товаров
+
+## Список предложений товаров [/api/promOffers/{?id_goods,with,order,filters,ids_list,offset,limit}]
+### Получить список предложений товаров [GET]
++ Parameters
+    + id_goods (integer, optional) - Код товара
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: goods
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[PromOfferStructure])
+
+### Добавить предложение товаров  [POST]
++ Request (application/json)
+    + Attributes (PromOfferStructure)
++ Response 201 (application/json)
+        + Headers
+            Location: /api/promOffers/1
+    + Attributes (PromOfferStructure)
+
+## Количество предложений товаров [/api/promOffers/count{?id_goods,filters,ids_list,offset,limit}]
+### Получить количество предложений товаров  [GET]
++ Parameters
+    + id_goods (integer, optional) - Код товара
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (CountStructure)
+    
+## Предложение товара [/api/promOffers/{id_goods}]
+### Получить характеристику товара [GET]
++ Parameters
+    + id_goods (integer, optional) - Код товара
++ Request (application/json)
+    + Attributes (PromOfferStructure)
++ Response 200 (application/json)
+    + Attributes (PromOfferStructure)
+
+### Изменить характеристику товара  [PUT]
++ Parameters
+    + id_goods (integer, optional) - Код товара
++ Request (application/json)
+    + Attributes (PromOfferStructure)
++ Response 200 (application/json)
+    + Attributes (PromOfferStructure)
+
+### Удалить характеристику товара [DELETE]
++ Parameters
+    + id_goods (integer, optional) - Код товара
++ Response 204
+
+# Group Интеграция с порталом prom.ua. Журнал синхронизации с интернет-магазином
+
+## Список записей журнала синхронизации с интернет-магазином [/api/promLog/{?from,to,order,filters,ids_list,offset,limit}]
+### Получить список предложений товаров [GET]
++ Parameters
+    + from (string, optional) - Время, начиная с которого, показывать данные
+    + to (string, optional) - Время, до которого, показывать данные    
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[PromLogStructure])
+
+### Добавить запись в журнал синхронизации с интернет-магазином  [POST]
++ Request (application/json)
+    + Attributes (PromLogStructure)
++ Response 201 (application/json)
+        + Headers
+            Location: /api/promLog/1
+    + Attributes (PromLogStructure)
+
+## Запись в журнале синхронизации с интернет-магазином [/api/promLog/{id_prom_log}/{from,to}]
+### Получить Запись в журнале синхронизации с интернет-магазином [GET]
++ Parameters
+    + id_prom_log (integer, required) - Идентификатор записи
++ Response 200 (application/json)
+    + Attributes (PromLogStructure)
+
+### Удалить запись в журнале синхронизации с интернет-магазином  [DELETE]
++ Parameters
+    + id_prom_log (integer, required) - Идентификатор записи
++ Response 204
+
++ Parameters
+    + from (string, optional) - Время, начиная с которого, удалять данные
+    + to (string, optional) - Время, до которого, удалять данные    
++ Response 204
+
+## Запустить синхронизацию с интернет-магазином [/api/promLog/sync]
+### Запускает процесс синхронизации с интернет-магазином. [GET]
+- пользователю возвращается массив записей из журнала - результатов синхронизации всех модулей
++ Response 200 (application/json)
+    + Attributes ([PromLogStructure])
+
+# Group Интеграция с порталом prom.ua. Заказы товара
+
+## Список заказов товара [/api/promOrders/{?from,to,order,filters,ids_list,with,offset,limit}]
+### Получить список заказов товара [GET]
++ Parameters
+    + from (string, optional) - Время, начиная с которого, показывать данные
+    + to (string, optional) - Время, до которого, показывать данные    
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: promOrderContent  
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[PromOrderStructure])
+
+## Заказ [/api/promOrders/{id_prom_order}/{?with}]
+### Получить заказ [GET]
++ Parameters
+    + id_prom_order (integer, required) - Идентификатор заказа
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: promOrderContent  
++ Request (application/json)
+    + Attributes (PromOrderStructure)
++ Response 200 (application/json)
+    + Attributes (PromOrderStructure)
+
+## Изменение статуса заказа [/api/promOrders/{id_prom_order}/{status}]    
+### Поменять статус заказа [PUT]
++ Parameters
+    + id_prom_order (integer, required) - Идентификатор заказа
+    + status (string, required) - Статус заказа, который требуется установить
++ Request (application/json)
+    + Attributes (PromOrderStructure)
++ Response 200 (application/json)
+    + Attributes (PromOrderStructure)
+
+# Group Интеграция с порталом prom.ua. Содержимое заказа
+
+## Список строк заказов [/api/promOrdersContent/{id_order,order,filters,ids_list,with,offset,limit}]
+### Получить список строк заказов [GET]
++ Parameters 
+    + id_order (number,optional) - Идентификатор заказа
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: promOrders 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[PromOrderContentStructure])
+
+## Строка заказа [/api/promOrdersContent/{id_prom_order_content}/{?with}]
+### Получить строку заказа [GET]
++ Parameters
+    + id_prom_order_content (integer, required) - Идентификатор строки заказа
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: promOrder  
++ Request (application/json)
+    + Attributes (PromOrderContentStructure)
++ Response 200 (application/json)
+    + Attributes (PromOrderContentStructure)
