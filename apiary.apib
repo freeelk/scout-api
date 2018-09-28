@@ -525,27 +525,29 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + critical: false (boolean,required)
 
 ### PromCurrencyStructure
-+ id: 1 (number,required)
++ id_currency: 1 (number,required)
 + special_rate: `CB` (string,required)
 
 ### PromCategoriesStructure
-+ id: 1 (number,required)
-+ portal_id_category (number,optional) 
-+ portal_url `http:\some.url.com` (string,optional)
++ id_group: 1 (number,required)
++ portal_id_category: 1 (number,optional) 
++ portal_url: `http:\some.url.com` (string,optional)
++ active: true (boolean, default)
 
 ### PromPricesStructure
-+ id: 1 (number,required)
++ id_prom_price: 1 (number,required)
 + id_goods: 1 (number,required)
 + price: 1 (number,required)
 + quantity: 1 (number,required)
 + active: true (boolean, default)
 
 ### PromOffersParamsStructure
-+ id: 1 (number,required)
++ id_param: 1 (number,required)
 + id_goods: 1 (number,required)
 + param_name: `размер экрана` (string, required)
 + param_value: `5` (string, required)
 + unit: `дюймы` (string, required)
++ active: true (boolean, default)
 
 ### PromOfferStructure
 + id_goods: 1 (number,required)
@@ -568,6 +570,7 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + keywords `одежда,мужская,брюки`
 + portal_category_id 100 (number)
 + portal_category_url `http::\\some.url.com.ua`
++ active: true (boolean, required)
 
 ###PromOrderStructure
 + id_order: 1 (number,required)
@@ -599,6 +602,11 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + total_price: 100000 (number)
 + measure_unit: `шт` (string)
 + sku `1`  (string)
+
+### PromLogAttemptStructure
++ id_log_attempt: 1 (number,required)
++ start_time: `2018-09-11 13:20:58+03` (string,required) 
++ end_time: `2018-09-11 13:30:00+03` (string,required) 
 
 ### PromLogStructure
 + id_prom_log: 1 (number,required)
@@ -4445,14 +4453,13 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 200 (application/json)
     + Attributes (PromCurrencyStructure) 
 
-## Установить значение курса валют равное курсу нацбанка  [/api/promCurrencies/{id_currency}/setDefaultRate]
+## Значение курса валют равное курсу нацбанка  [/api/promCurrencies/{id_currency}/defaultRate]
 ### Установить значение курса валют равное курсу нацбанка  [POST]
  + Parameters
     + id_currency (integer, required) - Код валюты
 + Response 204
 
-## Убрать значение курса валют равное курсу нацбанка  [/api/promCurrencies/{id_currency}/removeDefaultRate]
-### Убрать значение курса валют равное курсу нацбанка  [POST]
+### Убрать значение курса валют равное курсу нацбанка  [DELETE]
  + Parameters
     + id_currency (integer, required) - Код валюты
 + Response 204
@@ -4492,7 +4499,7 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 200 (application/json)
     + Attributes (PromCategoriesStructure)
 
-### Удалить дополнительные значения для групп товаров на prom.ua [DELETE]
+### Деактивировать дополнительные значения для групп товаров на prom.ua [DELETE]
 + Parameters
     + id_goods (integer, required) - Код товара
 + Response 204
@@ -4505,7 +4512,7 @@ Cписок товаров, доступных на каждом рабочем 
 + Parameters
     + id_goods (integer, optional) - Код товара
     + order (string, optional) - Список полей сортировки через запятую без пробелов
-    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: goods
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: goods, promOffer
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
     + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
     + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
@@ -4531,10 +4538,11 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 200 (application/json)
     + Attributes (CountStructure)      
 
-## Оптовая цена на товар [/api/promPrices/{id_price}]
+## Оптовая цена на товар [/api/promPrices/{id_price}/{?with}]
 ### Получить оптовую цену на товар [GET]
 + Parameters
     + id_price (integer, required) - Идентификатор записи
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: goods, promOffer
 + Request (application/json)
     + Attributes (PromPricesStructure)
 + Response 200 (application/json)
@@ -4548,7 +4556,7 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 200 (application/json)
     + Attributes (PromPricesStructure)
 
-### Удалить оптовую цену на товар [DELETE]
+### Деактивировать оптовую цену на товар [DELETE]
 + Parameters
     + id_price (integer, required) - Идентификатор записи
 + Response 204   
@@ -4556,12 +4564,12 @@ Cписок товаров, доступных на каждом рабочем 
 # Group Интеграция с порталом prom.ua. Параметры товара
 - Указание дополнительных характеристик для товаров
 
-## Список характеристик товара [/api/promOfferParams/{?id_goods,with,order,filters,ids_list,offset,limit}]
+## Список характеристик товара [/api/promOffersParams/{?id_goods,with,order,filters,ids_list,offset,limit}]
 ### Получить список характеристик товара [GET]
 + Parameters
     + id_goods (integer, optional) - Код товара
     + order (string, optional) - Список полей сортировки через запятую без пробелов
-    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: goods
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: goods, promOffer
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
     + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
     + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
@@ -4577,7 +4585,7 @@ Cписок товаров, доступных на каждом рабочем 
             Location: /api/promOfferParams/1
     + Attributes (PromOffersParamsStructure)
 
-## Количество характеристик товара [/api/promOfferParams/count{?id_goods,filters,ids_list,active}]
+## Количество характеристик товара [/api/promOffersParams/count{?id_goods,filters,ids_list,active}]
 ### Получить количество характеристик товара  [GET]
 + Parameters
     + id_goods (integer, optional) - Код товара
@@ -4587,10 +4595,11 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 200 (application/json)
     + Attributes (CountStructure)      
 
-## Характеристика товара [/api/promOfferParams/{id_param}]
+## Характеристика товара [/api/promOffersParams/{id_param}/{?with}]
 ### Получить характеристику товара [GET]
 + Parameters
     + id_param (integer, required) - Идентификатор записи
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: goods, promOffer
 + Request (application/json)
     + Attributes (PromOffersParamsStructure)
 + Response 200 (application/json)
@@ -4611,12 +4620,11 @@ Cписок товаров, доступных на каждом рабочем 
 
 # Group Интеграция с порталом prom.ua. Предложения товаров
 
-## Список предложений товаров [/api/promOffers/{?id_goods,with,order,filters,ids_list,offset,limit}]
+## Список предложений товаров [/api/promOffers/{?with,order,filters,ids_list,offset,limit}]
 ### Получить список предложений товаров [GET]
 + Parameters
-    + id_goods (integer, optional) - Код товара
     + order (string, optional) - Список полей сортировки через запятую без пробелов
-    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: goods
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: currencies, promCurrencies, promPrices, goods
     + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
     + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
     + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
@@ -4642,9 +4650,9 @@ Cписок товаров, доступных на каждом рабочем 
     + limit (number, optional) - Возвращать указанное количество записей
 + Response 200 (application/json)
     + Attributes (CountStructure)
-    
+
 ## Предложение товара [/api/promOffers/{id_goods}]
-### Получить характеристику товара [GET]
+### Получить предложение товара [GET]
 + Parameters
     + id_goods (integer, optional) - Код товара
 + Request (application/json)
@@ -4652,7 +4660,7 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 200 (application/json)
     + Attributes (PromOfferStructure)
 
-### Изменить характеристику товара  [PUT]
+### Изменить предложение товара  [PUT]
 + Parameters
     + id_goods (integer, optional) - Код товара
 + Request (application/json)
@@ -4660,16 +4668,58 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 200 (application/json)
     + Attributes (PromOfferStructure)
 
-### Удалить характеристику товара [DELETE]
+### Деактивировать предложение товара [DELETE]
 + Parameters
     + id_goods (integer, optional) - Код товара
 + Response 204
 
-# Group Интеграция с порталом prom.ua. Журнал синхронизации с интернет-магазином
 
-## Список записей журнала синхронизации с интернет-магазином [/api/promLog/{?from,to,order,filters,ids_list,offset,limit}]
+# Group Интеграция с порталом prom.ua. Журнал синхронизации с интернет-магазином - запуски синхронизации
+
+## Список записей запусков синхронизации [/api/promLogAttempts/{?from,to,with,order,filters,ids_list,offset,limit}]
+### Получить список записей запусков синхронизации [GET]
++ Parameters
+    + from (string, optional) - Время, начиная с которого, показывать данные
+    + to (string, optional) - Время, до которого, показывать данные    
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: goods, promOffer
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[PromLogAttemptStructure])
+
+## Данные о запуске синхронизации [/api/promLogAttempts/{id_log_attempt}/{?with,from,to}]
+### Получить данные о запуске синхронизации [GET]
++ Parameters
+    + id_log_attempt (integer, required) - Идентификатор записи
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: promLog
++ Response 200 (application/json)
+    + Attributes (PromLogAttemptStructure)
+
+### Удалить данные о запуске синхронизации  [DELETE]
++ Parameters
+    + id_log_attempt (integer, required) - Идентификатор записи
++ Response 204
+
++ Parameters
+    + from (string, optional) - Время старта запуска, начиная с которого, удалять данные
+    + to (string, optional) - Время старта запуска, до которого, удалять данные    
++ Response 204
+
+## Запустить синхронизацию с интернет-магазином [/api/promLogAttempts/sync]
+### Запускает процесс синхронизации с интернет-магазином. [GET]
++ Response 200 (application/json)
+    + Attributes ([PromLogAttemptStructure])
+
+# Group Интеграция с порталом prom.ua. Журнал синхронизации с интернет-магазином - информация о модулях синхронизации
+
+## Список записей журнала синхронизации с интернет-магазином [/api/promLog/{?id_log_attempt,with,from,to,order,filters,ids_list,offset,limit}]
 ### Получить список предложений товаров [GET]
 + Parameters
+    + id_log_attempt (integer, required) - Идентификатор записи
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: promLogAttempt
     + from (string, optional) - Время, начиная с которого, показывать данные
     + to (string, optional) - Время, до которого, показывать данные    
     + order (string, optional) - Список полей сортировки через запятую без пробелов
@@ -4680,36 +4730,13 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 200 (application/json)
     + Attributes (array[PromLogStructure])
 
-### Добавить запись в журнал синхронизации с интернет-магазином  [POST]
-+ Request (application/json)
-    + Attributes (PromLogStructure)
-+ Response 201 (application/json)
-        + Headers
-            Location: /api/promLog/1
-    + Attributes (PromLogStructure)
-
-## Запись в журнале синхронизации с интернет-магазином [/api/promLog/{id_prom_log}/{from,to}]
+## Запись в журнале синхронизации с интернет-магазином [/api/promLog/{id_prom_log}/{?with}]
 ### Получить Запись в журнале синхронизации с интернет-магазином [GET]
 + Parameters
     + id_prom_log (integer, required) - Идентификатор записи
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: promLogAttempt
 + Response 200 (application/json)
     + Attributes (PromLogStructure)
-
-### Удалить запись в журнале синхронизации с интернет-магазином  [DELETE]
-+ Parameters
-    + id_prom_log (integer, required) - Идентификатор записи
-+ Response 204
-
-+ Parameters
-    + from (string, optional) - Время, начиная с которого, удалять данные
-    + to (string, optional) - Время, до которого, удалять данные    
-+ Response 204
-
-## Запустить синхронизацию с интернет-магазином [/api/promLog/sync]
-### Запускает процесс синхронизации с интернет-магазином. [GET]
-- пользователю возвращается массив записей из журнала - результатов синхронизации всех модулей
-+ Response 200 (application/json)
-    + Attributes ([PromLogStructure])
 
 # Group Интеграция с порталом prom.ua. Заказы товара
 
@@ -4726,6 +4753,18 @@ Cписок товаров, доступных на каждом рабочем 
     + limit (number, optional) - Возвращать указанное количество записей
 + Response 200 (application/json)
     + Attributes (array[PromOrderStructure])
+
+## Количество предложений товаров [/api/promOrders/count{?from,to,filters,ids_list,offset,limit}]
+### Получить количество предложений товаров  [GET]
++ Parameters
+    + from (string, optional) - Время, начиная с которого, показывать данные
+    + to (string, optional) - Время, до которого, показывать данные  
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (CountStructure)    
 
 ## Заказ [/api/promOrders/{id_prom_order}/{?with}]
 ### Получить заказ [GET]
@@ -4749,7 +4788,7 @@ Cписок товаров, доступных на каждом рабочем 
 
 # Group Интеграция с порталом prom.ua. Содержимое заказа
 
-## Список строк заказов [/api/promOrdersContent/{id_order,order,filters,ids_list,with,offset,limit}]
+## Список строк заказов [/api/promOrdersContent/{?id_order,order,filters,ids_list,with,offset,limit}]
 ### Получить список строк заказов [GET]
 + Parameters 
     + id_order (number,optional) - Идентификатор заказа
