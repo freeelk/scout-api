@@ -166,6 +166,14 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + id_owner_group: 1 (number)
 + active: true (boolean, required)
 
+### TradeObjectsTreeStructure
++ id: 1 (number, required)
++ id_trade_object: 1 (number, required)
++ type: `group` (string, required)
++ name: `Киоски` (string, required)
++ active: true (boolean, required)
++ children: TradeObjectsTreeStructure[]
+
 ### OutletsStructure
 + id_outlet: 2 (number, required)
 + name_outlet: This is outlet (string, required)
@@ -529,12 +537,15 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + date_doc: `2017-12-04 15:33:00+02` (string, required)
 + number_doc: `00001`  (string, required)
 + id_outlet: 1 (number,required)
-+ id_workplace: 1 (number,optional)
-+ id_employee: 1 (number,optional)
++ id_workplace: 1 (number,required)
++ id_employee: 1 (number,required)
 + id_supplier: 1 (number,required)
 + payment_sum: 1 (number,optional)
 + status: 0 (number,default)
 + comment_doc: `Это комментарий` (string,optional)
+
+### NextNumberDocStructure
++ number_doc: `00001` (string,required)
 
 ### PromCurrencyStructure
 + id_currency: 1 (number,required)
@@ -626,6 +637,53 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + sync_result: true (boolean,required)
 + response_text: `response from the internet shop` (string)
 + message: `Error/inform message about sychronisation result` (string)
+
+
+
+
+
+
+### ReportSettementStructure
++ invoice_sum: 100000 (number,required)
++ payment_sum: 100000 (number,required)
++ refund_sum: 100000 (number,required)
++ balance: 0 (number,required)
++ suppliers: ReportSettlementSupplierStructure[]
++ id_outlet: 1 (number,required)
++ name_outlet: `Магазин` (string,required)
++ id_supplier: 1 (number,required)
++ name_supplier: `Оптовый склад №1` (string,required)
+
+### ReportSettlementSupplierStructure
+id_supplier:1 (number,required)
+name_supplier:`ВестФуд` (string,required)
+start_balance:0 (number,required)
+end_balance: 6917290 (number,required)
+invoice_sum:112200 (number,required)
+payment_sum:29490 (number,required)
+refund_sum:7000000 (number,required)
+days: ReportSettlementDayStructure[]
+
+### ReportSettlementDayStructure
+day: `2018-12-10` (string,required)
+documents: ReportSettlementDocumentStructure[]
+
+### ReportSettlementDocumentStructure
+type_doc: `invoice` (number,required)
+number_doc: `Приходная накладная: 000027`
+time_doc: `14:11:00` (string,required)
+id_outlet: 1 (number,required)
+name_outlet: `Супермаркет` (string,required)
+id_workplace: 1 (number)
+id_workplace: `Касса №1` (string)
+id_supplier: 1 (number)
+name_supplier: `ВестФуд` (string)
+id_employee: 1 (number)
+name_employee: `Иванов И.И.` (string)
+invoice_sum: 2200 (number,required)
+payment_sum: 0 (number,required)
+refund_sum: 0 (number,required)
+balance:-2200 (number,required)
 
 ### CountStructure
 + count: 10 (number, required)
@@ -2039,8 +2097,16 @@ HOST: private-01ace7-scout7.apiary-mock.com
             Location: /api/groupOutlets/1
 
     + Attributes (GroupOutletsStructure) 
-   
 
+## Дерево торговых объектов [/api/groupsOutlets/tradeObjectsTree{?active}]
+### Получить дерево торговых объектов [GET]
+
++ Parameters
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+
++ Response 200 (application/json)
+
+    + Attributes (array[TradeObjectsTreeStructure]) 
     
 ## Количество групп торговых точек [/api/groupOutlets/count{?filters,ids_list,active}]
 
@@ -4440,7 +4506,7 @@ Cписок товаров, доступных на каждом рабочем 
 
 # Group Документ "Оплата поставщику"
 
-## Документ "Оплата поставщику" [/api/settlement{?with,order,filters,ids_list,offset,limit,from,to}]
+## Документ "Оплата поставщику" [/api/settlements{?with,order,filters,ids_list,offset,limit,from,to}]
 ### Список документов "Оплата поставщику" [GET]
 + Parameters
     + order (string, optional) - Список полей сортировки через запятую без пробелов
@@ -4459,10 +4525,10 @@ Cписок товаров, доступных на каждом рабочем 
     + Attributes (SettlementStructure)
 + Response 201 (application/json)
             + Headers
-                Location: /api/settlement/1
+                Location: /api/settlements/1
     + Attributes (SettlementStructure)
     
-## Количество документов "Оплата поставщику" [/api/settlement/count/{?filters,ids_list,from,to}] 
+## Количество документов "Оплата поставщику" [/api/settlements/count/{?filters,ids_list,from,to}] 
 ### Получить количество документов "Оплата поставщику"  [GET]
 + Parameters
     + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
@@ -4472,13 +4538,13 @@ Cписок товаров, доступных на каждом рабочем 
 + Response 200 (application/json)
     + Attributes (CountStructure) 
 
-## Получение/изменение документа "Оплата поставщику" [/api/settlement/{id_doc}/{?with}]
+## Получение/изменение документа "Оплата поставщику" [/api/settlements/{id_doc}/{?with}]
 ### Получить Документ "Оплата поставщику" [GET]
 + Parameters
     + id_doc (number, required) - Идентификатор документа
     + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: supplier, outlet, workplace, employee 
 + Response 200 (application/json)
-    + Attributes (InventoryHeadStructure)
+    + Attributes (SettlementStructure)
 
 ### Изменить документ "Оплата поставщику" [PUT]
 - Изменять можно только неотправленный документ (status = -1)
@@ -4486,11 +4552,17 @@ Cписок товаров, доступных на каждом рабочем 
 + Parameters
     + id_doc (number, required) - Идентификатор документа
 + Request (application/json)
-    + Attributes (InventoryHeadStructure) 
+    + Attributes (SettlementStructure) 
 + Response 200 (application/json)
-    + Attributes (InventoryHeadStructure)
+    + Attributes (SettlementStructure)
 
-## Отправка документа "Оплата поставщику" [/api/settlement/{id_doc}/send]
+## Получение следующего свободного номера документа "Оплата поставщику" [/api/settlements/next_number_doc]
+### Получить предполагаемый номер документа для создаваемого документа" [GET]
+- Этот номер может быть отредактирован пользователем. Если за время редактирования был создан новый документ с таким номером, пользователь получит соответствующую ошибку
++ Response 200 (application/json)
+    + Attributes (NextNumberDocStructure)   
+
+## Отправка документа "Оплата поставщику" [/api/settlements/{id_doc}/send]
 ### Отправить документ [POST]
 - Отправить можно только документ со статусом -1, с ненулевой суммой
 - статус документа устанавливается равным 0
@@ -4498,7 +4570,7 @@ Cписок товаров, доступных на каждом рабочем 
     + id_doc (number, required) - Идентификатор документа
 + Response 204
 
-## Удаление документа "Оплата поставщику" [/api/settlement/{id_doc}]
+## Удаление документа "Оплата поставщику" [/api/settlements/{id_doc}]
 ### Удалить документ "Оплата поставщику" [DELETE]
 - Удалить можно только документ со статусом -1 (неотправленный)
 + Parameters
@@ -4894,3 +4966,17 @@ Cписок товаров, доступных на каждом рабочем 
     + Attributes (PromOrderContentStructure)
 + Response 200 (application/json)
     + Attributes (PromOrderContentStructure)
+
+# Group Отчет "Оплата поставщику"
+## Данные отчета [/api/reportSettement/{outlets,suppliers,from,to,order,offset,limit}]
+### Получить данные [GET]
++ Parameters 
+    + outlets (string,required) - Идентификатор заказа
+    + suppliers (string,required) - Идентификатор заказа
+    + from (string,required) - Начальная дата анализируемых данных
+    + to (string,required) - Конечная дата анализируемых данных
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[ReportSettementStructure])
