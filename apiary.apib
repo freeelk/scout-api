@@ -71,6 +71,11 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + type_goods: 1 (number, required)
 + name: Обычный товар (string, required)
 
+### TopGoodsStructure
++ id_goods: 100 (number, required)
++ sort_order : `Хлеб` (string)
++ active: true (boolean, required)
+
 ### BarCodesStructure
 + bar_code: 4052557303215 (string,required)
 + id_unit: 1 (number,required)
@@ -946,6 +951,67 @@ balance:-2200 (number,required)
 + Response 200 (application/json)
 
     + Attributes (array[TypesGoodsStructure])
+
+
+#Group Часто покупаемые товары
+Мписок товаров для быстрого выбора кассиром
+## Список часто покупаемых товаров [/api/topGoods/{?active,with,order,filters,ids_list,offset,limit,unprotect_keys}]
+
+### Получить список пользователей Скаута [GET]
++ Parameters
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + with (string, optional) - Список имен связанных ресурсов через запятую без пробелов. Связи: role  
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[TopGoodsStructure])
+
+### Добавить часто покупаемый товар [POST]
+
++ Request (application/json)
+    + Attributes (TopGoodsStructure)
++ Parameters
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются    
++ Response 201 (application/json)
+            + Headers
+                Location: /api/topGoods/1
+    + Attributes (TopGoodsStructure)    
+
+## Количество часто покупаемых товаров [/api/topGoods/count/{?filters,ids_list,active}] 
+### Получить количество часто покупаемых товаров  [GET]
++ Parameters
+    + ids_list (string,optional) - Список значений ключевого поля записей, которые нужно возвратить. Указывается через запятую без пробела 
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
++ Response 200 (application/json)
+    + Attributes (CountStructure)
+
+
+## Часто покупаемый товар  [/api/topGoods/{id_goods}{?unprotect_keys}]
+
+### Получить часто покупаемый товар по коду товара  [GET]
++ Parameters
+    + id_goods (number, required) - Код товара
++ Response 200 (application/json)
+    + Attributes (TopGoodsStructure)
+
+### Изменить часто покупаемый товар [PUT]
++ Parameters
+    + id_goods (number, required) - Код товара
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются   
++ Request (application/json)
+    + Attributes (TopGoodsStructure) 
++ Response 200 (application/json)
+    + Attributes (TopGoodsStructure) 
+
+### Деактивировать часто покупаемый товар [DELETE]
++ Parameters
+    + id_goods (number, required) - Код товара
++ Response 204
+
 
 
 #Group Штрих-коды
