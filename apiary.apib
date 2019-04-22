@@ -643,11 +643,6 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + response_text: `response from the internet shop` (string)
 + message: `Error/inform message about sychronisation result` (string)
 
-
-
-
-
-
 ### ReportSettementStructure
 + invoice_sum: 100000 (number,required)
 + payment_sum: 100000 (number,required)
@@ -660,35 +655,49 @@ HOST: private-01ace7-scout7.apiary-mock.com
 + name_supplier: `Оптовый склад №1` (string,required)
 
 ### ReportSettlementSupplierStructure
-id_supplier:1 (number,required)
-name_supplier:`ВестФуд` (string,required)
-start_balance:0 (number,required)
-end_balance: 6917290 (number,required)
-invoice_sum:112200 (number,required)
-payment_sum:29490 (number,required)
-refund_sum:7000000 (number,required)
-days: ReportSettlementDayStructure[]
++ id_supplier:1 (number,required)
++ name_supplier:`ВестФуд` (string,required)
++ start_balance:0 (number,required)
++ end_balance: 6917290 (number,required)
++ invoice_sum:112200 (number,required)
++ payment_sum:29490 (number,required)
++ refund_sum:7000000 (number,required)
++ days: ReportSettlementDayStructure[]
 
 ### ReportSettlementDayStructure
-day: `2018-12-10` (string,required)
-documents: ReportSettlementDocumentStructure[]
++ day: `2018-12-10` (string,required)
++ documents: ReportSettlementDocumentStructure[]
 
 ### ReportSettlementDocumentStructure
-type_doc: `invoice` (number,required)
-number_doc: `Приходная накладная: 000027`
-time_doc: `14:11:00` (string,required)
-id_outlet: 1 (number,required)
-name_outlet: `Супермаркет` (string,required)
-id_workplace: 1 (number)
-id_workplace: `Касса №1` (string)
-id_supplier: 1 (number)
-name_supplier: `ВестФуд` (string)
-id_employee: 1 (number)
-name_employee: `Иванов И.И.` (string)
-invoice_sum: 2200 (number,required)
-payment_sum: 0 (number,required)
-refund_sum: 0 (number,required)
-balance:-2200 (number,required)
++ type_doc: `invoice` (string,required)
++ number_doc: `Приходная накладная: 000027` (string,required)
++ time_doc: `14:11:00` (string,required)
++ id_outlet: 1 (number,required)
++ name_outlet: `Супермаркет` (string,required)
++ id_workplace: 1 (number)
++ id_workplace: `Касса №1` (string)
++ id_supplier: 1 (number)
++ name_supplier: `ВестФуд` (string)
++ id_employee: 1 (number)
++ name_employee: `Иванов И.И.` (string)
++ invoice_sum: 2200 (number,required)
++ payment_sum: 0 (number,required)
++ refund_sum: 0 (number,required)
++ balance: 2200 (number,required)
+
+### ConfigStructure
++ config_name `sale_print_map` (string,required)
++ config_value `{some_json_parameter: "Some JSON value"}` (string,required)
++ id_outlet 1 (number)
++ id_workplace 1 (number)
++ active: true (boolean, required)
+
+### ConfigTreeStructure
++ config_name: `sales_print_map` (string,required)
++ config_description: `Sales print map` (string,required)
++ active: true (boolean, required)
++ children: [] (array[ConfigTreeStructure], required)
+
 
 ### CountStructure
 + count: 10 (number, required)
@@ -3791,6 +3800,77 @@ Cписок товаров, доступных на каждом рабочем 
 + Parameters
     + id_user (number, required) - Идентификатор пользователя
 + Response 204
+
+
+
+# Group Системные конфигурации
+Редактирование системных конфигураций Хамелеона
+
+## Список системных конфигураций [/api/configs/{?unprotect_keys,active,order,filters,offset,limit}]
+### Получить список системных конфигураций [GET]
++ Parameters
+    + active (string, optional) - Если параметр равен "true", то возвращаются только активные записи.
+    + order (string, optional) - Список полей сортировки через запятую без пробелов
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + offset (number, optional) - Возвращать данные, начиная с указанного номера записи
+    + limit (number, optional) - Возвращать указанное количество записей
++ Response 200 (application/json)
+    + Attributes (array[ConfigStructure]) 
+
+### Добавить системную конфигурацию [POST]
++ Request (application/json)
+    + Attributes (ConfigStructure)
++ Parameters
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются    
++ Response 201 (application/json)
+            + Headers
+                Location: /api/configs/sales_print_map/1/1
+    + Attributes (ConfigStructure)   
+
+## Количество системных конфигураций [/api/maskBarCodes/configs/{?filters,ids_list,active}] 
+### Получить количество конфигураций  [GET]
++ Parameters
+    + filters (string, optional) - Текстовые фильтры в формате: field_name::<search_term>|field_name1::<search_term1>
+    + active (string, optional) - Если параметр равен "true", то учитываются только активные записи.
++ Response 200 (application/json)
+    + Attributes (CountStructure)
+
+## Системная конфигурация  [/api/configs/{name_config}/{?id_outlet,id_workplace,unprotect_keys}]    
+### Получить системную конфигурацию  [GET]
++ Parameters
+    + name_config (string, required) - Название системной конфигурации
+    + id_outlet (number,optional) - Идентификатор торговой точки
+    + id_workplace (number, optional) - Идентификатор рабочего места
++ Response 200 (application/json)
+    + Attributes (ConfigStructure)
+
+### Изменить системную конфигурацию [PUT]
++ Parameters
+    + name_config (string, required) - Название системной конфигурации
+    + id_outlet (number,optional) - Идентификатор торговой точки
+    + id_workplace (number, optional) - Идентификатор рабочего места
+    + unprotect_keys (string,optional) - Если параметр существует и равен "true", в операциях создания/редактирования значения ключевого поля не игнорируются   
++ Request (application/json)
+    + Attributes (ConfigStructure) 
++ Response 200 (application/json)
+    + Attributes (ConfigStructure) 
+
+### Деактивировать системную конфигурацию [DELETE]
++ Parameters
+    + name_config (string, required) - Название системной конфигурации
+    + id_outlet (number,optional) - Идентификатор торговой точки
+    + id_workplace (number, optional) - Идентификатор рабочего места
++ Response 204    
+
+## Дерево конфигураций [/api/configs/configs_tree{?active}]
+### Получить системные конфигурации в виде дерева [GET]
+Возвращает названия и описания системных конфигураций в виде дерева
+ 
++ Parameters 
+    + active (string, optional) - Если параметр присутствует и равен "true", то возвращается дерево, с использованием только активных конфигураций.
++ Response 200 (application/json)
+    + Attributes (array[ConfigTreeStructure])
+
 
 # Group Документ "Приходная накладная"
 
